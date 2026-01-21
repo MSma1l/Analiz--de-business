@@ -1,0 +1,156 @@
+[
+  {
+    "categorie": "Корпоративная практика",
+    "index": 1,
+    "language": "ru",
+    "text": "Есть ли у компании оригиналы и актуальная версия учредительных документов?"
+  },
+  {
+    "categorie": "Practica corporativă",
+    "index": 1,
+    "language": "ro",
+    "text": "Compania deține originalele și versiunea actualizată a documentelor constitutive?"
+  },
+
+  {
+    "categorie": "Корпоративная практика",
+    "index": 2,
+    "language": "ru",
+    "text": "Все изменения в документы компании зарегистрированы в Агентстве государственных услуг (ASP)?"
+  },
+  {
+    "categorie": "Practica corporativă",
+    "index": 2,
+    "language": "ro",
+    "text": "Toate modificările documentelor companiei sunt înregistrate la Agenția Servicii Publice (ASP)?"
+  },
+
+  {
+    "categorie": "Корпоративная практика",
+    "index": 3,
+    "language": "ru",
+    "text": "Назначен ли администратор (директор) и оформлены ли его полномочия в ASP?"
+  },
+  {
+    "categorie": "Practica corporativă",
+    "index": 3,
+    "language": "ro",
+    "text": "Este numit administratorul (directorul) și sunt înregistrate atribuțiile acestuia la ASP?"
+  },
+
+  {
+    "categorie": "Деловая практика",
+    "index": 4,
+    "language": "ru",
+    "text": "Получены все необходимые лицензии и разрешения для вашей деятельности?"
+  },
+  {
+    "categorie": "Practica de afaceri",
+    "index": 4,
+    "language": "ro",
+    "text": "Sunt obținute toate licențele și autorizațiile necesare pentru activitatea desfășurată?"
+  },
+
+  {
+    "categorie": "Деловая практика",
+    "index": 5,
+    "language": "ru",
+    "text": "Все заключаемые вашей компанией договоры заполнены, подписаны уполномоченными лицами и скреплены печатью/электронной подписью?"
+  },
+  {
+    "categorie": "Practica de afaceri",
+    "index": 5,
+    "language": "ro",
+    "text": "Toate contractele încheiate de companie sunt completate, semnate de persoane autorizate și confirmate cu ștampilă sau semnătură electronică?"
+  },
+
+  {
+    "categorie": "Деловая практика",
+    "index": 6,
+    "language": "ru",
+    "text": "Есть ли привлечённые внешние специалисты на основании соответствующих договоров?"
+  },
+  {
+    "categorie": "Practica de afaceri",
+    "index": 6,
+    "language": "ro",
+    "text": "Există specialiști externi implicați pe baza unor contracte (outsourcing, consultanți)?"
+  },
+
+  {
+    "categorie": "Финансовая и налоговая практика",
+    "index": 7,
+    "language": "ru",
+    "text": "Компания регулярно сдаёт бухгалтерскую и налоговую отчётность?"
+  },
+  {
+    "categorie": "Practica financiară și fiscală",
+    "index": 7,
+    "language": "ro",
+    "text": "Compania depune regulat rapoartele contabile și fiscale?"
+  },
+
+  {
+    "categorie": "Финансовая и налоговая практика",
+    "index": 8,
+    "language": "ru",
+    "text": "Есть ли у компании кассовый аппарат или POS-терминал?"
+  },
+  {
+    "categorie": "Practica financiară și fiscală",
+    "index": 8,
+    "language": "ro",
+    "text": "Compania deține aparat de casă sau terminal POS?"
+  },
+
+  {
+    "categorie": "Финансовая и налоговая практика",
+    "index": 9,
+    "language": "ru",
+    "text": "Ведутся ли регистры учёта покупок, продаж и банковских операций?"
+  },
+  {
+    "categorie": "Practica financiară și fiscală",
+    "index": 9,
+    "language": "ro",
+    "text": "Sunt ținute registrele de evidență a cumpărărilor, vânzărilor și operațiunilor bancare?"
+  },
+
+  {
+    "categorie": "Трудовая практика",
+    "index": 13,
+    "language": "ru",
+    "text": "С каждым работником заключён письменный трудовой договор?"
+  },
+  {
+    "categorie": "Practica muncii",
+    "index": 13,
+    "language": "ro",
+    "text": "Cu fiecare angajat este încheiat un contract individual de muncă în formă scrisă?"
+  },
+
+  {
+    "categorie": "Делопроизводство",
+    "index": 19,
+    "language": "ru",
+    "text": "Используемое вами программное обеспечение является лицензионным?"
+  },
+  {
+    "categorie": "Managementul documentelor",
+    "index": 19,
+    "language": "ro",
+    "text": "Software-ul utilizat de companie este licențiat?"
+  },
+    {
+    "categorie": "Делопроизводство",
+    "index": 20,
+    "language": "ru",
+    "text": "Ведёте ли вы архив документов компании, где хранятся все важные документы?"
+  },
+  {
+    "categorie": "Managementul documentelor",
+    "index": 20,
+    "language": "ro",
+    "text": "Țineți un arhiv al documentelor companiei, în care sunt păstrate toate documentele importante?"
+  }
+]
