@@ -1,14 +1,18 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 def yes_no_keyboard(language: str):
-    if language == "ro":
-        yes, no = "Da", "Nu"
-    else:
-        yes, no = "Да", "Нет"
+    texts = {
+        "ro": ("✅ Da", "❌ Nu"),
+        "ru": ("✅ Да", "❌ Нет")
+    }
 
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(text=yes, callback_data="answer_yes"),
-            InlineKeyboardButton(text=no, callback_data="answer_no")
+    yes_text, no_text = texts.get(language, texts["ro"])
+
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text=yes_text, callback_data="answer_yes"),
+                InlineKeyboardButton(text=no_text, callback_data="answer_no")
+            ]
         ]
-    ])
+    )

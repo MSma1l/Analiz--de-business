@@ -2,18 +2,21 @@ import asyncio
 from aiogram import Bot, Dispatcher
 
 from configurare.setari import TOKEN
-from bot.gestionari.start import router
 from bd_sqlite.scheme_bd import async_main
+
+from bot.gestionari.start import router as start_bot
+from bot.gestionari.test import router as handle_answer
 
 
 async def main():
-    # creează tabelele DB (o singură dată)
     await async_main()
 
     bot = Bot(token=TOKEN)
     dp = Dispatcher()
 
-    dp.include_router(router)
+    # 🔥 FOARTE IMPORTANT
+    dp.include_router(start_bot)
+    dp.include_router(handle_answer)
 
     await dp.start_polling(bot)
 

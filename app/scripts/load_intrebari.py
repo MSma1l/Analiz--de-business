@@ -1,29 +1,31 @@
 import json
 import asyncio
 
-from app.bd_sqlite.conexiune import async_session
-from app.bd_sqlite.models import Intrebare
+from bd_sqlite.conexiune import async_session
+from bd_sqlite.models import Intrebare
 
 
-async def load_questions():
+async def main():
     with open("data/Intrebari.json", encoding="utf-8") as f:
         questions = json.load(f)
-    print("Gsit intrebarile cu succes")
-
+        
+    print("✅ Întrebările au fost citite")
+    
     async with async_session() as session:
         for q in questions:
             session.add(
                 Intrebare(
+                    index=q["index"],   # CHEIA LOGICĂ
                     categorie=q["categorie"],
                     text=q["text"],
-                    tip=q["tip"],
+                    tip="boolean",
                     language=q["language"]
                 )
             )
         await session.commit()
 
-    print("✅ Întrebările au fost încărcate în baza de date")
+    print("✅ Întrebările au fost încărcate în DB")
 
 
 if __name__ == "__main__":
-    asyncio.run(load_questions())
+    asyncio.run(main())

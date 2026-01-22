@@ -36,9 +36,13 @@ async def set_user_language(telegram_id: int, language: str):
         await session.execute(
             update(User)
             .where(User.telegram_id == telegram_id)
-            .values(language=language)
+            .values(
+                language=language,
+                current_index=1
+            )
         )
         await session.commit()
+
 
 async def get_user_by_telegram_id(telegram_id: int):
     async with async_session() as session:
@@ -47,17 +51,8 @@ async def get_user_by_telegram_id(telegram_id: int):
         )
         return result.scalar_one_or_none()
 
-async def get_question_by_index(index: int, language: str):
-    async with async_session() as session:
-        result = await session.execute(
-            select(Intrebare)
-            .where(Intrebare.language == language)
-            .offset(index)
-            .limit(1)
-        )
-        return result.scalar_one_or_none()
 
-async def save_answer(user_id: int, intrebare_id: int, valoare: str):
+async def save_answer(user_id: int, intrebare_id: int, valoare: bool):
     async with async_session() as session:
         result = await session.execute(
             select(Raspuns).where(
@@ -90,3 +85,14 @@ async def save_result(user_id: int, scor: int, nivel: str):
         )
         session.add(rezultat)
         await session.commit()
+
+
+async def get_current_question(index: int, language: str):
+    async with async_session() as session:
+        result = await session.execute(
+            select(Intrebare).where(
+                Intrebare.index == index,
+                Intrebare.language == language
+            )
+        )
+        return result.scalar_one_or_none()
