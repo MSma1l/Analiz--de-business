@@ -29,6 +29,11 @@ class User(Base):
 
     # 🏢 COMPANIE
     company_name: Mapped[str | None] = mapped_column(String(100))
+    company_domain: Mapped[str | None] = mapped_column(String(100))
+    company_employees: Mapped[int | None] = mapped_column(Integer)
+    company_year: Mapped[int | None] = mapped_column(Integer)
+    company_location: Mapped[str | None] = mapped_column(String(100))
+
     
 class Intrebare(Base):
     __tablename__ = "intrebari"
