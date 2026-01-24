@@ -1,1 +1,0 @@
-ALTER TABLE users ADD COLUMN current_index INTEGER DEFAULT 1;
