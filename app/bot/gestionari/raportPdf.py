@@ -9,9 +9,14 @@ router = Router()
 async def generate_report(message: Message):
     user = await get_user_by_telegram_id(message.from_user.id)
 
-    pdf_path = await build_user_report(user.id)
+    pdf_path = await build_user_report(user.id, user.language)
 
+    texts = {
+        "ro": f"📊 Raportul tău este gata!",
+        "ru": f"📊 Ваш отчёт готов!"
+    }
+    
     await message.answer_document(
         document=FSInputFile(pdf_path),
-        caption="📊 Raportul tău este gata!"
+        caption=texts[user.language]
     )

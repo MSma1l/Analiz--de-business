@@ -6,7 +6,7 @@
     "text": "Есть ли у компании оригиналы и актуальная версия учредительных документов?"
   },
   {
-    "categorie": "Practica corporativă",
+    "categorie": "Practica corporativa",
     "index": 1,
     "language": "ro",
     "text": "Compania deține originalele și versiunea actualizată a documentelor constitutive?"
@@ -18,7 +18,7 @@
     "text": "Все изменения в документы компании зарегистрированы в Агентстве государственных услуг (ASP)?"
   },
   {
-    "categorie": "Practica corporativă",
+    "categorie": "Practica corporativa",
     "index": 2,
     "language": "ro",
     "text": "Toate modificările documentelor companiei sunt înregistrate la Agenția Servicii Publice (ASP)?"
@@ -30,7 +30,7 @@
     "text": "Назначен ли администратор (директор) и оформлены ли его полномочия в ASP?"
   },
   {
-    "categorie": "Practica corporativă",
+    "categorie": "Practica corporativa",
     "index": 3,
     "language": "ro",
     "text": "Este numit administratorul (directorul) și sunt înregistrate atribuțiile acestuia la ASP?"
@@ -78,7 +78,7 @@
     "text": "Компания регулярно сдаёт бухгалтерскую и налоговую отчётность?"
   },
   {
-    "categorie": "Practica financiară și fiscală",
+    "categorie": "Practica financiara și fiscala",
     "index": 7,
     "language": "ro",
     "text": "Compania depune regulat rapoartele contabile și fiscale?"
@@ -90,7 +90,7 @@
     "text": "Есть ли у компании кассовый аппарат или POS-терминал?"
   },
   {
-    "categorie": "Practica financiară și fiscală",
+    "categorie": "Practica financiara și fiscala",
     "index": 8,
     "language": "ro",
     "text": "Compania deține aparat de casă sau terminal POS?"
@@ -102,7 +102,7 @@
     "text": "Ведутся ли регистры учёта покупок, продаж и банковских операций?"
   },
   {
-    "categorie": "Practica financiară și fiscală",
+    "categorie": "Practica financiara și fiscala",
     "index": 9,
     "language": "ro",
     "text": "Sunt ținute registrele de evidență a cumpărărilor, vânzărilor și operațiunilor bancare?"
@@ -114,7 +114,7 @@
     "text": "Ежегодно проводится инвентаризация имущества?"
   },
   {
-    "categorie": "Practica financiară și fiscală",
+    "categorie": "Practica financiara și fiscala",
     "index": 10,
     "language": "ro",
     "text": "Se efectuează anual inventarierea bunurilor?"
@@ -126,7 +126,7 @@
     "text": "У компании есть задолженность по налогам и обязательным платежам в бюджет?"
   },
   {
-    "categorie": "Practica financiară și fiscală",
+    "categorie": "Practica financiara și fiscala",
     "index": 11,
     "language": "ro",
     "text": "Are compania datorii la taxe și plăți obligatorii către buget?"
@@ -138,7 +138,7 @@
     "text": "Контролируете ли Вы состояние дебиторской и кредиторской задолженности в компании?"
   },
   {
-    "categorie": "Practica financiară și fiscală",
+    "categorie": "Practica financiara și fiscala",
     "index": 12,
     "language": "ro",
     "text": "Monitorizați starea creanțelor și datoriilor companiei?"
@@ -198,7 +198,7 @@
     "text": "Вы проверяете своих партнёров/клиентов перед началом сотрудничества (например, на наличие долгов, судебных дел или санкций)?"
   },
   {
-    "categorie": "Reclamații și litigii",
+    "categorie": "Reclamatii și litigii",
     "index": 17,
     "language": "ro",
     "text": "Verificați partenerii/clienții înainte de începerea colaborării (de exemplu, datorii, litigii sau sancțiuni)?"
