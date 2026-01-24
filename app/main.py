@@ -8,6 +8,9 @@ from bot.gestionari.start import router as start_bot
 from bot.gestionari.test import router as handle_answer
 from bot.gestionari.meniu import router as cabinet_router
 from bot.gestionari.question import router as test_start
+from bot.gestionari.raportPdf import router as raportPDF
+
+
 async def main():
     await async_main()
 
@@ -18,6 +21,7 @@ async def main():
     dp.include_router(handle_answer)
     dp.include_router(cabinet_router)
     dp.include_router(test_start)
+    dp.include_router(raportPDF)
 
     await dp.start_polling(bot)
 
