@@ -131,11 +131,11 @@ async def contacte(message:Message):
     
     
     contacte = {
-    "ro": "📩 Contacte:\n\n📞 Telefon: +373 XXX XXXXX\n\n✉️ Email: support@gmail.com",
-    "ru": "📩 Контакты:\n\n📞 Телефон: +373 XXX XXXXX\n\n✉️ Email: support@gmail.com"
+    "ro": "📩 Contacte:\n\n📞 Telefon: +373 XXX XXXXX\n\n✉️ Poșta electronică: support@gmail.com",
+    "ru": "📩 Контакты:\n\n📞 Телефон: +373 XXX XXXXX\n\n✉️ Электронная почта: support@gmail.com"
     }
     
     await message.answer(
         contacte[user.language],
-        reply_markup= locatie_keyboard()
+        reply_markup= locatie_keyboard(user.language)
         )
