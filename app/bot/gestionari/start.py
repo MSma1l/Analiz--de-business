@@ -26,7 +26,7 @@ async def start_bot(message: Message):
     )
 
     
-@router.message(F.text.in_(["🇷🇴 Română", "🇷🇺 Русский"]))
+@router.message(F.text.in_(["Română", "Русский"]))
 async def language_selected(message: Message):
     language = "ro" if "Română" in message.text else "ru"
 

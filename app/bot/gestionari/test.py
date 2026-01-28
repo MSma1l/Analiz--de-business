@@ -13,7 +13,7 @@ from bot.tastatura.testButton import yes_no_keyboard
 
 router = Router()
 
-@router.callback_query(F.data.in_(["answer_yes", "answer_no"]))
+@router.callback_query(F.data.in_(["answer_yes", "answer_no", "answer_idk"]))
 async def handle_answer(callback: CallbackQuery):
     user = await get_user_by_telegram_id(callback.from_user.id)
 
@@ -34,14 +34,11 @@ async def handle_answer(callback: CallbackQuery):
         await callback.message.edit_text(texts[user.language])
         return
 
-    # salvăm răspunsul
     value = callback.data == "answer_yes"
     await save_answer(user.id, question.id, value)
 
-    # calculăm noul index
     next_index = user.current_index + 1
 
-    # salvăm indexul în DB
     async with async_session() as session:
         await session.execute(
             update(User)
@@ -88,7 +85,6 @@ async def handle_answer(callback: CallbackQuery):
         await callback.message.edit_text(texts[user.language])
         return
 
-    # 👇 EDITĂM mesajul, NU trimitem unul nou
     await callback.message.edit_text(
         next_question.text,
         reply_markup=yes_no_keyboard(user.language)
