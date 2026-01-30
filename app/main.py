@@ -9,6 +9,7 @@ from bot.gestionari.test import router as handle_answer
 from bot.gestionari.meniu import router as cabinet_router
 from bot.gestionari.question import router as test_start
 from bot.gestionari.raportPdf import router as raportPDF
+from bot.gestionari.command import router as command_router
 
 
 async def main():
@@ -22,6 +23,7 @@ async def main():
     dp.include_router(cabinet_router)
     dp.include_router(test_start)
     dp.include_router(raportPDF)
+    dp.include_router(command_router)
 
     await dp.start_polling(bot)
 
