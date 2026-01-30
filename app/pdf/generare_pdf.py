@@ -116,15 +116,15 @@ def generate_pdf(charts: dict, scores: dict, language: str, filename="raport.pdf
     }
 
     elements = []
-    elements.append(Spacer(1, 2 * cm))
+    elements.append(Spacer(1, 0.5 * cm))
     elements.append(Paragraph(titles[language], title_style))
-    elements.append(Spacer(1, 1.5 * cm))
+    elements.append(Spacer(1, 0.5 * cm))
 
     data = []
     row = []
 
     for i, (category, img_path) in enumerate(charts.items()):
-        img = Image(img_path, width=5 * cm, height=5 * cm)
+        img = Image(img_path, width=6 * cm, height=6 * cm)
 
         cell_table = Table(
             [[img]],
@@ -141,7 +141,7 @@ def generate_pdf(charts: dict, scores: dict, language: str, filename="raport.pdf
         data.append(row)
 
 
-    main_table = Table(data, colWidths=[6 * cm, 6 * cm, 6 * cm])
+    main_table = Table(data, colWidths=[8 * cm, 8 * cm, 8 * cm])
     main_table.setStyle(TableStyle([
         ("ALIGN", (0,0), (-1,-1), "CENTER"),
         ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
@@ -156,8 +156,8 @@ def generate_pdf(charts: dict, scores: dict, language: str, filename="raport.pdf
         pagesize=A4,
         rightMargin=2 * cm,
         leftMargin=2 * cm,
-        topMargin=2 * cm,
-        bottomMargin=2 * cm,
+        topMargin=1 * cm,
+        bottomMargin=1 * cm,
     )
 
     doc.build(elements, onFirstPage=draw_background)
