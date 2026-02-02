@@ -31,13 +31,13 @@ async def cabinet_personal(message: Message):
 async def add_company_start(message: Message, state: FSMContext):
     user = await get_user_by_telegram_id(message.from_user.id)
 
-    texts = {
+    texts_company = {
         "ro": "🏢 Introdu numele companiei:",
         "ru": "🏢 Введите название компании:"
     }
 
     await state.set_state(CabinetState.waiting_company_name)
-    await message.answer(texts[user.language])
+    await message.answer(texts_company[user.language])
 
 @router.message(CabinetState.waiting_company_name)
 async def save_company_name(message: Message, state: FSMContext):
@@ -53,32 +53,85 @@ async def save_company_name(message: Message, state: FSMContext):
         )
         return
 
+    await state.update_data(company_name=company_name)
+
+    texts_number = {
+        "ro": "📞 Introdu numărul companiei:",
+        "ru": "📞 Введите номер компании:"
+    }
+
+    await state.set_state(CabinetState.waiting_company_number)
+    await message.answer(texts_number[user.language])
+
+@router.message(CabinetState.waiting_company_number)
+async def save_company_number(message: Message, state: FSMContext):
+    user = await get_user_by_telegram_id(message.from_user.id)
+
+    number_company = message.text.strip()
+
+    if len(number_company) < 9:
+        await message.answer(
+            "❌ Număr invalid"
+            if user.language == "ro"
+            else "❌ Неверный номер"
+        )
+        return
+
+    await state.update_data(number_company=number_company)
+
+    texts_email = {
+        "ro": "📧 Introdu emailul:",
+        "ru": "📧 Введите email:"
+    }
+
+    await state.set_state(CabinetState.waiting_company_email)
+    await message.answer(texts_email[user.language])
+
+@router.message(CabinetState.waiting_company_email)
+async def save_company_email(message: Message, state: FSMContext):
+    user = await get_user_by_telegram_id(message.from_user.id)
+
+    email_company = message.text.strip()
+
+    if "@" not in email_company:
+        await message.answer(
+            "❌ Email invalid"
+            if user.language == "ro"
+            else "❌ Неверный email"
+        )
+        return
+
+    data = await state.get_data()
+
     async with async_session() as session:
         await session.execute(
             update(User)
             .where(User.id == user.id)
-            .values(company_name=company_name)
+            .values(
+                company_name=data["company_name"],
+                number_company=data["number_company"],
+                email_company=email_company
+            )
         )
         await session.commit()
 
     await state.clear()
 
     texts = {
-        "ro": f"✅ Compania **{company_name}** a fost salvată.",
-        "ru": f"✅ Компания **{company_name}** сохранена."
+        "ro": f"✅ Compania a fost salvată:\n🏢 {data['company_name']}\n📞 {data['number_company']}\n📧 {email_company}",
+        "ru": f"✅ Компания сохранена:\n🏢 {data['company_name']}\n📞 {data['number_company']}\n📧 {email_company}"
     }
 
     await message.answer(
         texts[user.language],
-        reply_markup=cabinet_keyboard(user.language),
-        parse_mode="Markdown"
+        reply_markup=cabinet_keyboard(user.language)
     )
+
 
 @router.message(F.text.in_(["📊 Vezi poziția companiei", "📊 Позиция компании"]))
 async def company_position(message: Message):
     user = await get_user_by_telegram_id(message.from_user.id)
 
-    # dacă nu a terminat testul
     if not user.test_completed or user.score is None:
         await message.answer(
             "❌ Mai întâi trebuie să finalizezi testul."

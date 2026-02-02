@@ -23,17 +23,12 @@ class User(Base):
 
     current_index: Mapped[int] = mapped_column(Integer, default=1)
 
-    # 🔹 DATE TEST
     test_completed: Mapped[bool] = mapped_column(Boolean, default=False)
     score: Mapped[int | None] = mapped_column(Integer)
 
-    # 🏢 COMPANIE
     company_name: Mapped[str | None] = mapped_column(String(100))
-    company_domain: Mapped[str | None] = mapped_column(String(100))
-    company_employees: Mapped[int | None] = mapped_column(Integer)
-    company_year: Mapped[int | None] = mapped_column(Integer)
-    company_location: Mapped[str | None] = mapped_column(String(100))
-
+    number_company: Mapped[int | None] = mapped_column(Integer)
+    email_company: Mapped[str | None] = mapped_column(String(100))
     
 class Intrebare(Base):
     __tablename__ = "intrebari"

@@ -5,9 +5,9 @@ Problema de probă în cadrul companiei Crowe Ţurcan Mikhailenko
 
 ## 1. Introducere
 
-Acest proiect reprezintă un **Telegram Bot pentru analiza nivelului de conformitate și maturitate a unei afaceri**, prin intermediul unui set de întrebări structurate pe categorii. Utilizatorul răspunde la întrebări, iar aplicația generează un **raport PDF** cu rezultatele și recomandări.
+Acest proiect reprezintă un Telegram Bot pentru analiza nivelului de conformitate și maturitate a unei afaceri**, prin intermediul unui set de întrebări structurate pe categorii. Utilizatorul răspunde la întrebări, iar aplicația generează un raport PDF cu rezultatele și recomandări.
 
-Proiectul a fost realizat cu ajutorul limbajului **Python**, utilizând:
+Proiectul a fost realizat cu ajutorul limbajului Python, utilizând:
 
 * Telegram Bot API
 * SQLite pentru stocarea datelor

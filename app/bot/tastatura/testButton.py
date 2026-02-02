@@ -2,7 +2,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 def yes_no_keyboard(language: str):
     texts = {
-        "ro": ("✅ Da", "❌ Nu", "🤷‍♂️ Nu știu"),
+        "ro": ("✅ Da", "❌ Nu", "🤷‍♂️ Nu știu",),
         "ru": ("✅ Да", "❌ Нет", "🤷‍♂️ Не знаю")
     }
 

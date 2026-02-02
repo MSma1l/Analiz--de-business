@@ -3,240 +3,240 @@
     "categorie": "Корпоративная практика",
     "index": 1,
     "language": "ru",
-    "text": "Есть ли у компании оригиналы и актуальная версия учредительных документов?"
+    "text": "1. Есть ли у компании оригиналы и актуальная версия учредительных документов?"
   },
   {
     "categorie": "Practica corporativa",
     "index": 1,
     "language": "ro",
-    "text": "Compania deține originalele și versiunea actualizată a documentelor constitutive?"
+    "text": "1. Compania deține originalele și versiunea actualizată a documentelor constitutive?"
   },
   {
     "categorie": "Корпоративная практика",
     "index": 2,
     "language": "ru",
-    "text": "Все изменения в документы компании зарегистрированы в Агентстве государственных услуг (ASP)?"
+    "text": "2. Все изменения в документы компании зарегистрированы в Агентстве государственных услуг (ASP)?"
   },
   {
     "categorie": "Practica corporativa",
     "index": 2,
     "language": "ro",
-    "text": "Toate modificările documentelor companiei sunt înregistrate la Agenția Servicii Publice (ASP)?"
+    "text": "2. Toate modificările documentelor companiei sunt înregistrate la Agenția Servicii Publice (ASP)?"
   },
   {
     "categorie": "Корпоративная практика",
     "index": 3,
     "language": "ru",
-    "text": "Назначен ли администратор (директор) и оформлены ли его полномочия в ASP?"
+    "text": "3. Назначен ли администратор (директор) и оформлены ли его полномочия в ASP?"
   },
   {
     "categorie": "Practica corporativa",
     "index": 3,
     "language": "ro",
-    "text": "Este numit administratorul (directorul) și sunt înregistrate atribuțiile acestuia la ASP?"
+    "text": "3. Este numit administratorul (directorul) și sunt înregistrate atribuțiile acestuia la ASP?"
   },
   {
     "categorie": "Деловая практика",
     "index": 4,
     "language": "ru",
-    "text": "Получены все необходимые лицензии и разрешения для вашей деятельности?"
+    "text": "4. Получены все необходимые лицензии и разрешения для вашей деятельности?"
   },
   {
     "categorie": "Practica de afaceri",
     "index": 4,
     "language": "ro",
-    "text": "Sunt obținute toate licențele și autorizațiile necesare pentru activitatea desfășurată?"
+    "text": "4. Sunt obținute toate licențele și autorizațiile necesare pentru activitatea desfășurată?"
   },
   {
     "categorie": "Деловая практика",
     "index": 5,
     "language": "ru",
-    "text": "Все заключаемые вашей компанией договоры заполнены, подписаны уполномоченными лицами и скреплены печатью/электронной подписью?"
+    "text": "5. Все заключаемые вашей компанией договоры заполнены, подписаны уполномоченными лицами и скреплены печатью/электронной подписью?"
   },
   {
     "categorie": "Practica de afaceri",
     "index": 5,
     "language": "ro",
-    "text": "Toate contractele încheiate de companie sunt completate, semnate de persoane autorizate și confirmate cu ștampilă sau semnătură electronică?"
+    "text": "5. Toate contractele încheiate de companie sunt completate, semnate de persoane autorizate și confirmate cu ștampilă sau semnătură electronică?"
   },
   {
     "categorie": "Деловая практика",
     "index": 6,
     "language": "ru",
-    "text": "Есть ли привлечённые внешние специалисты на основании соответствующих договоров?"
+    "text": "6. Есть ли привлечённые внешние специалисты на основании соответствующих договоров?"
   },
   {
     "categorie": "Practica de afaceri",
     "index": 6,
     "language": "ro",
-    "text": "Există specialiști externi implicați pe baza unor contracte (outsourcing, consultanți)?"
+    "text": "6. Există specialiști externi implicați pe baza unor contracte (outsourcing, consultanți)?"
   },
   {
     "categorie": "Финансовая и налоговая практика",
     "index": 7,
     "language": "ru",
-    "text": "Компания регулярно сдаёт бухгалтерскую и налоговую отчётность?"
+    "text": "7. Компания регулярно сдаёт бухгалтерскую и налоговую отчётность?"
   },
   {
     "categorie": "Practica financiara și fiscala",
     "index": 7,
     "language": "ro",
-    "text": "Compania depune regulat rapoartele contabile și fiscale?"
+    "text": "7. Compania depune regulat rapoartele contabile și fiscale?"
   },
   {
     "categorie": "Финансовая и налоговая практика",
     "index": 8,
     "language": "ru",
-    "text": "Есть ли у компании кассовый аппарат или POS-терминал?"
+    "text": "8. Есть ли у компании кассовый аппарат или POS-терминал?"
   },
   {
     "categorie": "Practica financiara și fiscala",
     "index": 8,
     "language": "ro",
-    "text": "Compania deține aparat de casă sau terminal POS?"
+    "text": "8. Compania deține aparat de casă sau terminal POS?"
   },
   {
     "categorie": "Финансовая и налоговая практика",
     "index": 9,
     "language": "ru",
-    "text": "Ведутся ли регистры учёта покупок, продаж и банковских операций?"
+    "text": "9. Ведутся ли регистры учёта покупок, продаж и банковских операций?"
   },
   {
     "categorie": "Practica financiara și fiscala",
     "index": 9,
     "language": "ro",
-    "text": "Sunt ținute registrele de evidență a cumpărărilor, vânzărilor și operațiunilor bancare?"
+    "text": "9. Sunt ținute registrele de evidență a cumpărărilor, vânzărilor și operațiunilor bancare?"
   },
   {
     "categorie": "Финансовая и налоговая практика",
     "index": 10,
     "language": "ru",
-    "text": "Ежегодно проводится инвентаризация имущества?"
+    "text": "10. Ежегодно проводится инвентаризация имущества?"
   },
   {
     "categorie": "Practica financiara și fiscala",
     "index": 10,
     "language": "ro",
-    "text": "Se efectuează anual inventarierea bunurilor?"
+    "text": "10. Se efectuează anual inventarierea bunurilor?"
   },
   {
     "categorie": "Финансовая и налоговая практика",
     "index": 11,
     "language": "ru",
-    "text": "У компании есть задолженность по налогам и обязательным платежам в бюджет?"
+    "text": "11. У компании есть задолженность по налогам и обязательным платежам в бюджет?"
   },
   {
     "categorie": "Practica financiara și fiscala",
     "index": 11,
     "language": "ro",
-    "text": "Are compania datorii la taxe și plăți obligatorii către buget?"
+    "text": "11. Are compania datorii la taxe și plăți obligatorii către buget?"
   },
   {
     "categorie": "Финансовая и налоговая практика",
     "index": 12,
     "language": "ru",
-    "text": "Контролируете ли Вы состояние дебиторской и кредиторской задолженности в компании?"
+    "text": "12. Контролируете ли Вы состояние дебиторской и кредиторской задолженности в компании?"
   },
   {
     "categorie": "Practica financiara și fiscala",
     "index": 12,
     "language": "ro",
-    "text": "Monitorizați starea creanțelor și datoriilor companiei?"
+    "text": "12. Monitorizați starea creanțelor și datoriilor companiei?"
   },
   {
     "categorie": "Трудовая практика",
     "index": 13,
     "language": "ru",
-    "text": "С каждым работником заключён письменный трудовой договор?"
+    "text": "13. С каждым работником заключён письменный трудовой договор?"
   },
   {
     "categorie": "Practica muncii",
     "index": 13,
     "language": "ro",
-    "text": "Cu fiecare angajat este încheiat un contract individual de muncă în formă scrisă?"
+    "text": "13. Cu fiecare angajat este încheiat un contract individual de muncă în formă scrisă?"
   },
   {
     "categorie": "Трудовая практика",
     "index": 14,
     "language": "ru",
-    "text": "В компании утверждено штатное расписание и есть должностные инструкции?"
+    "text": "14. В компании утверждено штатное расписание и есть должностные инструкции?"
   },
   {
     "categorie": "Practica muncii",
     "index": 14,
     "language": "ro",
-    "text": "În companie este aprobat organigrama și există fișe de post?"
+    "text": "14. În companie este aprobat organigrama și există fișe de post?"
   },
   {
     "categorie": "Трудовая практика",
     "index": 15,
     "language": "ru",
-    "text": "Сотрудники проходят инструктажи по технике безопасности и охране труда?"
+    "text": "15. Сотрудники проходят инструктажи по технике безопасности и охране труда?"
   },
   {
     "categorie": "Practica muncii",
     "index": 15,
     "language": "ro",
-    "text": "Angajații participă la instruiri privind securitatea muncii și protecția muncii?"
+    "text": "15. Angajații participă la instruiri privind securitatea muncii și protecția muncii?"
   },
   {
     "categorie": "Трудовая практика",
     "index": 16,
     "language": "ru",
-    "text": "В компании утверждено Положение о защите персональных данных работников и клиентов?"
+    "text": "16. В компании утверждено Положение о защите персональных данных работников и клиентов?"
   },
   {
     "categorie": "Practica muncii",
     "index": 16,
     "language": "ro",
-    "text": "În companie este aprobat Regulamentul privind protecția datelor personale ale angajaților și clienților?"
+    "text": "16. În companie este aprobat Regulamentul privind protecția datelor personale ale angajaților și clienților?"
   },
   {
     "categorie": "Претензии и судопроизводство",
     "index": 17,
     "language": "ru",
-    "text": "Вы проверяете своих партнёров/клиентов перед началом сотрудничества (например, на наличие долгов, судебных дел или санкций)?"
+    "text": "17. Вы проверяете своих партнёров/клиентов перед началом сотрудничества (например, на наличие долгов, судебных дел или санкций)?"
   },
   {
     "categorie": "Reclamatii și litigii",
     "index": 17,
     "language": "ro",
-    "text": "Verificați partenerii/clienții înainte de începerea colaborării (de exemplu, datorii, litigii sau sancțiuni)?"
+    "text": "17. Verificați partenerii/clienții înainte de începerea colaborării (de exemplu, datorii, litigii sau sancțiuni)?"
   },
   {
     "categorie": "Претензии и судопроизводство",
     "index": 18,
     "language": "ru",
-    "text": "Ведётся ли в компании учёт всех претензий и судебных дел где она участвует?"
+    "text": "18. Ведётся ли в компании учёт всех претензий и судебных дел где она участвует?"
   },
   {
     "categorie": "Reclamații și litigii",
     "index": 18,
     "language": "ro",
-    "text": "Este ținută evidența tuturor reclamațiilor și litigiilor în care compania este implicată?"
+    "text": "18. Este ținută evidența tuturor reclamațiilor și litigiilor în care compania este implicată?"
   },
   {
     "categorie": "Делопроизводство",
     "index": 19,
     "language": "ru",
-    "text": "Используемое вами программное обеспечение является лицензионным?"
+    "text": "19. Используемое вами программное обеспечение является лицензионным?"
   },
   {
     "categorie": "Managementul documentelor",
     "index": 19,
     "language": "ro",
-    "text": "Software-ul utilizat de companie este licențiat?"
+    "text": "19. Software-ul utilizat de companie este licențiat?"
   },
   {
     "categorie": "Делопроизводство",
     "index": 20,
     "language": "ru",
-    "text": "Ведёте ли вы архив документов компании, где хранятся все важные документы?"
+    "text": "20. Ведёте ли вы архив документов компании, где хранятся все важные документы?"
   },
   {
     "categorie": "Managementul documentelor",
     "index": 20,
     "language": "ro",
-    "text": "Țineți un arhiv al documentelor companiei, în care sunt păstrate toate documentele importante?"
+    "text": "20. Țineți un arhiv al documentelor companiei, în care sunt păstrate toate documentele importante?"
   }
 ]

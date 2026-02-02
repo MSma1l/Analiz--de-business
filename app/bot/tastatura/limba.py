@@ -1,12 +1,12 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 def language_keyboard():
-    return ReplyKeyboardMarkup(
-        keyboard=[
-            [KeyboardButton(text="Română")],
-            [KeyboardButton(text="Русский")]
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+            InlineKeyboardButton(text="Română", callback_data="lang_ro"),
+            InlineKeyboardButton(text="Русский", callback_data="lang_ru")
+            ]
         ],
-        resize_keyboard=True,
-        one_time_keyboard=True
     )

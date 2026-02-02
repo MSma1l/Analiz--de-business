@@ -1,6 +1,6 @@
 from aiogram import Router, F
 from aiogram.filters import CommandStart
-from aiogram.types import Message
+from aiogram.types import Message, CallbackQuery
 from bot.tastatura.limba import language_keyboard
 from bot.tastatura.meniuButton import main_menu
 from bd_sqlite.fuction_bd import (
@@ -21,8 +21,24 @@ async def start_bot(message: Message):
     )
 
     await message.answer(
-        "Bun venit! / Добро пожаловать!\n\nAlege limba / Выберите язык:",
+        "Bun venit! Mă numesc BizCheck \nДобро пожаловать! Меня зовут BizCheck \n\nAlegeți limba / Выберите язык:",
         reply_markup=language_keyboard()
+    )
+
+@router.message(F.text.in_(["/info"]))
+async def info_command(message: Message):
+    user =  await get_user_by_telegram_id(message.from_user.id)
+    language = user.language if user and user.language else "ro"
+    
+    textss = {
+        "ro": "Acest bot a fost creat pentru a oferi o perspectivă rapidă și inteligentă asupra afacerii tale. Pe baza răspunsurilor introduse, sistemul analizează datele și stabilește nivelul de dezvoltare al businessului. \nÎn plus, utilizatorul poate vizualiza rezultatele sub formă de rapoarte clare și comparații relevante, obținând astfel o înțelegere mai bună a situației economice.",
+        "ru": """Этот бот был создан для того, чтобы предоставить быстрый и интеллектуальный обзор вашего бизнеса. На основе введённых ответов система анализирует данные и определяет уровень развития компании.
+Кроме того, пользователь может просматривать результаты в виде наглядных отчётов и релевантных сравнений, получая тем самым более полное понимание экономической ситуации."""
+    }
+    
+    await message.answer(
+        textss[language],
+        reply_markup=main_menu(language)
     )
 
 @router.message(F.text.in_(["/help"]))
@@ -55,23 +71,34 @@ async def about_command(message: Message):
         reply_markup=main_menu(language)
     ) 
     
-@router.message(F.text.in_(["Română", "Русский"]))
-async def language_selected(message: Message):
-    language = "ro" if "Română" in message.text else "ru"
+@router.callback_query(F.data.in_(["lang_ro", "lang_ru"]))
+async def language_selected(callback: CallbackQuery):
+    language = "ro" if callback.data == "lang_ro" else "ru"
 
-    await set_user_language(message.from_user.id, language)
+    await set_user_language(callback.from_user.id, language)
 
-    user = await get_user_by_telegram_id(message.from_user.id)
+    user = await get_user_by_telegram_id(callback.from_user.id)
 
     
     texts = {
-        "ro": "✅ Limba setată. Alege o opțiune:",
-        "ru": "✅ Язык установлен. Выберите опцию:"
+        "ro": """🏢 BizCheck Bot
+
+    Bine ai venit în centrul tău de analiză!
+    📈 Analiza performanței afacerii
+    📊 Evaluarea stării businessului
+    📋 Rapoarte și comparații inteligente""",
+        "ru": """🏢 BizCheck Bot
+
+    Добро пожаловать в центр бизнес-анализа!
+    📈 Анализ эффективности бизнеса
+    📊 Оценка состояния компании
+    📋 Умные отчёты и сравнения"""
     }
 
-    
-    await message.answer(
+    await callback.message.answer(
         texts[language],
         reply_markup=main_menu(language)
     )
+    
+    await callback.answer()  
     
