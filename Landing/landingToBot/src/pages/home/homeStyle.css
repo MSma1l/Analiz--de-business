@@ -1,0 +1,142 @@
+.main-section-hero {
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  overflow: hidden;
+}
+
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 90%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.content-section-hero {
+  position: absolute;
+  top: 40px;     /* distanța de sus */
+  right: 40px;   /* distanța din dreapta */
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 20px 25px 25px 25px;
+  z-index: 1;
+}
+.main-section-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+}
+
+/* CONTAINER TEXT */
+.content-section-hero {
+  position: absolute;
+ /* dreapta */
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 20px 25px 25px 25px;
+}
+
+/* TITLU */
+.content-section-hero h1 {
+  background: black;
+  color: white;
+  padding: 10px 15px;
+  margin: -20px -25px 15px -25px;
+  font-size: 22px;
+}
+
+/* TEXT */
+.content-section-hero p {
+  color: #000;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* BUTON */
+.hero-btn {
+  margin-top: 15px;
+  background: #b6d600;
+  color: black;
+  border: none;
+  padding: 10px 25px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.hero-btn:hover {
+  background: #9fbf00;
+}
+
+.about-landing-company {
+  margin-top: 10px;        /* spațiu de sus */
+  text-align: center;     /* centrare text */
+  display: flex;
+  flex-direction: column;
+  align-items: center;    /* centrare pe orizontală */
+  justify-content: center;
+}
+
+.about-landing-company h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.about-landing-company h3 {
+  font-size: 20px;
+  max-width: 700px;       /* să nu fie textul prea lat */
+  line-height: 1.5;
+}
+.services-landing-bot {
+  margin-top: 100px;
+  text-align: center;
+}
+
+.services-title {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.services-subtitle {
+  font-size: 20px;
+  color: gray;
+  margin-bottom: 60px;
+}
+
+.services-cards {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+.service-card {
+  width: 300px;
+  text-align: center;
+}
+
+.service-icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.service-card h2 {
+  margin-bottom: 15px;
+}
+
+.service-card p {
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.service-card button {
+  background-color: #d6ff00;
+  border: none;
+  padding: 10px 25px;
+  cursor: pointer;
+  font-weight: bold;
+}

@@ -1,0 +1,70 @@
+.header-landing-page {
+  width: 100%;
+}
+
+.header-landing-logo {
+  background-color: #f9b91c; /* galben ca in imagine */
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-landing-logo img {
+  height: 40px;
+  width: auto;
+}
+
+.select-language select {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.header-contacts {
+  background-color: #000;
+  display: flex;
+  gap: 70px;
+  padding: 20px 40px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+}
+
+
+.contact-icon {
+  background-color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-icon img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 24%;
+}
+
+.contact-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+}
+
+.contact-text span {
+  opacity: 0.8;
+}
+
+.contact-text strong {
+  font-size: 14px;
+}
