@@ -17,8 +17,8 @@
 
 .content-section-hero {
   position: absolute;
-  top: 40px;     /* distanța de sus */
-  right: 40px;   /* distanța din dreapta */
+  top: 40px;   
+  right: 40px;   
   max-width: 600px;
   background: rgba(255, 255, 255, 0.85);
   padding: 20px 25px 25px 25px;
@@ -73,11 +73,11 @@
 }
 
 .about-landing-company {
-  margin-top: 10px;        /* spațiu de sus */
-  text-align: center;     /* centrare text */
+  margin-top: 10px;        
+  text-align: center;     
   display: flex;
   flex-direction: column;
-  align-items: center;    /* centrare pe orizontală */
+  align-items: center;    
   justify-content: center;
 }
 
@@ -88,7 +88,7 @@
 
 .about-landing-company h3 {
   font-size: 20px;
-  max-width: 700px;       /* să nu fie textul prea lat */
+  max-width: 700px;      
   line-height: 1.5;
 }
 .services-landing-bot {
