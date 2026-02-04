@@ -2,6 +2,7 @@
 .overlay-hero {
   width: 70%;
   margin: 0 auto;
+  z-index: 1; /* deasupra video */
 }
 
 /* HERO */
@@ -14,12 +15,13 @@
 
 /* VIDEO FIX + RESPONSIVE */
 .background-video {
-  position: fixed;    
-  top: 0;
-  left: 0;
-  width: 100vw;        
-  height: 100vh;        
-  object-fit: cover;    
+  position: absolute; /* fix devine absolute pentru a fi în container */
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%); /* centrare perfectă */
   z-index: -1;
 }
 
@@ -30,7 +32,16 @@
   z-index: 1;
 }
 
-/* Adaptivitate pentru mobile */
+/* ---------------- Responsive ---------------- */
+@media (max-width: 1024px) {
+  .overlay-hero {
+    width: 85%;
+  }
+  .main-section-hero {
+    height: 80vh;
+  }
+}
+
 @media (max-width: 768px) {
   .overlay-hero {
     width: 95%;
@@ -41,7 +52,23 @@
   }
 
   .background-video {
-    height: 100vh;
-    width: 100vw;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-section-hero {
+    height: 60vh;
+  }
+
+  .overlay-hero {
+    width: 98%;
+  }
+  
+  .background-video {
+    width: 100%;
+    height: 100%;
+    object-position: center top; /* video se ajustează mai bine pe telefon */
   }
 }

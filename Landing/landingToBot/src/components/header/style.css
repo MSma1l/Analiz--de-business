@@ -1,9 +1,11 @@
+/* ---------------- Desktop ---------------- */
 .header-landing-page {
   width: 100%;
 }
 
+/* Logo */
 .header-landing-logo {
-  background-color: #f9b91c; /* galben ca in imagine */
+  background-color: #f9b91c;
   padding: 20px;
   display: flex;
   justify-content: space-between;
@@ -16,15 +18,7 @@
   margin-left: 5%;
 }
 
-/* selectare limbei */
-/* .select-language select {
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-} */
-
+/* Contacts */
 .header-contacts {
   background-color: #000;
   display: flex;
@@ -39,7 +33,6 @@
   color: white;
   margin-left: 4%;
 }
-
 
 .contact-icon {
   background-color: white;
@@ -70,4 +63,59 @@
 
 .contact-text strong {
   font-size: 14px;
+}
+
+/* ---------------- Responsive ---------------- */
+
+/* Mobil: sub 768px */
+@media (max-width: 768px) {
+  .header-landing-logo {
+    padding: 15px;
+  }
+
+  .header-landing-logo img {
+    height: 25px;
+    margin-left: 2%;
+  }
+
+  .header-contacts {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .contact-item {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .contact-text {
+    font-size: 12px;
+  }
+
+  .contact-text strong {
+    font-size: 13px;
+  }
+}
+
+/* Mobil foarte mic: sub 480px */
+@media (max-width: 480px) {
+  .header-landing-logo img {
+    height: 20px;
+  }
+
+  .contact-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .contact-text {
+    font-size: 11px;
+  }
+
+  .contact-text strong {
+    font-size: 12px;
+  }
 }
