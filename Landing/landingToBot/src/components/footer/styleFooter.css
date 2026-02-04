@@ -1,0 +1,142 @@
+.footer {
+  background: linear-gradient(180deg, #f4fc93, #e7a51f);
+  padding: 40px 60px;
+  color: #000;
+  font-family: Arial, sans-serif;
+}
+
+.footer-container {
+  max-width: 1300px;
+  margin: auto;
+}
+
+/* TOP */
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.logo img {
+  height: 40px;
+}
+
+/* Contact */
+.contact-info {
+  display: flex;
+  gap: 40px;
+}
+
+.contact-box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icon-circle {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: #e6e6e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.label {
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Divider */
+hr {
+  border: none;
+  border-top: 1px solid rgba(0,0,0,0.3);
+  margin: 25px 0;
+}
+
+/* GRID */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Columns */
+.footer-col h4 {
+  margin-bottom: 15px;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 10px;
+}
+.footer-col ul li a {
+  text-decoration: none;
+  color: #000;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+/* Social */
+.socials {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.socials a {
+  width: 40px;
+  height: 40px;
+  background: #1877f2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.socials a:last-child {
+  background: #e4405f;
+}
+
+/* QR */
+.qr-col img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  border-radius: 10%;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .contact-info {
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 500px) {
+  .footer {
+    padding: 30px 20px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+}

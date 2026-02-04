@@ -4,24 +4,26 @@
 
 .header-landing-logo {
   background-color: #f9b91c; /* galben ca in imagine */
-  padding: 30px;
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .header-landing-logo img {
-  height: 40px;
+  height: 30px;
   width: auto;
+  margin-left: 5%;
 }
 
-.select-language select {
+/* selectare limbei */
+/* .select-language select {
   padding: 6px 10px;
   border-radius: 4px;
   border: none;
   font-weight: bold;
   cursor: pointer;
-}
+} */
 
 .header-contacts {
   background-color: #000;
@@ -35,6 +37,7 @@
   align-items: center;
   gap: 12px;
   color: white;
+  margin-left: 4%;
 }
 
 
