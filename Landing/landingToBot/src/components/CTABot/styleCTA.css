@@ -1,122 +1,120 @@
+
+/* ================= CSS PREMIUM LANDING ================= */
+
 .bot-cta-section {
-  margin: 120px auto;
-  padding: 80px 40px;
-  max-width: 900px;
+  width: 100%;
+  padding: 120px 20px;
+  display: flex;
+  justify-content: center;
+  background: #f7f9fc
+}
+
+.bot-cta-container {
+  width: 100%;
+  max-width: 1100px;
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 70px 60px;
   text-align: center;
-  background: linear-gradient(135deg, #f5ff9a, #e8ff4d);
-  border-radius: 30px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-  animation: fadeInUp 1.2s ease both;
-}
-
-/* TITLU */
-.bot-cta-title {
-  font-size: 48px;
-  font-weight: 700;
-  margin-bottom: 25px;
-  color: #111;
-  animation: popIn 1s ease both;
-}
-
-/* SUBTITLU */
-.bot-cta-subtitle {
-  font-size: 20px;
-  max-width: 650px;
-  margin: 0 auto 40px auto;
-  line-height: 1.6;
-  color: #333;
-  animation: fadeIn 1.5s ease both;
-}
-
-/* BUTON CTA */
-.bot-cta-button {
-  background: #000;
-  color: #fff;
-  border: none;
-  padding: 18px 50px;
-  font-size: 20px;
-  font-weight: 600;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-  animation: pulse 2s infinite;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.08);
   position: relative;
   overflow: hidden;
-  will-change: transform;
 }
 
-/* glow la hover */
+/* subtle accent */
+.bot-cta-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, #f2c94c, #f2994a);
+}
+
+/* TITLE */
+.bot-cta-title {
+  font-size: 44px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.bot-cta-title span {
+  color: #f2c94c;
+}
+
+/* SUBTITLE */
+.bot-cta-subtitle {
+  font-size: 18px;
+  color: #475569;
+  max-width: 680px;
+  margin: 0 auto 35px auto;
+  line-height: 1.7;
+}
+
+/* BUTTON */
+.bot-cta-button {
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  padding: 16px 42px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);
+}
+
 .bot-cta-button:hover {
-  background: #222;
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 0 25px rgba(0,0,0,0.6);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
+  background: #020617;
 }
 
 /* BENEFITS */
 .bot-cta-benefits {
-  margin-top: 30px;
   display: flex;
   justify-content: center;
-  gap: 30px;
-  font-size: 16px;
-  color: #222;
+  gap: 25px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.benefit {
+  background: #f1f5f9;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 14px;
   font-weight: 500;
-  animation: fadeIn 2s ease both;
+  color: #0f172a;
 }
 
-/* ===== ANIMATIONS ===== */
+/* ================= RESPONSIVE ================= */
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(60px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes popIn {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  80% {
-    transform: scale(1.05);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(0,0,0,0.5);
-  }
-  70% {
-    box-shadow: 0 0 0 18px rgba(0,0,0,0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(0,0,0,0);
-  }
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .bot-cta-section {
-    padding: 50px 20px;
-    margin: 80px 10px;
+@media (max-width: 1024px) {
+  .bot-cta-container {
+    padding: 60px 40px;
   }
 
   .bot-cta-title {
-    font-size: 32px;
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  .bot-cta-section {
+    padding: 80px 15px;
+  }
+
+  .bot-cta-container {
+    padding: 50px 25px;
+  }
+
+  .bot-cta-title {
+    font-size: 28px;
   }
 
   .bot-cta-subtitle {
@@ -124,20 +122,17 @@
   }
 
   .bot-cta-button {
-    padding: 14px 35px;
-    font-size: 16px;
-  }
-
-  .bot-cta-benefits {
-    flex-direction: column;
-    gap: 12px;
+    width: 100%;
+    max-width: 320px;
   }
 }
 
-/* ACCESIBILITATE */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
+@media (max-width: 480px) {
+  .bot-cta-title {
+    font-size: 24px;
+  }
+
+  .bot-cta-subtitle {
+    font-size: 15px;
   }
 }

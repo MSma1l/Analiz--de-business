@@ -11,17 +11,52 @@ const Home: React.FC = () => {
     return(
         <div className='home-page-to-landing'>
             < Header />
-            <div className="main-section-hero">
+                <div className="main-section-hero">
+
+                {/* Background video */}
                 <video
                     className="background-video"
                     autoPlay
                     loop
                     muted
                     playsInline
-                  >
+                >
                     <source src={crowe} type="video/mp4" />
                 </video>
-            </div>
+
+                {/* Overlay dark */}
+                <div className="hero-overlay"></div>
+
+                {/* Content */}
+                <div className="hero-content">
+
+                    <h1 className="hero-title">
+                    Evaluează performanța afacerii tale
+                    </h1>
+
+                    <p className="hero-subtitle">
+                    Completează testul și primești instant un raport profesional
+                    realizat pe metodologia Crowe Turcan Mikhailenko
+                    </p>
+
+                    <div className="hero-actions">
+                    <button className="hero-cta"
+                    onClick={() => window.open("https://t.me/BizScope_bot")}
+                    >
+                        Începe testul gratuit
+                    </button>
+                    </div>
+
+                    {/* Trust badges */}
+                    <div className="hero-trust">
+                    <span>✔ Gratuit</span>
+                    <span>✔ Fără înregistrare</span>
+                    <span>✔ Raport instant</span>
+                    </div>
+
+                </div>
+                </div>
+
             <AboutSecvice />
             <BotCTAAction />
             <Footer />

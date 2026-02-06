@@ -1,49 +1,47 @@
-import  React from "react";
+import React from "react";
+import "@/components/header/style.css";
 
-import "@/components/header/style.css"
-import email from "@/pages/home/assets/email.png"
-import phone from "@/pages/home/assets/phone.png"
-import Crowe_White from "@/assets/Crowe_White.png"
-
+import email from "@/pages/home/assets/email.png";
+import phone from "@/pages/home/assets/phone.png";
+import Crowe from "@/assets/Crowe_Logo_blue.png";
 
 const Header: React.FC = () => {
-
-    return(
-      <div className="header-landing-page">
+  return (
+    <header className="header">
+      <div className="header-container">
         
-        <div className="header-landing-logo">
-          <img src={Crowe_White} alt="Crowe Logo" />
-
-          {/* <div className="select-language">
-            <select>
-              <option value="ro">RO</option>
-              <option value="ru">RU</option>
-            </select>
-          </div> */}
+        {/* Logo */}
+        <div className="header-logo">
+          <img src={Crowe} alt="Crowe Logo" />
         </div>
 
-        <div className="header-contacts">
-          <div className="contact-item">
-            <div className="contact-icon">
+        {/* Contacts */}
+        <div className="header-right">
+
+          <div className="header-contacts-wrapper">
+            
+            <div className="header-contact">
               <img src={email} alt="email" />
+              <span>Support@example.com</span>
             </div>
-            <div className="contact-text">
-              <span>Adresa electronică</span>
-              <strong>Support@Example.com</strong>
+
+            <div className="header-contact">
+              <img src={phone} alt="phone" />
+              <span>+373 60 123 458</span>
             </div>
+
           </div>
 
-          <div className="contact-item">
-            <div className="contact-icon">
-              <img src={phone} alt="phone" />
-            </div>
-            <div className="contact-text">
-              <span>Număr Mobil</span>
-              <strong>+37360123458</strong>
-            </div>
-          </div>
+          <button className="header-cta"
+            onClick={() => window.open("https://t.me/BizScope_bot")}>
+            Începe testul
+          </button>
+
         </div>
+
       </div>
-    )
-}
+    </header>
+  );
+};
+
 export default Header;

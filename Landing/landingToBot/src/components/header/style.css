@@ -1,121 +1,139 @@
-/* ---------------- Desktop ---------------- */
-.header-landing-page {
+/* ===== HEADER BASE ===== */
+.header {
   width: 100%;
+  background: #ffffff;
+  border-bottom: 1px solid #eee;
+  top: 0;
+  z-index: 1000;
 }
 
-/* Logo */
-.header-landing-logo {
-  background-color: #f9b91c;
-  padding: 20px;
+/* Container aliniat cu pagina */
+.header-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 14px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.header-landing-logo img {
-  height: 30px;
+/* ===== LOGO ===== */
+.header-logo img {
+  height: 32px;
   width: auto;
-  margin-left: 5%;
 }
 
-/* Contacts */
-.header-contacts {
-  background-color: #000;
-  display: flex;
-  gap: 70px;
-  padding: 20px 40px;
-}
-
-.contact-item {
+/* ===== RIGHT SIDE ===== */
+.header-right {
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: white;
-  margin-left: 4%;
+  gap: 28px;
 }
 
-.contact-icon {
-  background-color: white;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+/* Contact item */
+.header-contact {
   display: flex;
   align-items: center;
-  justify-content: center;
-}
+  gap: 8px;
 
-.contact-icon img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  border-radius: 24%;
-}
-
-.contact-text {
-  display: flex;
-  flex-direction: column;
-  font-size: 13px;
-}
-
-.contact-text span {
-  opacity: 0.8;
-}
-
-.contact-text strong {
   font-size: 14px;
+  color: #1a1a1a;
+  font-weight: 500;
 }
 
-/* ---------------- Responsive ---------------- */
+.header-contact img {
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+}
 
-/* Mobil: sub 768px */
+/* ===== CTA BUTTON ===== */
+.header-cta {
+  background: linear-gradient(135deg, #f9b91c, #ffcd4d);
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 999px;
+
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  box-shadow: 0 4px 14px rgba(249, 185, 28, 0.35);
+}
+
+/* Hover effect */
+.header-cta:hover {
+  background: linear-gradient(135deg, #e5a800, #ffc933);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(249, 185, 28, 0.45);
+}
+
+/* Click effect */
+.header-cta:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(249, 185, 28, 0.3);
+}
+
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
-  .header-landing-logo {
-    padding: 15px;
+
+  /* Container mai compact */
+  .header-container {
+    padding: 12px 18px;
+  }
+  .header-contacts-wrapper{
+    display: none;
   }
 
-  .header-landing-logo img {
-    height: 25px;
-    margin-left: 2%;
+  /* Logo mai mic */
+  .header-logo img {
+    height: 26px;
   }
 
-  .header-contacts {
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px;
+  /* Spațiere mai mică */
+  .header-right {
+    gap: 12px;
   }
 
-  .contact-item {
-    margin-left: 0;
-    width: 100%;
-    justify-content: flex-start;
-    gap: 10px;
+  /* Ascundem textul contactelor */
+  .header-contact span {
+    display: none;
   }
 
-  .contact-text {
-    font-size: 12px;
+  /* Icon mai mic */
+  .header-contact img {
+    width: 16px;
+    height: 16px;
   }
 
-  .contact-text strong {
-    font-size: 13px;
+  /* CTA compact */
+  .header-cta {
+    padding: 8px 14px;
+    font-size: 12.5px;
+    box-shadow: 0 3px 10px rgba(249, 185, 28, 0.35);
   }
 }
 
-/* Mobil foarte mic: sub 480px */
 @media (max-width: 480px) {
-  .header-landing-logo img {
-    height: 20px;
+  .header-contacts-wrapper{
+    display: none;
   }
 
-  .contact-icon {
-    width: 30px;
-    height: 30px;
+  .header-container {
+    padding: 10px 14px;
   }
 
-  .contact-text {
-    font-size: 11px;
+  .header-logo img {
+    height: 22px;
   }
 
-  .contact-text strong {
+  .header-cta {
+    padding: 7px 12px;
     font-size: 12px;
   }
+
 }

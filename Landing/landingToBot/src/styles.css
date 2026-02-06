@@ -1,4 +1,23 @@
-body {
+/* Reset general */
+* {
   margin: 0;
-  background-color: #fafbe4e7;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body full-width și full-height */
+body {
+  min-height: 100vh;      /* cel puțin înălțimea ecranului */
+  width: 100vw;           /* full lățime */
+  background-color: #fefff0c5; /* fundalul tău */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;     /* elimină scroll-ul orizontal */
+}
+
+/* Container central (ex: wrapper landing page) */
+.container {
+  max-width: 1300px; /* sau orice dimensiune dorită */
+  margin: 0 auto;    /* centru pe pagină */
+  padding: 0 20px;   /* padding intern să nu atingă marginile */
+  width: 100%;
 }
