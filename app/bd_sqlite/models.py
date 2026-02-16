@@ -77,6 +77,9 @@ class PragRisc(Base):
     scor_max: Mapped[int] = mapped_column(Integer)
 
     nivel: Mapped[str] = mapped_column(String(50))
+    
+    # ✅ Adăugat câmp pentru limbă
+    language: Mapped[str] = mapped_column(String(5), default="ro")
 
 
 # =====================================================
@@ -108,4 +111,5 @@ class Rezultat(Base):
 
     categorie: Mapped[str] = mapped_column(String(50))
     scor: Mapped[int]
+    max_scor: Mapped[int | None] = mapped_column(Integer, default=None)  # ✅ Adăugat
     nivel: Mapped[str] = mapped_column(String(50))

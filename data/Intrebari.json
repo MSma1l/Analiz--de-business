@@ -445,21 +445,21 @@
       "category": "Blocul 7. Date, IT",
       "index": 32,
       "language": "ro",
-      "text": "Este posibil în companie să obțineți în decurs de o oră lista tuturor contractelor active și să vedeți când expiră fiecare dintre ele?",
+      "text": "32. Este posibil în companie să obțineți în decurs de o oră lista tuturor contractelor active și să vedeți când expiră fiecare dintre ele?",
       "weight": 3
     },
     {
       "category": "Блок 7. Данные, IT",
       "index": 33,
       "language": "ru",
-      "text": "Есть ли в компании оформленные по закону письменные правила (политика защиты персональных данных), где указано, какие данные о людях собираются, зачем используются и как долго хранятся?",
+      "text": "33. Есть ли в компании оформленные по закону письменные правила (политика защиты персональных данных), где указано, какие данные о людях собираются, зачем используются и как долго хранятся?",
       "weight": 5
     },
     {
       "category": "Blocul 7. Date, IT",
       "index": 33,
       "language": "ro",
-      "text": "Există în companie reguli scrise întocmite conform legii (politica de protecție a datelor cu caracter personal), unde este indicat ce date despre persoane sunt colectate, de ce sunt utilizate și cât timp sunt păstrate?",
+      "text": "33. Există în companie reguli scrise întocmite conform legii (politica de protecție a datelor cu caracter personal), unde este indicat ce date despre persoane sunt colectate, de ce sunt utilizate și cât timp sunt păstrate?",
       "weight": 5
     }
   ]
