@@ -1,4 +1,3 @@
-import React from "react";
 import "@/components/footer/styleFooter.css";
 import { FaLinkedinIn, FaTelegramPlane, FaPhoneAlt, FaGlobe } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";

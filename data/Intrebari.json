@@ -1,242 +1,466 @@
-[
-  {
-    "categorie": "Корпоративная практика",
-    "index": 1,
-    "language": "ru",
-    "text": "1. Есть ли у компании оригиналы и актуальная версия учредительных документов?"
-  },
-  {
-    "categorie": "Practica corporativa",
-    "index": 1,
-    "language": "ro",
-    "text": "1. Compania deține originalele și versiunea actualizată a documentelor constitutive?"
-  },
-  {
-    "categorie": "Корпоративная практика",
-    "index": 2,
-    "language": "ru",
-    "text": "2. Все изменения в документы компании зарегистрированы в Агентстве государственных услуг (ASP)?"
-  },
-  {
-    "categorie": "Practica corporativa",
-    "index": 2,
-    "language": "ro",
-    "text": "2. Toate modificările documentelor companiei sunt înregistrate la Agenția Servicii Publice (ASP)?"
-  },
-  {
-    "categorie": "Корпоративная практика",
-    "index": 3,
-    "language": "ru",
-    "text": "3. Назначен ли администратор (директор) и оформлены ли его полномочия в ASP?"
-  },
-  {
-    "categorie": "Practica corporativa",
-    "index": 3,
-    "language": "ro",
-    "text": "3. Este numit administratorul (directorul) și sunt înregistrate atribuțiile acestuia la ASP?"
-  },
-  {
-    "categorie": "Деловая практика",
-    "index": 4,
-    "language": "ru",
-    "text": "4. Получены все необходимые лицензии и разрешения для вашей деятельности?"
-  },
-  {
-    "categorie": "Practica de afaceri",
-    "index": 4,
-    "language": "ro",
-    "text": "4. Sunt obținute toate licențele și autorizațiile necesare pentru activitatea desfășurată?"
-  },
-  {
-    "categorie": "Деловая практика",
-    "index": 5,
-    "language": "ru",
-    "text": "5. Все заключаемые вашей компанией договоры заполнены, подписаны уполномоченными лицами и скреплены печатью/электронной подписью?"
-  },
-  {
-    "categorie": "Practica de afaceri",
-    "index": 5,
-    "language": "ro",
-    "text": "5. Toate contractele încheiate de companie sunt completate, semnate de persoane autorizate și confirmate cu ștampilă sau semnătură electronică?"
-  },
-  {
-    "categorie": "Деловая практика",
-    "index": 6,
-    "language": "ru",
-    "text": "6. Есть ли привлечённые внешние специалисты на основании соответствующих договоров?"
-  },
-  {
-    "categorie": "Practica de afaceri",
-    "index": 6,
-    "language": "ro",
-    "text": "6. Există specialiști externi implicați pe baza unor contracte (outsourcing, consultanți)?"
-  },
-  {
-    "categorie": "Финансовая и налоговая практика",
-    "index": 7,
-    "language": "ru",
-    "text": "7. Компания регулярно сдаёт бухгалтерскую и налоговую отчётность?"
-  },
-  {
-    "categorie": "Practica financiara și fiscala",
-    "index": 7,
-    "language": "ro",
-    "text": "7. Compania depune regulat rapoartele contabile și fiscale?"
-  },
-  {
-    "categorie": "Финансовая и налоговая практика",
-    "index": 8,
-    "language": "ru",
-    "text": "8. Есть ли у компании кассовый аппарат или POS-терминал?"
-  },
-  {
-    "categorie": "Practica financiara și fiscala",
-    "index": 8,
-    "language": "ro",
-    "text": "8. Compania deține aparat de casă sau terminal POS?"
-  },
-  {
-    "categorie": "Финансовая и налоговая практика",
-    "index": 9,
-    "language": "ru",
-    "text": "9. Ведутся ли регистры учёта покупок, продаж и банковских операций?"
-  },
-  {
-    "categorie": "Practica financiara și fiscala",
-    "index": 9,
-    "language": "ro",
-    "text": "9. Sunt ținute registrele de evidență a cumpărărilor, vânzărilor și operațiunilor bancare?"
-  },
-  {
-    "categorie": "Финансовая и налоговая практика",
-    "index": 10,
-    "language": "ru",
-    "text": "10. Ежегодно проводится инвентаризация имущества?"
-  },
-  {
-    "categorie": "Practica financiara și fiscala",
-    "index": 10,
-    "language": "ro",
-    "text": "10. Se efectuează anual inventarierea bunurilor?"
-  },
-  {
-    "categorie": "Финансовая и налоговая практика",
-    "index": 11,
-    "language": "ru",
-    "text": "11. У компании есть задолженность по налогам и обязательным платежам в бюджет?"
-  },
-  {
-    "categorie": "Practica financiara și fiscala",
-    "index": 11,
-    "language": "ro",
-    "text": "11. Are compania datorii la taxe și plăți obligatorii către buget?"
-  },
-  {
-    "categorie": "Финансовая и налоговая практика",
-    "index": 12,
-    "language": "ru",
-    "text": "12. Контролируете ли Вы состояние дебиторской и кредиторской задолженности в компании?"
-  },
-  {
-    "categorie": "Practica financiara și fiscala",
-    "index": 12,
-    "language": "ro",
-    "text": "12. Monitorizați starea creanțelor și datoriilor companiei?"
-  },
-  {
-    "categorie": "Трудовая практика",
-    "index": 13,
-    "language": "ru",
-    "text": "13. С каждым работником заключён письменный трудовой договор?"
-  },
-  {
-    "categorie": "Practica muncii",
-    "index": 13,
-    "language": "ro",
-    "text": "13. Cu fiecare angajat este încheiat un contract individual de muncă în formă scrisă?"
-  },
-  {
-    "categorie": "Трудовая практика",
-    "index": 14,
-    "language": "ru",
-    "text": "14. В компании утверждено штатное расписание и есть должностные инструкции?"
-  },
-  {
-    "categorie": "Practica muncii",
-    "index": 14,
-    "language": "ro",
-    "text": "14. În companie este aprobat organigrama și există fișe de post?"
-  },
-  {
-    "categorie": "Трудовая практика",
-    "index": 15,
-    "language": "ru",
-    "text": "15. Сотрудники проходят инструктажи по технике безопасности и охране труда?"
-  },
-  {
-    "categorie": "Practica muncii",
-    "index": 15,
-    "language": "ro",
-    "text": "15. Angajații participă la instruiri privind securitatea muncii și protecția muncii?"
-  },
-  {
-    "categorie": "Трудовая практика",
-    "index": 16,
-    "language": "ru",
-    "text": "16. В компании утверждено Положение о защите персональных данных работников и клиентов?"
-  },
-  {
-    "categorie": "Practica muncii",
-    "index": 16,
-    "language": "ro",
-    "text": "16. În companie este aprobat Regulamentul privind protecția datelor personale ale angajaților și clienților?"
-  },
-  {
-    "categorie": "Претензии и судопроизводство",
-    "index": 17,
-    "language": "ru",
-    "text": "17. Вы проверяете своих партнёров/клиентов перед началом сотрудничества (например, на наличие долгов, судебных дел или санкций)?"
-  },
-  {
-    "categorie": "Reclamatii și litigii",
-    "index": 17,
-    "language": "ro",
-    "text": "17. Verificați partenerii/clienții înainte de începerea colaborării (de exemplu, datorii, litigii sau sancțiuni)?"
-  },
-  {
-    "categorie": "Претензии и судопроизводство",
-    "index": 18,
-    "language": "ru",
-    "text": "18. Ведётся ли в компании учёт всех претензий и судебных дел где она участвует?"
-  },
-  {
-    "categorie": "Reclamații și litigii",
-    "index": 18,
-    "language": "ro",
-    "text": "18. Este ținută evidența tuturor reclamațiilor și litigiilor în care compania este implicată?"
-  },
-  {
-    "categorie": "Делопроизводство",
-    "index": 19,
-    "language": "ru",
-    "text": "19. Используемое вами программное обеспечение является лицензионным?"
-  },
-  {
-    "categorie": "Managementul documentelor",
-    "index": 19,
-    "language": "ro",
-    "text": "19. Software-ul utilizat de companie este licențiat?"
-  },
-  {
-    "categorie": "Делопроизводство",
-    "index": 20,
-    "language": "ru",
-    "text": "20. Ведёте ли вы архив документов компании, где хранятся все важные документы?"
-  },
-  {
-    "categorie": "Managementul documentelor",
-    "index": 20,
-    "language": "ro",
-    "text": "20. Țineți un arhiv al documentelor companiei, în care sunt păstrate toate documentele importante?"
-  }
-]
+{
+  "questionnaire": [
+    {
+      "category": "Блок 1. Учредители, управление",
+      "index": 1,
+      "language": "ru",
+      "text": "1. В Вашей компании один учредитель?",
+      "weight": 4
+    },
+    {
+      "category": "Blocul 1. Fondatori, management",
+      "index": 1,
+      "language": "ro",
+      "text": "1. În compania dumneavoastră este un singur fondator?",
+      "weight": 4
+    },
+    {
+      "category": "Блок 1. Учредители, управление",
+      "index": 2,
+      "language": "ru",
+      "text": "2. Является ли директор и учредитель одним и тем же лицом?",
+      "weight": 3
+    },
+    {
+      "category": "Blocul 1. Fondatori, management",
+      "index": 2,
+      "language": "ro",
+      "text": "2. Este directorul și fondatorul aceeași persoană?",
+      "weight": 3
+    },
+    {
+      "category": "Блок 1. Учредители, управление",
+      "index": 3,
+      "language": "ru",
+      "text": "3. Если учредителей больше одного: есть ли между ними письменный партнёрский договор (распределение ролей, полномочий, денег, выход из бизнеса)?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 1. Fondatori, management",
+      "index": 3,
+      "language": "ro",
+      "text": "3. Dacă sunt mai mulți fondatori: există între ei un acord de parteneriat în scris (distribuirea rolurilor, competențelor, banilor, ieșirea din afacere)?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 1. Учредители, управление",
+      "index": 4,
+      "language": "ru",
+      "text": "4. В Вашей компании письменно закреплено, кто и в каких пределах принимает ключевые управленческие решения?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 1. Fondatori, management",
+      "index": 4,
+      "language": "ro",
+      "text": "4. În compania dumneavoastră este stabilit în scris cine și în ce limite ia deciziile manageriale cheie?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 1. Учредители, управление",
+      "index": 5,
+      "language": "ru",
+      "text": "5. Есть ли заранее прописанный порядок, как принимаются ключевые решения (кто подписывает, кто утверждает платежи, какие сделки требуют согласия учредителей)?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 1. Fondatori, management",
+      "index": 5,
+      "language": "ro",
+      "text": "5. Există o procedură prestabilită despre cum se iau deciziile cheie (cine semnează, cine aprobă plățile, ce tranzacții necesită consimțământul fondatorilor)?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 1. Учредители, управление",
+      "index": 6,
+      "language": "ru",
+      "text": "6. Есть ли прописанный механизм (например выкуп доли, опционы, медиация и др.) решения тупиковых ситуаций между учредителями (если мнения разделились)?",
+      "weight": 4
+    },
+    {
+      "category": "Blocul 1. Fondatori, management",
+      "index": 6,
+      "language": "ro",
+      "text": "6. Există un mecanism stabilit (de exemplu, răscumpărarea cotei-părți, opțiuni, mediere etc.) pentru rezolvarea situațiilor de impas între fondatori (dacă opiniile sunt împărțite)?",
+      "weight": 4
+    },
+    {
+      "category": "Блок 1. Учредители, управление",
+      "index": 7,
+      "language": "ru",
+      "text": "7. Когда документы подписывает не директор, оформлено ли у этого человека официальное разрешение (доверенность или приказ)?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 1. Fondatori, management",
+      "index": 7,
+      "language": "ro",
+      "text": "7. Când documentele sunt semnate nu de director, are acea persoană o autorizație oficială (procură sau ordin)?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 2. Аффилированность и банковский контроль",
+      "index": 8,
+      "language": "ru",
+      "text": "8. Совпадают ли данные о Бенефициарном владельце, которые вы подали в банк, с тем, что зарегистрировано в ASP?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 2. Afiliere și control bancar",
+      "index": 8,
+      "language": "ro",
+      "text": "8. Coincid datele despre Beneficiarul efectiv pe care le-ați prezentat la bancă cu cele înregistrate în ASP?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 2. Аффилированность и банковский контроль",
+      "index": 9,
+      "language": "ru",
+      "text": "9. Участвует ли супруг или супруга учредителя либо директора в деятельности компании?",
+      "weight": 4
+    },
+    {
+      "category": "Blocul 2. Afiliere și control bancar",
+      "index": 9,
+      "language": "ro",
+      "text": "9. Participă soțul sau soția fondatorului sau directorului la activitatea companiei?",
+      "weight": 4
+    },
+    {
+      "category": "Блок 2. Аффилированность и банковский контроль",
+      "index": 10,
+      "language": "ru",
+      "text": "10. Есть ли у вас задокументированные решения Общего собрания на все сделки с компаниями родственников учредителя или директора?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 2. Afiliere și control bancar",
+      "index": 10,
+      "language": "ro",
+      "text": "10. Aveți decizii documentate ale Adunării Generale pentru toate tranzacțiile cu companiile rudelor fondatorului sau directorului?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 2. Аффилированность и банковский контроль",
+      "index": 11,
+      "language": "ru",
+      "text": "11. Лицо, указанное в уставе и в выписке из реестра как участник (владелец) компании, действительно является фактическим владельцем бизнеса или указано формально, а фактическим владельцем является другое лицо?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 2. Afiliere și control bancar",
+      "index": 11,
+      "language": "ro",
+      "text": "11. Persoana indicată în statut și în extrasul din registru ca participant (proprietar) al companiei, este cu adevărat proprietarul efectiv al afacerii sau este indicată formal, iar proprietarul efectiv este o altă persoană?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 3. Финансы и налоговая дисциплина",
+      "index": 12,
+      "language": "ru",
+      "text": "12. Разделены ли личные деньги собственников и деньги компании?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "index": 12,
+      "language": "ro",
+      "text": "12. Sunt separați banii personali ai proprietarilor de banii companiei?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 3. Финансы и налоговая дисциплина",
+      "index": 13,
+      "language": "ru",
+      "text": "13. Оформлены ли финансовые вливания от учредителей как официальные займы с договорами, или они просто «падают» на счет?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "index": 13,
+      "language": "ro",
+      "text": "13. Sunt înregistrate aporturile financiare de la fondatori ca împrumuturi oficiale cu contracte, sau pur și simplu \"cad\" pe cont?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 3. Финансы и налоговая дисциплина",
+      "index": 14,
+      "language": "ru",
+      "text": "14. Бывали ли задержки налогов, зарплат или обязательных платежей за последние 3 года?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "index": 14,
+      "language": "ro",
+      "text": "14. Au existat întârzieri la plata impozitelor, salariilor sau plăților obligatorii în ultimii 3 ani?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 3. Финансы и налоговая дисциплина",
+      "index": 15,
+      "language": "ru",
+      "text": "15. Превышает ли снятие наличных с корпоративной карты или со счета компании 10% месячного оборота?",
+      "weight": 4
+    },
+    {
+      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "index": 15,
+      "language": "ro",
+      "text": "15. Depășește retragerea de numerar de pe cardul corporativ sau de pe contul companiei 10% din cifra de afaceri lunară?",
+      "weight": 4
+    },
+    {
+      "category": "Блок 3. Финансы и налоговая дисциплина",
+      "index": 16,
+      "language": "ru",
+      "text": "16. Берете ли вы НДС к зачету строго в том периоде, когда была наложена электронная подпись на e-Factura (а не по дате выписки)?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "index": 16,
+      "language": "ro",
+      "text": "16. Luați TVA-ul la deducere strict în perioada în care a fost aplicată semnătura electronică pe e-Factura (și nu după data emiterii)?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 3. Финансы и налоговая дисциплина",
+      "index": 17,
+      "language": "ru",
+      "text": "17. Сравнивали ли вы ежегодно свою «Налоговую нагрузку» (налоги/оборот) со среднеотраслевой по данным ГНС?",
+      "weight": 3
+    },
+    {
+      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "index": 17,
+      "language": "ro",
+      "text": "17. Ați comparat anual \"Sarcina fiscală\" (impozite/cifra de afaceri) cu media pe ramură conform datelor SFS?",
+      "weight": 3
+    },
+    {
+      "category": "Блок 3. Финансы и налоговая дисциплина",
+      "index": 18,
+      "language": "ru",
+      "text": "18. Превышают ли ваши Чистые Активы размер Уставного Капитала по последнему балансу?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "index": 18,
+      "language": "ro",
+      "text": "18. Depășesc Activele Nete mărimea Capitalului Statutar conform ultimului bilanț?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 3. Финансы и налоговая дисциплина",
+      "index": 19,
+      "language": "ru",
+      "text": "19. Списываете ли Вы расходы на личные нужды учредителей или директора (автомобиль, отдых, личные покупки) как расходы компании?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "index": 19,
+      "language": "ro",
+      "text": "19. Decontați cheltuielile pentru necesitățile personale ale fondatorilor sau directorului (automobile, vacanțe, achiziții personale) ca cheltuieli ale companiei?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 3. Финансы и налоговая дисциплина",
+      "index": 20,
+      "language": "ru",
+      "text": "20. Списывали ли вы долги просто на основании внутреннего приказа, без решения суда?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "index": 20,
+      "language": "ro",
+      "text": "20. Ați anulat datorii pur și simplu pe baza unui ordin intern, fără hotărâre judecătorească?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 4. Личная ответственность и банкротство",
+      "index": 21,
+      "language": "ru",
+      "text": "21. Знаете ли Вы, в каких случаях проблемы компании могут привести к личной финансовой ответственности директора или учредителя?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 4. Responsabilitate personală și faliment",
+      "index": 21,
+      "language": "ro",
+      "text": "21. Știți în ce cazuri problemele companiei pot duce la responsabilitate financiară personală a directorului sau fondatorului?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 4. Личная ответственность и банкротство",
+      "index": 22,
+      "language": "ru",
+      "text": "22. Подписывали ли учредитель или директор личные поручительства по обязательствам компании (кредиты, аренда, ключевые договоры)?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 4. Responsabilitate personală și faliment",
+      "index": 22,
+      "language": "ro",
+      "text": "22. Au semnat fondatorul sau directorul garanții personale pentru obligațiile companiei (credite, chirie, contracte cheie)?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 5. Контрагенты и реальная деятельность",
+      "index": 23,
+      "language": "ru",
+      "text": "23. Проверяете ли Вы контрагентов перед сделкой (компания, бенефициары, долги)?",
+      "weight": 4
+    },
+    {
+      "category": "Blocul 5. Contrapărți și activitate reală",
+      "index": 23,
+      "language": "ro",
+      "text": "23. Verificați contrapartidele înainte de tranzacție (companie, beneficiari, datorii)?",
+      "weight": 4
+    },
+    {
+      "category": "Блок 5. Контрагенты и реальная деятельность",
+      "index": 24,
+      "language": "ru",
+      "text": "24. Соответствует ли реальная деятельность компании тому, что указано в документах и регистрах?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 5. Contrapărți și activitate reală",
+      "index": 24,
+      "language": "ro",
+      "text": "24. Corespunde activitatea reală a companiei cu cea indicată în documente și registre?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 5. Контрагенты и реальная деятельность",
+      "index": 25,
+      "language": "ru",
+      "text": "25. Проводите ли Вы обязательную ежегодную инвентаризацию в компании?",
+      "weight": 4
+    },
+    {
+      "category": "Blocul 5. Contrapărți și activitate reală",
+      "index": 25,
+      "language": "ro",
+      "text": "25. Efectuați inventarierea anuală obligatorie în companie?",
+      "weight": 4
+    },
+    {
+      "category": "Блок 6. Персонал и рыночные риски",
+      "index": 26,
+      "language": "ru",
+      "text": "26. Выплачиваете ли вы сотрудникам какие-либо бонусы, премии или доплаты наличными, которые не проходят через ведомость?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 6. Personal și riscuri de piață",
+      "index": 26,
+      "language": "ro",
+      "text": "26. Plătiți angajaților bonusuri, premii sau plăți suplimentare în numerar care nu trec prin statele de plată?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 6. Персонал и рыночные риски",
+      "index": 27,
+      "language": "ru",
+      "text": "27. Обмениваетесь ли вы с конкурентами информацией о ценах или планах продаж / закупок (на встречах ассоциаций, в общих чатах)?",
+      "weight": 4
+    },
+    {
+      "category": "Blocul 6. Personal și riscuri de piață",
+      "index": 27,
+      "language": "ro",
+      "text": "27. Schimbați cu concurenții informații despre prețuri sau planuri de vânzări/achiziții (la întâlniri ale asociațiilor, în chat-uri comune)?",
+      "weight": 4
+    },
+    {
+      "category": "Блок 7. Данные, IT",
+      "index": 28,
+      "language": "ru",
+      "text": "28. Установлены ли у вас камеры видеонаблюдения и подготовлен ли письменный анализ рисков для защиты личных данных (оценка воздействия)?",
+      "weight": 3
+    },
+    {
+      "category": "Blocul 7. Date, IT",
+      "index": 28,
+      "language": "ro",
+      "text": "28. Aveți instalate camere de supraveghere video și este pregătită o analiză scrisă a riscurilor pentru protecția datelor personale (evaluarea impactului)?",
+      "weight": 3
+    },
+    {
+      "category": "Блок 7. Данные, IT",
+      "index": 29,
+      "language": "ru",
+      "text": "29. Передаете ли вы данные клиентов в «облака» или сервисы (CRM, рассылки), серверы которых находятся в США или за пределами ЕС?",
+      "weight": 4
+    },
+    {
+      "category": "Blocul 7. Date, IT",
+      "index": 29,
+      "language": "ro",
+      "text": "29. Transferați datele clienților în \"cloud-uri\" sau servicii (CRM, newsletter-uri) ale căror servere se află în SUA sau în afara UE?",
+      "weight": 4
+    },
+    {
+      "category": "Блок 7. Данные, IT",
+      "index": 30,
+      "language": "ru",
+      "text": "30. Делаете ли вы резервные копии бухгалтерской базы на удаленный сервер/облако?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 7. Date, IT",
+      "index": 30,
+      "language": "ro",
+      "text": "30. Faceți copii de rezervă ale bazei de date contabile pe un server la distanță/cloud?",
+      "weight": 5
+    },
+    {
+      "category": "Блок 7. Данные, IT",
+      "index": 31,
+      "language": "ru",
+      "text": "31. Есть ли в контрактах с IT-подрядчиками пункты о конфиденциальности и защите данных?",
+      "weight": 4
+    },
+    {
+      "category": "Blocul 7. Date, IT",
+      "index": 31,
+      "language": "ro",
+      "text": "31. Există în contractele cu contractorii IT clauze despre confidențialitate și protecția datelor?",
+      "weight": 4
+    },
+    {
+      "category": "Блок 7. Данные, IT",
+      "index": 32,
+      "language": "ru",
+      "text": "32. Можно ли в компании в течение часа получить список всех действующих договоров и увидеть, когда каждый из них заканчивается?",
+      "weight": 3
+    },
+    {
+      "category": "Blocul 7. Date, IT",
+      "index": 32,
+      "language": "ro",
+      "text": "Este posibil în companie să obțineți în decurs de o oră lista tuturor contractelor active și să vedeți când expiră fiecare dintre ele?",
+      "weight": 3
+    },
+    {
+      "category": "Блок 7. Данные, IT",
+      "index": 33,
+      "language": "ru",
+      "text": "Есть ли в компании оформленные по закону письменные правила (политика защиты персональных данных), где указано, какие данные о людях собираются, зачем используются и как долго хранятся?",
+      "weight": 5
+    },
+    {
+      "category": "Blocul 7. Date, IT",
+      "index": 33,
+      "language": "ro",
+      "text": "Există în companie reguli scrise întocmite conform legii (politica de protecție a datelor cu caracter personal), unde este indicat ce date despre persoane sunt colectate, de ce sunt utilizate și cât timp sunt păstrate?",
+      "weight": 5
+    }
+  ]
+}
