@@ -21,7 +21,7 @@ async def start_bot(message: Message):
     )
 
     await message.answer(
-        "Bun venit! Mă numesc BizzCheck \nДобро пожаловать! Меня зовут BizCheck \n\nAlegeți limba / Выберите язык:",
+        "Bun venit! Mă numesc BizzCheck \nДобро пожаловать! Меня зовут BizzCheck \n\nAlegeți limba / Выберите язык:",
         reply_markup=language_keyboard()
     )
 
@@ -87,7 +87,7 @@ async def language_selected(callback: CallbackQuery):
     📈 Analiza performanței afacerii
     📊 Evaluarea stării businessului
     📋 Rapoarte și comparații inteligente""",
-        "ru": """🏢 BizCheck Bot
+        "ru": """🏢 BizzCheck Bot
 
     Добро пожаловать в центр бизнес-анализа!
     📈 Анализ эффективности бизнеса

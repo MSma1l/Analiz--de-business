@@ -24,7 +24,9 @@ async def cabinet_personal(message: Message):
 
     await message.answer(
         texts[user.language],
-        reply_markup=cabinet_keyboard(user.language)
+        reply_markup=cabinet_keyboard(user.language,
+                                      test_completed=user.test_completed
+        )
     )
 
 @router.message(F.text.in_(["➕ Adaugă compania", "➕ Добавить компанию"]))
@@ -124,7 +126,9 @@ async def save_company_email(message: Message, state: FSMContext):
 
     await message.answer(
         texts[user.language],
-        reply_markup=cabinet_keyboard(user.language)
+        reply_markup=cabinet_keyboard(user.language,
+                                      test_completed=user.test_completed
+        )
     )
 
 

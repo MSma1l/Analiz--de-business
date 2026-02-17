@@ -1,7 +1,7 @@
 {
   "praguri": [
     {
-      "categorie": "Blocul 1. Учредители, управление",
+      "categorie": "Блок 1. Учредители, управление",
       "scor_min": 26,
       "scor_max": 31,
       "nivel": "Риски минимальные",
@@ -15,7 +15,7 @@
       "language": "ro"
     },
     {
-      "categorie": "Blocul 1. Учредители, управление",
+      "categorie": "Блок 1. Учредители, управление",
       "scor_min": 17,
       "scor_max": 25,
       "nivel": "Средний Риск",
@@ -29,7 +29,7 @@
       "language": "ro"
     },
     {
-      "categorie": "Blocul 1. Учредители, управление",
+      "categorie": "Блок 1. Учредители, управление",
       "scor_min": 0,
       "scor_max": 16,
       "nivel": "Высокий Риск проблем",
@@ -42,9 +42,8 @@
       "nivel": "Risc ridicat",
       "language": "ro"
     },
-
     {
-      "categorie": "Blocul 2. Аффилированность и банковский контроль",
+      "categorie": "Блок 2. Аффилированность и банковский контроль",
       "scor_min": 14,
       "scor_max": 19,
       "nivel": "Риски минимальные",
@@ -58,7 +57,7 @@
       "language": "ro"
     },
     {
-      "categorie": "Blocul 2. Аффилированность и банковский контроль",
+      "categorie": "Блок 2. Аффилированность и банковский контроль",
       "scor_min": 10,
       "scor_max": 13,
       "nivel": "Средний Риск",
@@ -72,7 +71,7 @@
       "language": "ro"
     },
     {
-      "categorie": "Blocul 2. Аффилированность и банковский контроль",
+      "categorie": "Блок 2. Аффилированность и банковский контроль",
       "scor_min": 0,
       "scor_max": 9,
       "nivel": "Высокий Риск проблем",
@@ -85,9 +84,8 @@
       "nivel": "Risc ridicat",
       "language": "ro"
     },
-
     {
-      "categorie": "Blocul 3. Финансы и налоговая дисциплина",
+      "categorie": "Блок 3. Финансы и налоговая дисциплина",
       "scor_min": 32,
       "scor_max": 42,
       "nivel": "Риски минимальные",
@@ -101,7 +99,7 @@
       "language": "ro"
     },
     {
-      "categorie": "Blocul 3. Финансы и налоговая дисциплина",
+      "categorie": "Блок 3. Финансы и налоговая дисциплина",
       "scor_min": 24,
       "scor_max": 31,
       "nivel": "Средний Риск",
@@ -115,7 +113,7 @@
       "language": "ro"
     },
     {
-      "categorie": "Blocul 3. Финансы и налоговая дисциплина",
+      "categorie": "Блок 3. Финансы и налоговая дисциплина",
       "scor_min": 0,
       "scor_max": 23,
       "nivel": "Высокий Риск проблем",
@@ -128,9 +126,8 @@
       "nivel": "Risc ridicat",
       "language": "ro"
     },
-
     {
-      "categorie": "Blocul 4. Личная ответственность и банкротство",
+      "categorie": "Блок 4. Личная ответственность и банкротство",
       "scor_min": 10,
       "scor_max": 999,
       "nivel": "Риски минимальные",
@@ -144,7 +141,7 @@
       "language": "ro"
     },
     {
-      "categorie": "Blocul 4. Личная ответственность и банкротство",
+      "categorie": "Блок 4. Личная ответственность и банкротство",
       "scor_min": 0,
       "scor_max": 9,
       "nivel": "Высокий Риск проблем",
@@ -157,38 +154,36 @@
       "nivel": "Risc ridicat",
       "language": "ro"
     },
-
     {
-      "categorie": "Blocul 5. Контрагенты и реальная деятельность",
+      "categorie": "Блок 5. Контрагенты и реальная деятельность",
       "scor_min": 13,
       "scor_max": 999,
       "nivel": "Риски минимальные",
       "language": "ru"
     },
     {
-      "categorie": "Blocul 5. Parteneri și activitate reală",
+      "categorie": "Blocul 5. Contrapărți și activitate reală",
       "scor_min": 13,
       "scor_max": 999,
       "nivel": "Risc minim",
       "language": "ro"
     },
     {
-      "categorie": "Blocul 5. Контрагенты и реальная деятельность",
+      "categorie": "Блок 5. Контрагенты и реальная деятельность",
       "scor_min": 0,
       "scor_max": 12,
       "nivel": "Высокий Риск проблем",
       "language": "ru"
     },
     {
-      "categorie": "Blocul 5. Parteneri și activitate reală",
+      "categorie": "Blocul 5. Contrapărți și activitate reală",
       "scor_min": 0,
       "scor_max": 12,
       "nivel": "Risc ridicat",
       "language": "ro"
     },
-
     {
-      "categorie": "Blocul 6. Персонал и рыночные риски",
+      "categorie": "Блок 6. Персонал и рыночные риски",
       "scor_min": 9,
       "scor_max": 999,
       "nivel": "Риски минимальные",
@@ -202,7 +197,7 @@
       "language": "ro"
     },
     {
-      "categorie": "Blocul 6. Персонал и рыночные риски",
+      "categorie": "Блок 6. Персонал и рыночные риски",
       "scor_min": 0,
       "scor_max": 8,
       "nivel": "Высокий Риск проблем",
@@ -215,9 +210,8 @@
       "nivel": "Risc ridicat",
       "language": "ro"
     },
-
     {
-      "categorie": "Blocul 7. Данные, IT",
+      "categorie": "Блок 7. Данные, IT",
       "scor_min": 16,
       "scor_max": 24,
       "nivel": "Риски минимальные",
@@ -231,7 +225,7 @@
       "language": "ro"
     },
     {
-      "categorie": "Blocul 7. Данные, IT",
+      "categorie": "Блок 7. Данные, IT",
       "scor_min": 12,
       "scor_max": 15,
       "nivel": "Средний Риск",
@@ -245,7 +239,7 @@
       "language": "ro"
     },
     {
-      "categorie": "Blocul 7. Данные, IT",
+      "categorie": "Блок 7. Данные, IT",
       "scor_min": 0,
       "scor_max": 11,
       "nivel": "Высокий Риск проблем",

@@ -47,21 +47,26 @@ async def handle_answer(callback: CallbackQuery):
         )
         await session.commit()
 
-        # URMĂTOAREA ÎNTREBARE
-        next_q = await get_current_question(user.current_index, user.language)
-        if not next_q:
-            # 🔥 FINAL TEST
-            rezultate = await finalize_test(user.id)
-            raport = format_report(rezultate)
-            await callback.message.answer(raport)
-            return
+    # URMĂTOAREA ÎNTREBARE
+    #  Apelat DUPĂ ce sesiunea s-a închis
+    next_q = await get_current_question(user.current_index, user.language)
+    if not next_q:
+        #  FINAL TEST
+        #  finalize_test returnează (raport, language)
+        rezultat  = await finalize_test(user.id)
+        rezultate = rezultat[0]   # [(categorie, scor, nivel), ...]
+        language  = rezultat[1]   # "ro" sau "ru"
 
-        # actualizăm mesajul existent cu următoarea întrebare
-        await callback.message.edit_text(
-            next_q.text,
-            reply_markup=yes_no_keyboard(user.language)
-        )
+        raport_text = format_report(rezultate, language)
+        await callback.message.answer(raport_text, parse_mode="Markdown")
+        await callback.answer()
+        return
 
-        # confirmăm callback-ul pentru a elimina “loading” la apăsare
-        await callback.answer(cache_time=0)
+    # actualizăm mesajul existent cu următoarea întrebare
+    await callback.message.answer(
+        next_q.text,
+        reply_markup=yes_no_keyboard(user.language)
+    )
 
+    # confirmăm callback-ul pentru a elimina "loading" la apăsare
+    await callback.answer(cache_time=0)

@@ -1,6 +1,6 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-def cabinet_keyboard(language: str):
+def cabinet_keyboard(language: str, test_completed: bool= False):
     if language == "ro":
         buttons = [
             [
@@ -11,8 +11,10 @@ def cabinet_keyboard(language: str):
                 KeyboardButton(text="💬 Contacte"),
                 KeyboardButton(text="📄 Raport PDF")
             ],
-            [KeyboardButton(text="📝 Test")]
         ]
+        if not test_completed:
+            buttons.append([KeyboardButton(text="📝 Test")])
+        
     else:
         buttons = [
             [
@@ -23,8 +25,11 @@ def cabinet_keyboard(language: str):
                 KeyboardButton(text="💬 Контакты"),
                 KeyboardButton(text="📄 PDF отчёт")
             ],
-            [KeyboardButton(text="📝 Тест")]
         ]
+        if not test_completed:
+            buttons.append(
+            [KeyboardButton(text="📝 Тест")])
+        
 
     return ReplyKeyboardMarkup(
         keyboard=buttons,
