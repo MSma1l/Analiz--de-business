@@ -8,6 +8,8 @@ from bd_sqlite.models import (
     PragRisc
 )
 
+from ..pdf.generare_pdf import final_pdf
+
 # =====================================================
 # USER
 # =====================================================
@@ -362,47 +364,31 @@ def format_report(raport, language="ro"):
     """
     Formatează raportul pentru afișare în Telegram.
     Grupează blocurile pe niveluri de risc cu recomandări.
-    raport = [(categorie, scor, nivel), ...]
-
-    Exemplu output:
-    📊 Итоговый результат:
-
-    🟢 Риски минимальные - рекомендуем проверять раз в год
-        └ 2 Блока (1 и 4)
-
-    🟡 Средний Риск - обратитесь когда будут проблемы
-        └ 3 Блока (2, 3 и 5)
-
-    🔴 Высокий Риск проблем - срочно примите меры
-        └ 2 Блока (6 и 7)
+    Afișează Bloc nr X: denumirea completă a blocului
     """
 
     # =====================================================
     # TEXTE PE LIMBĂ
     # =====================================================
-
     if language == "ro":
         titlu = "📊 *Rezultat final:*"
         texte_risc = {
             "minim":   "Riscuri minime - recomandăm verificare anuală",
             "mediu":   "Risc Mediu - consultați când apar probleme",
-            "ridicat": "Risc Ridicat - luați măsuri urgente"
+            "ridicat": "Risc Ridicat - trebuie verificat urgent"
         }
         separator = " și "
-        cuvant_bloc_singular = "Bloc"
-        cuvant_bloc_plural = "Blocuri"
         text_final = "\n📄 Raportul PDF detaliat a fost generat."
     else:  # ru
         titlu = "📊 *Итоговый результат:*"
         texte_risc = {
             "minim":   "Риски минимальные - рекомендуем проверять раз в год",
             "mediu":   "Средний Риск - обратитесь когда будут проблемы",
-            "ridicat": "Высокий Риск проблем - срочно примите меры"
+            "ridicat": "Высокий Риск проблем - требуется срочная проверка"
         }
         separator = " и "
-        cuvant_bloc_singular = "Блок"
-        cuvant_bloc_plural = "Блока"
         text_final = "\n📄 Детальный PDF отчет был сгенерирован."
+        
 
     emoji_map = {
         "minim":   "🟢",
@@ -411,82 +397,56 @@ def format_report(raport, language="ro"):
     }
 
     # =====================================================
-    # EXTRAGE NUMĂRUL BLOCULUI
-    # =====================================================
-
-    def get_bloc_number(categorie: str) -> str:
-        """
-        Extrage numărul blocului din numele categoriei
-        "Blocul 3. Finanțe..." → "3"
-        "Блок 3. Финансы..."   → "3"
-        """
-        try:
-            part = categorie.split(".")[0]        # "Blocul 3" sau "Блок 3"
-            return part.strip().split(" ")[-1]    # "3"
-        except:
-            return categorie
-
-    # =====================================================
     # GRUPARE BLOCURI PE NIVEL
     # =====================================================
-
     grupe = {"minim": [], "mediu": [], "ridicat": []}
 
     for item in raport:
-        # ✅ Acceptă atât 3 cât și 4 valori (cu sau fără max_scor)
         if len(item) == 4:
             categorie, scor, max_scor, nivel = item
         else:
             categorie, scor, nivel = item
 
-        nr = get_bloc_number(categorie)
         nivel_lower = nivel.lower()
-
         if language == "ro":
             if "ridicat" in nivel_lower or "înalt" in nivel_lower:
-                grupe["ridicat"].append(nr)
+                grupe["ridicat"].append(categorie)
             elif "mediu" in nivel_lower:
-                grupe["mediu"].append(nr)
+                grupe["mediu"].append(categorie)
             else:
-                grupe["minim"].append(nr)
+                grupe["minim"].append(categorie)
         else:  # ru
             if "высокий" in nivel_lower:
-                grupe["ridicat"].append(nr)
+                grupe["ridicat"].append(categorie)
             elif "средний" in nivel_lower:
-                grupe["mediu"].append(nr)
+                grupe["mediu"].append(categorie)
             else:
-                grupe["minim"].append(nr)
+                grupe["minim"].append(categorie)
 
     # =====================================================
     # CONSTRUIRE TEXT FINAL
     # =====================================================
-
     text = f"{titlu}\n\n"
 
-    # Afișăm în ordinea: risc ridicat → mediu → minim
     for cheie in ["ridicat", "mediu", "minim"]:
         blocuri = grupe[cheie]
-
         if not blocuri:
             continue
 
         emoji = emoji_map[cheie]
         label = texte_risc[cheie]
 
-        # Formatăm lista de blocuri
-        if len(blocuri) == 1:
-            blocuri_str = f"{cuvant_bloc_singular} {blocuri[0]}"
-        else:
-            if len(blocuri) == 2:
-                joined = separator.join(blocuri)
-            else:
-                joined = ", ".join(blocuri[:-1]) + separator + blocuri[-1]
-
-            blocuri_str = f"{len(blocuri)} {cuvant_bloc_plural} ({joined})"
-
         text += f"{emoji} {label}\n"
-        text += f"    └ *{blocuri_str}*\n\n"
+        for bloc in blocuri:
+            # Extragem numărul blocului (Bloc nr X) și denumirea completă
+            try:
+                part = bloc.split(".")[0].strip().split(" ")
+                nr_bloc = part[-1]
+            except:
+                nr_bloc = "?"  # fallback dacă parsing-ul e greșit
+
+            text += f"    └ {bloc}\n"
+        text += "\n"
 
     text += text_final
-
     return text

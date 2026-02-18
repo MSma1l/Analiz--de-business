@@ -5,7 +5,7 @@ def main_menu(language: str):
         return ReplyKeyboardMarkup(
             keyboard=[
                 [
-                    KeyboardButton(text="👤 Cabinet personal"),
+                    # KeyboardButton(text="👤 Cabinet personal"),
                     KeyboardButton(text="📝 Începe testul")
                 ]
             ],
@@ -15,7 +15,7 @@ def main_menu(language: str):
         return ReplyKeyboardMarkup(
             keyboard=[
                 [
-                    KeyboardButton(text="👤 Личный кабинет"),
+                    # KeyboardButton(text="👤 Личный кабинет"),
                     KeyboardButton(text="📝 Начать тест")
                 ]
             ],
