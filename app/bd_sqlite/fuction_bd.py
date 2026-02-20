@@ -8,8 +8,6 @@ from bd_sqlite.models import (
     PragRisc
 )
 
-from ..pdf.generare_pdf import final_pdf
-
 # =====================================================
 # USER
 # =====================================================
@@ -54,7 +52,6 @@ async def set_user_language(telegram_id: int, language: str):
     """
     async with async_session() as session:
 
-        # Găsim userul pentru a-i lua ID-ul intern
         result = await session.execute(
             select(User).where(User.telegram_id == telegram_id)
         )
@@ -63,7 +60,6 @@ async def set_user_language(telegram_id: int, language: str):
         if not user:
             return
 
-        # Resetăm: limbă, index, test_completed, scor
         await session.execute(
             update(User)
             .where(User.telegram_id == telegram_id)
@@ -75,12 +71,10 @@ async def set_user_language(telegram_id: int, language: str):
             )
         )
 
-        # Ștergem răspunsurile vechi
         await session.execute(
             delete(Raspuns).where(Raspuns.user_id == user.id)
         )
 
-        # Ștergem rezultatele vechi
         await session.execute(
             delete(Rezultat).where(Rezultat.user_id == user.id)
         )
@@ -146,7 +140,6 @@ async def get_current_question(index: int, language: str):
 async def get_max_score_by_category(language: str):
     """
     Returnează scorul maxim posibil pentru fiecare categorie
-    (suma tuturor weight-urilor din întrebări)
     """
     async with async_session() as session:
         stmt = (
@@ -301,152 +294,16 @@ async def get_user_results(user_id: int):
             categorie: {"scor": scor, "max_scor": max_scor or scor, "nivel": nivel}
             for categorie, scor, max_scor, nivel in rows
         }
-
-
-# =====================================================
-# FINALIZARE TEST
-# =====================================================
-
-async def finalize_test(user_id: int):
-    """
-    1. Calculează scor pe categorii
-    2. Determină risc din interval
-    3. Salvează rezultate în BD (inclusiv max_scor)
-    4. Marchează test ca finalizat
-    5. Returnează (raport, language)
-    """
-
-    async with async_session() as session:
-
-        # 1. Aflăm limba utilizatorului
-        result = await session.execute(
-            select(User).where(User.id == user_id)
-        )
-        user = result.scalar_one()
-        language = user.language or "ro"
-
-    # 2. Obținem scorurile maxime posibile pe categorii
-    #    ✅ Apelat DUPĂ ce sesiunea s-a închis
-    max_scores = await get_max_score_by_category(language)
-
-    # 3. Calculăm scorul obținut pe categorii
-    scoruri_categorii = await calculate_score_by_category(user_id, language)
-
-    # 4. Construim raportul complet cu niveluri de risc
-    raport = []
-    for categorie, scor in scoruri_categorii:
-        nivel = await get_nivel_risc(categorie, scor, language)
-        raport.append((categorie, scor, nivel))
-
-    # 5. Salvăm rezultatele în BD (cu max_scor)
-    await save_results_to_db(user_id, raport, max_scores)
-
-    # 6. Calculăm scorul total și marcăm testul ca finalizat
-    scor_total = sum(scor for _, scor, _ in raport)
-
-    async with async_session() as session:
-        await session.execute(
-            update(User)
-            .where(User.id == user_id)
-            .values(score=scor_total, test_completed=True)
-        )
-        await session.commit()
-
-    # ✅ Returnează (raport, language) - cele 2 valori
-    return raport, language
-
-
-# =====================================================
-# RAPORT TEXT TELEGRAM
-# =====================================================
-
-def format_report(raport, language="ro"):
-    """
-    Formatează raportul pentru afișare în Telegram.
-    Grupează blocurile pe niveluri de risc cu recomandări.
-    Afișează Bloc nr X: denumirea completă a blocului
-    """
-
-    # =====================================================
-    # TEXTE PE LIMBĂ
-    # =====================================================
-    if language == "ro":
-        titlu = "📊 *Rezultat final:*"
-        texte_risc = {
-            "minim":   "Riscuri minime - recomandăm verificare anuală",
-            "mediu":   "Risc Mediu - consultați când apar probleme",
-            "ridicat": "Risc Ridicat - trebuie verificat urgent"
-        }
-        separator = " și "
-        text_final = "\n📄 Raportul PDF detaliat a fost generat."
-    else:  # ru
-        titlu = "📊 *Итоговый результат:*"
-        texte_risc = {
-            "minim":   "Риски минимальные - рекомендуем проверять раз в год",
-            "mediu":   "Средний Риск - обратитесь когда будут проблемы",
-            "ridicat": "Высокий Риск проблем - требуется срочная проверка"
-        }
-        separator = " и "
-        text_final = "\n📄 Детальный PDF отчет был сгенерирован."
         
-
-    emoji_map = {
-        "minim":   "🟢",
-        "mediu":   "🟡",
-        "ridicat": "🔴"
-    }
-
-    # =====================================================
-    # GRUPARE BLOCURI PE NIVEL
-    # =====================================================
-    grupe = {"minim": [], "mediu": [], "ridicat": []}
-
-    for item in raport:
-        if len(item) == 4:
-            categorie, scor, max_scor, nivel = item
-        else:
-            categorie, scor, nivel = item
-
-        nivel_lower = nivel.lower()
-        if language == "ro":
-            if "ridicat" in nivel_lower or "înalt" in nivel_lower:
-                grupe["ridicat"].append(categorie)
-            elif "mediu" in nivel_lower:
-                grupe["mediu"].append(categorie)
-            else:
-                grupe["minim"].append(categorie)
-        else:  # ru
-            if "высокий" in nivel_lower:
-                grupe["ridicat"].append(categorie)
-            elif "средний" in nivel_lower:
-                grupe["mediu"].append(categorie)
-            else:
-                grupe["minim"].append(categorie)
-
-    # =====================================================
-    # CONSTRUIRE TEXT FINAL
-    # =====================================================
-    text = f"{titlu}\n\n"
-
-    for cheie in ["ridicat", "mediu", "minim"]:
-        blocuri = grupe[cheie]
-        if not blocuri:
-            continue
-
-        emoji = emoji_map[cheie]
-        label = texte_risc[cheie]
-
-        text += f"{emoji} {label}\n"
-        for bloc in blocuri:
-            # Extragem numărul blocului (Bloc nr X) și denumirea completă
-            try:
-                part = bloc.split(".")[0].strip().split(" ")
-                nr_bloc = part[-1]
-            except:
-                nr_bloc = "?"  # fallback dacă parsing-ul e greșit
-
-            text += f"    └ {bloc}\n"
-        text += "\n"
-
-    text += text_final
-    return text
+async def get_questions_per_category(language: str) -> dict:
+    """
+    Returnează {categorie: total_intrebari} pentru o limbă
+    """
+    async with async_session() as session:
+        stmt = (
+            select(Intrebare.categorie, func.count(Intrebare.id).label("total"))
+            .where(Intrebare.language == language)
+            .group_by(Intrebare.categorie)
+        )
+        result = await session.execute(stmt)
+        return {categorie: total for categorie, total in result.all()}

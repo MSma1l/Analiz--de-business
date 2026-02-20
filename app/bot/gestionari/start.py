@@ -8,6 +8,7 @@ from bd_sqlite.fuction_bd import (
     set_user_language,
     get_user_by_telegram_id,
 )
+from bd_sqlite.models import User
 
 router = Router()
 
@@ -38,7 +39,7 @@ async def info_command(message: Message):
     
     await message.answer(
         textss[language],
-        reply_markup=main_menu(language)
+        reply_markup=main_menu(language=user.language, test_completed=User.test_completed)
     )
 
 @router.message(F.text.in_(["/help"]))
@@ -53,7 +54,7 @@ async def help_command(message: Message):
     
     await message.answer(
         textss[language],
-        reply_markup=main_menu(language)
+        reply_markup=main_menu(language=user.language, test_completed=User.test_completed)
     )
    
 @router.message(F.text.in_(["/about"]))
@@ -68,7 +69,7 @@ async def about_command(message: Message):
     
     await message.answer(
         textss[language],
-        reply_markup=main_menu(language)
+        reply_markup=main_menu(language=user.language, test_completed=User.test_completed)
     ) 
     
 @router.callback_query(F.data.in_(["lang_ro", "lang_ru"]))
@@ -97,7 +98,7 @@ async def language_selected(callback: CallbackQuery):
 
     await callback.message.answer(
         texts[language],
-        reply_markup=main_menu(language)
+        reply_markup=main_menu(language=user.language, test_completed=User.test_completed)
     )
     
     await callback.answer()  

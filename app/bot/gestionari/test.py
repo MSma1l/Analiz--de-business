@@ -4,11 +4,12 @@ from bd_sqlite.fuction_bd import (
     save_answer,
     get_user_by_telegram_id,
     get_current_question,
-    finalize_test,
-    format_report
+    get_questions_per_category
 )
+from sqlalchemy import func, select
+from .raport import (finalize_test, format_report)
 from bd_sqlite.conexiune import async_session
-from bd_sqlite.models import User
+from bd_sqlite.models import User, Intrebare
 from bot.tastatura.testButton import yes_no_keyboard
 
 router = Router()
@@ -83,19 +84,46 @@ async def handle_answer(callback: CallbackQuery):
         await session.commit()
 
     # URMĂTOAREA ÎNTREBARE
+# URMĂTOAREA ÎNTREBARE
     next_q = await get_current_question(user.current_index, user.language)
     if not next_q:
-        # ② FINAL TEST
+        # FINAL TEST
         rezultat  = await finalize_test(user.id)
         rezultate = rezultat[0]
         language  = rezultat[1]
-
         raport_text = format_report(rezultate, language)
         await callback.message.answer(raport_text, parse_mode="Markdown")
         return
 
-    # ③ Trimitem MESAJ NOU cu următoarea întrebare
+    # Totaluri per categorie
+    totale = await get_questions_per_category(user.language)
+
+    # Verificăm dacă e prima întrebare din bloc nou
+    # (întrebarea curentă are altă categorie față de cea anterioară)
+    prev_q = await get_current_question(user.current_index - 1, user.language)
+    bloc_nou = (prev_q is None or prev_q.categorie != next_q.categorie)
+
+    if bloc_nou:
+        await callback.message.answer(f"📌 *{next_q.categorie}*", parse_mode="Markdown")
+
+    # Calculăm index_in_bloc
+    # Găsim prima întrebare din această categorie
+    async with async_session() as session:
+        stmt = (
+            select(func.min(Intrebare.index))
+            .where(
+                Intrebare.categorie == next_q.categorie,
+                Intrebare.language == user.language
+            )
+        )
+        result = await session.execute(stmt)
+        primul_index = result.scalar_one()
+
+    index_in_bloc = next_q.index - primul_index + 1
+    total_bloc = totale.get(next_q.categorie, "?")
+
     await callback.message.answer(
-        next_q.text,
-        reply_markup=yes_no_keyboard(user.language)
+        f"`{index_in_bloc}/{total_bloc}`\n\n{next_q.text}",
+        reply_markup=yes_no_keyboard(user.language),
+        parse_mode="Markdown"
     )

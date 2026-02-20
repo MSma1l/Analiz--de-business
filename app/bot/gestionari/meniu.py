@@ -25,7 +25,7 @@ async def cabinet_personal(message: Message):
     await message.answer(
         texts[user.language],
         reply_markup=cabinet_keyboard(user.language,
-                                      test_completed=user.test_completed
+                                      test_completed=User.test_completed
         )
     )
 
@@ -127,7 +127,7 @@ async def save_company_email(message: Message, state: FSMContext):
     await message.answer(
         texts[user.language],
         reply_markup=cabinet_keyboard(user.language,
-                                      test_completed=user.test_completed
+                                      test_completed=User.test_completed
         )
     )
 
@@ -136,7 +136,7 @@ async def save_company_email(message: Message, state: FSMContext):
 async def company_position(message: Message):
     user = await get_user_by_telegram_id(message.from_user.id)
 
-    if not user.test_completed or user.score is None:
+    if not User.test_completed or User.score is None:
         await message.answer(
             "❌ Mai întâi trebuie să finalizezi testul."
             if user.language == "ro"

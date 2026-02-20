@@ -2,6 +2,7 @@ from aiogram import Router, F
 from aiogram.types import Message
 from bd_sqlite.fuction_bd import get_user_by_telegram_id
 from bot.tastatura.meniuButton import main_menu
+from bd_sqlite.models import User
 
 router = Router()
 
@@ -18,7 +19,7 @@ async def help_command(message: Message):
     
     await message.answer(
         textss[language],
-        reply_markup=main_menu(language)
+        reply_markup=main_menu(language=user.language, test_completed=User.test_completed)
     )
    
 @router.message(F.text.in_(["/about"]))
@@ -33,5 +34,5 @@ async def about_command(message: Message):
     
     await message.answer(
         textss[language],
-        reply_markup= main_menu(language)
+        reply_markup= main_menu(language=user.language, test_completed=User.test_completed)
     ) 

@@ -5,7 +5,7 @@ from bd_sqlite.fuction_bd import get_user_by_telegram_id
 
 router = Router()
 
-@router.message(F.text.in_(["📄 Raport PDF", "📄 PDF отчёт"]))
+@router.message(F.text.in_(["/pdf"]))
 async def generate_report(message: Message):
     user = await get_user_by_telegram_id(message.from_user.id)
 
