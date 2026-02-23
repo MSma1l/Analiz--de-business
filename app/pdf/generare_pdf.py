@@ -27,16 +27,16 @@ except Exception:
     pdfmetrics.registerFont(TTFont("DejaVu-Bold", FONT_PATH))
 
 # ==================== PALETA ====================
-C_BLUE_DARK   = "#1A3A5C"   # albastru închis  → header, titluri
-C_BLUE_MID    = "#1E6FA8"   # albastru mediu   → bare secțiuni
-C_BLUE_LIGHT  = "#D6E8F7"   # albastru pal     → rânduri alternate
-C_ORANGE      = "#F59E0B"   # galben-orange    → subtitlu header, risc mediu
-C_GREEN       = "#2E7D5E"   # verde smarald    → risc minim
-C_RED         = "#C0392B"   # roșu sobru       → risc ridicat
-C_GRAY_LIGHT  = "#EEF2F7"   # gri albăstrui    → arc background donut
-C_GRAY_TEXT   = "#4A5568"   # gri              → text secundar, mesaj italic
+C_BLUE_DARK   = "#1A3A5C"
+C_BLUE_MID    = "#1E6FA8"
+C_BLUE_LIGHT  = "#D6E8F7"
+C_ORANGE      = "#F59E0B"
+C_GREEN       = "#2E7D5E"
+C_RED         = "#C0392B"
+C_GRAY_LIGHT  = "#EEF2F7"
+C_GRAY_TEXT   = "#4A5568"
 C_WHITE       = "#FFFFFF"
-C_SEPARATOR   = "#B8D0E8"   # albastru pal     → linie separator
+C_SEPARATOR   = "#B8D0E8"
 
 PAGE_W  = A4[0]
 MAIN_W  = PAGE_W * 0.80
@@ -127,7 +127,6 @@ def _worst_nivel(niveluri: list, language: str) -> str:
 # ==================== COMPONENTE LAYOUT ====================
 
 def _header_block(titlu_doc: str, subtitlu_doc: str) -> Table:
-    """Header cu fundal albastru închis, titlu alb, subtitlu galben-orange."""
     title_style = ParagraphStyle(
         "HdrTitle",
         fontName="DejaVu-Bold",
@@ -166,7 +165,6 @@ def _header_block(titlu_doc: str, subtitlu_doc: str) -> Table:
 
 
 def _section_bar(text: str) -> Table:
-    """Bară de secțiune albastru mediu, text alb."""
     style = ParagraphStyle(
         "SecBar",
         fontName="DejaVu-Bold",
@@ -190,7 +188,6 @@ def _section_bar(text: str) -> Table:
 
 def generate_chart_bytes(scor: int, max_scor: int, nivel: str,
                          categorie: str, language: str) -> io.BytesIO:
-    """Donut compact per categorie."""
     buf     = io.BytesIO()
     procent = int((scor / max_scor) * 100) if max_scor > 0 else 0
     color   = _color_for_nivel(nivel, language)
@@ -233,7 +230,7 @@ def generate_chart_bytes(scor: int, max_scor: int, nivel: str,
 
 
 def generate_general_risk_chart_bytes(raport: list, language: str) -> io.BytesIO:
-    """Donut mare — procent mediu real + mesaj motivațional."""
+    """Donut mare — procent mediu real (fara mesaj motivational, doar procentul)."""
     buf = io.BytesIO()
 
     procente = [
@@ -252,24 +249,12 @@ def generate_general_risk_chart_bytes(raport: list, language: str) -> io.BytesIO
             "Risc Mediu"   if color == C_ORANGE else
             "Risc Minim"
         )
-        if procent_mediu >= 75:
-            mesaj = f"Ați atins {procent_mediu}% din vârful ideal de performanță."
-        elif procent_mediu >= 40:
-            mesaj = f"Sunteți la {procent_mediu}% distanță de afacerea perfectă."
-        else:
-            mesaj = f"Performanța actuală: {procent_mediu}% din nivelul ideal."
     else:
         nivel_text = (
             "Высокий риск"     if color == C_RED else
             "Средний риск"     if color == C_ORANGE else
             "Минимальный риск"
         )
-        if procent_mediu >= 75:
-            mesaj = f"Вы достигли {procent_mediu}% от идеального пика эффективности."
-        elif procent_mediu >= 40:
-            mesaj = f"Вы на {procent_mediu}% пути к идеальному бизнесу."
-        else:
-            mesaj = f"Текущий результат: {procent_mediu}% от идеального уровня."
 
     fig, ax = plt.subplots(figsize=(4.0, 4.0), facecolor="none")
 
@@ -293,17 +278,126 @@ def generate_general_risk_chart_bytes(raport: list, language: str) -> io.BytesIO
 
     ax.set_aspect("equal")
 
-    fig.text(0.5, 0.01, mesaj,
-             ha="center", va="bottom",
-             fontsize=8.5, style="italic",
-             color=C_GRAY_TEXT, fontfamily="DejaVu Sans")
-
     plt.tight_layout(pad=0.5)
     plt.savefig(buf, format="PNG", bbox_inches="tight",
                 transparent=True, dpi=140)
     plt.close(fig)
     buf.seek(0)
     return buf
+
+
+def _build_variants_block(procent_mediu: int, language: str) -> list:
+    """
+    Construieste blocul cu cele 3 variante de raspuns pentru pagina de scor general.
+    Textul apare DOAR in limba selectata de utilizator (ro sau ru).
+    """
+    elements = []
+
+    is_ro = language == "ro"
+
+    label_style = ParagraphStyle(
+        "VarLabel",
+        fontName="DejaVu-Bold",
+        fontSize=10,
+        textColor=colors.HexColor(C_BLUE_MID),
+        leading=15,
+        spaceAfter=4,
+    )
+    text_style = ParagraphStyle(
+        "VarText",
+        fontName="DejaVu-Bold",
+        fontSize=12,
+        textColor=colors.HexColor(C_BLUE_DARK),
+        leading=18,
+        spaceAfter=0,
+        leftIndent=10,
+    )
+    note_style = ParagraphStyle(
+        "VarNote",
+        fontName="DejaVu",
+        fontSize=8,
+        textColor=colors.HexColor(C_GRAY_TEXT),
+        leading=12,
+        alignment=1,
+    )
+
+    if is_ro:
+        nota    = "* Aceasta este o evaluare preliminară — nu reprezintă rezultatul final."
+        variants = [
+            {
+                "label": "Varianta 1",
+                "text":  f"Ați atins {procent_mediu}% din vârful ideal de performanță.",
+                "bg":    C_BLUE_LIGHT,
+            },
+            {
+                "label": "Varianta 2",
+                "text":  f"Sunteți la {procent_mediu}% distanță de afacerea perfectă.",
+                "bg":    C_GRAY_LIGHT,
+            },
+            {
+                "label": "Varianta 3",
+                "text":  f"Performanța actuală: {procent_mediu}% din nivelul ideal.",
+                "bg":    C_BLUE_LIGHT,
+            },
+        ]
+    else:
+        nota    = "* Это предварительная оценка — не является окончательным результатом."
+        variants = [
+            {
+                "label": "Вариант 1",
+                "text":  f"Вы достигли {procent_mediu}% от идеального пика эффективности.",
+                "bg":    C_BLUE_LIGHT,
+            },
+            {
+                "label": "Вариант 2",
+                "text":  f"Вы на {procent_mediu}% пути к идеальному бизнесу.",
+                "bg":    C_GRAY_LIGHT,
+            },
+            {
+                "label": "Вариант 3",
+                "text":  f"Текущий результат: {procent_mediu}% от идеального уровня.",
+                "bg":    C_BLUE_LIGHT,
+            },
+        ]
+
+    elements.append(Spacer(1, 0.3 * cm))
+
+    for v in variants:
+        cell_content = [
+            Spacer(1, 0.18 * cm),
+            Paragraph(v["label"], label_style),
+            Paragraph(v["text"], text_style),
+            Spacer(1, 0.18 * cm),
+        ]
+        row_tbl = Table([[cell_content]], colWidths=[MAIN_W])
+        row_tbl.setStyle(TableStyle([
+            ("BACKGROUND",    (0, 0), (-1, -1), colors.HexColor(v["bg"])),
+            ("LEFTPADDING",   (0, 0), (-1, -1), 16),
+            ("RIGHTPADDING",  (0, 0), (-1, -1), 16),
+            ("TOPPADDING",    (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+        elements.append(row_tbl)
+        elements.append(Spacer(1, 0.18 * cm))
+
+    elements.append(Spacer(1, 0.2 * cm))
+
+    # Nota de subsol in limba utilizatorului
+    nota_tbl = Table(
+        [[Paragraph(nota, note_style)]],
+        colWidths=[MAIN_W]
+    )
+    nota_tbl.setStyle(TableStyle([
+        ("BACKGROUND",    (0, 0), (-1, -1), colors.HexColor(C_WHITE)),
+        ("LEFTPADDING",   (0, 0), (-1, -1), 10),
+        ("RIGHTPADDING",  (0, 0), (-1, -1), 10),
+        ("TOPPADDING",    (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+        ("BOX",           (0, 0), (-1, -1), 0.5, colors.HexColor(C_SEPARATOR)),
+    ]))
+    elements.append(nota_tbl)
+
+    return elements
 
 
 # ==================== GENERARE PDF ====================
@@ -382,7 +476,7 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
             ]))
             elements.append(tbl)
 
-        # ---- Pagină nouă pentru scor general ----
+        # ---- Pagina 3: Scor General cu cele 3 variante ----
         elements.append(PageBreak())
         elements.append(Spacer(1, 0.5 * cm))
         elements.append(_header_block(titlu_doc, subtitlu_doc))
@@ -390,7 +484,14 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
         elements.append(_section_bar(titlu_general))
         elements.append(Spacer(1, 0.35 * cm))
 
-        # ---- Grafic donut general ----
+        # Calcul procent mediu
+        procente_all = [
+            int((scor / max_scor) * 100)
+            for _, scor, max_scor, _ in raport if max_scor > 0
+        ]
+        procent_mediu = int(sum(procente_all) / len(procente_all)) if procente_all else 0
+
+        # Grafic donut general (fara mesaj, doar grafic)
         general_buf = generate_general_risk_chart_bytes(raport, language)
         general_img = Image(general_buf, width=8.5 * cm, height=8.5 * cm)
 
@@ -403,170 +504,197 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
             ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
         ]))
         elements.append(general_tbl)
+        elements.append(Spacer(1, 0.3 * cm))
+
+        # ---- CELE 3 VARIANTE DE RASPUNS ----
+        for el in _build_variants_block(procent_mediu, language):
+            elements.append(el)
+
         elements.append(Spacer(1, 0.5 * cm))
 
-        # ---- Calculăm procentul mediu real ----
-        procente_carduri = [
-            int((d["scor"] / d["max_scor"]) * 100)
-            for d in results_dict.values() if d["max_scor"] > 0
-        ]
-        procent_card = int(sum(procente_carduri) / len(procente_carduri)) if procente_carduri else 0
+        # ---- Pagini per nivel de risc real ----
+        grupe_risc = {"minim": [], "mediu": [], "ridicat": []}
+        for cat, scor, max_scor, nivel in raport:
+            n = nivel.lower()
+            if language == "ro":
+                if "ridicat" in n or "înalt" in n:
+                    grupe_risc["ridicat"].append((cat, scor, max_scor, nivel))
+                elif "mediu" in n:
+                    grupe_risc["mediu"].append((cat, scor, max_scor, nivel))
+                else:
+                    grupe_risc["minim"].append((cat, scor, max_scor, nivel))
+            else:
+                if "высокий" in n:
+                    grupe_risc["ridicat"].append((cat, scor, max_scor, nivel))
+                elif "средний" in n:
+                    grupe_risc["mediu"].append((cat, scor, max_scor, nivel))
+                else:
+                    grupe_risc["minim"].append((cat, scor, max_scor, nivel))
 
-        niveluri_toate = [d["nivel"] for d in results_dict.values()]
-        worst          = _worst_nivel(niveluri_toate, language)
-        color_general  = _color_for_nivel(worst, language)
-
-        # Definim cele 3 scenarii — culoare + text bazate pe risc real
-        if language == "ro":
-            scenarii = [
-                {
-                    "nivel_key": "minim",
-                    "color":  C_GREEN,
-                    "emoji":  "🏆",
-                    "titlu":  "Performanță înaltă",
-                    "mesaj":  f"Ați atins {procent_card}% din vârful ideal de performanță.",
-                    "sub":    "Afacerea ta funcționează la un nivel excelent. Menține această direcție!",
+        config_risc = {
+            "minim": {
+                "color": C_GREEN,
+                "ro": {
+                    "emoji": "🏆",
+                    "titlu": "Performanță înaltă",
+                    "mesaj_fn": lambda p: f"Ați atins {p}% din vârful ideal de performanță.",
+                    "sub": "Aceste domenii funcționează excelent. Menține direcția!",
                     "nivel_display": "Risc Minim",
                 },
-                {
-                    "nivel_key": "mediu",
-                    "color":  C_ORANGE,
-                    "emoji":  "📈",
-                    "titlu":  "În dezvoltare",
-                    "mesaj":  f"Sunteți la {procent_card}% distanță de afacerea perfectă.",
-                    "sub":    "Există oportunități clare de îmbunătățire. Acționați acum!",
-                    "nivel_display": "Risc Mediu",
-                },
-                {
-                    "nivel_key": "ridicat",
-                    "color":  C_RED,
-                    "emoji":  "⚠️",
-                    "titlu":  "Necesită atenție urgentă",
-                    "mesaj":  f"Performanța actuală: {procent_card}% din nivelul ideal.",
-                    "sub":    "Recomandăm o analiză urgentă a punctelor slabe.",
-                    "nivel_display": "Risc Ridicat",
-                },
-            ]
-        else:
-            scenarii = [
-                {
-                    "nivel_key": "minim",
-                    "color":  C_GREEN,
-                    "emoji":  "🏆",
-                    "titlu":  "Высокая эффективность",
-                    "mesaj":  f"Вы достигли {procent_card}% от идеального пика эффективности.",
-                    "sub":    "Ваш бизнес работает на отличном уровне. Сохраняйте этот курс!",
+                "ru": {
+                    "emoji": "🏆",
+                    "titlu": "Высокая эффективность",
+                    "mesaj_fn": lambda p: f"Вы достигли {p}% от идеального пика эффективности.",
+                    "sub": "Эти направления работают отлично. Сохраняйте курс!",
                     "nivel_display": "Минимальный риск",
                 },
-                {
-                    "nivel_key": "mediu",
-                    "color":  C_ORANGE,
-                    "emoji":  "📈",
-                    "titlu":  "В развитии",
-                    "mesaj":  f"Вы на {procent_card}% пути к идеальному бизнесу.",
-                    "sub":    "Есть чёткие возможности для улучшения. Действуйте сейчас!",
+            },
+            "mediu": {
+                "color": C_ORANGE,
+                "ro": {
+                    "emoji": "📈",
+                    "titlu": "În dezvoltare",
+                    "mesaj_fn": lambda p: f"Sunteți la {p}% distanță de afacerea perfectă.",
+                    "sub": "Există oportunități clare de îmbunătățire. Acționați acum!",
+                    "nivel_display": "Risc Mediu",
+                },
+                "ru": {
+                    "emoji": "📈",
+                    "titlu": "В развитии",
+                    "mesaj_fn": lambda p: f"Вы на {p}% пути к идеальному бизнесу.",
+                    "sub": "Есть чёткие возможности для улучшения. Действуйте сейчас!",
                     "nivel_display": "Средний риск",
                 },
-                {
-                    "nivel_key": "ridicat",
-                    "color":  C_RED,
-                    "emoji":  "⚠️",
-                    "titlu":  "Требует срочного внимания",
-                    "mesaj":  f"Текущий результат: {procent_card}% от идеального уровня.",
-                    "sub":    "Рекомендуем срочный анализ слабых мест.",
+            },
+            "ridicat": {
+                "color": C_RED,
+                "ro": {
+                    "emoji": "⚠️",
+                    "titlu": "Necesită atenție urgentă",
+                    "mesaj_fn": lambda p: f"Performanța actuală: {p}% din nivelul ideal.",
+                    "sub": "Aceste domenii necesită intervenție imediată!",
+                    "nivel_display": "Risc Ridicat",
+                },
+                "ru": {
+                    "emoji": "⚠️",
+                    "titlu": "Требует срочного внимания",
+                    "mesaj_fn": lambda p: f"Текущий результат: {p}% от идеального уровня.",
+                    "sub": "Эти направления требуют немедленного вмешательства!",
                     "nivel_display": "Высокий риск",
                 },
-            ]
+            },
+        }
 
-        # Stiluri text card
         card_titlu_style = ParagraphStyle(
-            "CardTitlu",
-            fontName="DejaVu-Bold",
-            fontSize=18,
-            textColor=colors.HexColor(C_WHITE),
-            leading=24,
-            alignment=1,
-            spaceAfter=10,
+            "CardTitlu", fontName="DejaVu-Bold", fontSize=16,
+            textColor=colors.HexColor(C_WHITE), leading=22,
+            alignment=0, spaceAfter=8,
         )
         card_mesaj_style = ParagraphStyle(
-            "CardMesaj",
-            fontName="DejaVu-Bold",
-            fontSize=12,
-            textColor=colors.HexColor(C_WHITE),
-            leading=18,
-            alignment=1,
-            spaceAfter=8,
+            "CardMesaj", fontName="DejaVu-Bold", fontSize=15,
+            textColor=colors.HexColor(C_WHITE), leading=22,
+            alignment=0, spaceAfter=8,
         )
         card_sub_style = ParagraphStyle(
-            "CardSub",
-            fontName="DejaVu",
-            fontSize=10,
-            textColor=colors.HexColor(C_WHITE),
-            leading=15,
-            alignment=1,
+            "CardSub", fontName="DejaVu-Bold", fontSize=12,
+            textColor=colors.HexColor(C_WHITE), leading=18,
+            alignment=0,
+        )
+        cat_style = ParagraphStyle(
+            "CatStyle", fontName="DejaVu-Bold", fontSize=11,
+            textColor=colors.HexColor(C_WHITE), leading=16,
+            alignment=0,
         )
 
-        # O pagină per scenariu
-        for scenariu in scenarii:
+        for nivel_key in ["ridicat", "mediu", "minim"]:
+            categorii_nivel = grupe_risc[nivel_key]
+            if not categorii_nivel:
+                continue
+
+            cfg      = config_risc[nivel_key]
+            lang_cfg = cfg[language]
+
+            procente_nivel = [
+                int((scor / max_scor) * 100)
+                for _, scor, max_scor, _ in categorii_nivel if max_scor > 0
+            ]
+            procent_nivel = int(sum(procente_nivel) / len(procente_nivel)) if procente_nivel else 0
+
+            if procent_nivel >= 70:
+                color = C_GREEN
+                nivel_display = "Risc Minim" if language == "ro" else "Минимальный риск"
+                mesaj_text = (f"Ati atins {procent_nivel}% din varful ideal de performanta."
+                              if language == "ro" else
+                              f"Vy dostigli {procent_nivel}% ot idealnogo pika effektivnosti.")
+            elif procent_nivel >= 40:
+                color = C_ORANGE
+                nivel_display = "Risc Mediu" if language == "ro" else "Средний риск"
+                mesaj_text = (f"Sunteti la {procent_nivel}% distanta de afacerea perfecta."
+                              if language == "ro" else
+                              f"Vy na {procent_nivel}% puti k idealnomu biznesu.")
+            else:
+                color = C_RED
+                nivel_display = "Risc Ridicat" if language == "ro" else "Высокий риск"
+                mesaj_text = (f"Performanta actuala: {procent_nivel}% din nivelul ideal."
+                              if language == "ro" else
+                              f"Tekushchiy rezultat: {procent_nivel}% ot idealnogo urovnya.")
+
             elements.append(PageBreak())
             elements.append(Spacer(1, 0.5 * cm))
             elements.append(_header_block(titlu_doc, subtitlu_doc))
-            elements.append(Spacer(1, 0.5 * cm))
-            elements.append(_section_bar(f"{scenariu['emoji']}  {scenariu['titlu']}"))
+            elements.append(Spacer(1, 0.45 * cm))
+            elements.append(_section_bar(f"{lang_cfg['emoji']}  {lang_cfg['titlu']}"))
             elements.append(Spacer(1, 0.4 * cm))
 
-            # Diagrama donut pentru acest scenariu
-            buf_scenariu = io.BytesIO()
-            fig, ax = plt.subplots(figsize=(3.8, 3.8), facecolor="none")
+            buf_nivel = io.BytesIO()
+            fig, ax = plt.subplots(figsize=(3.6, 3.6), facecolor="none")
             ax.pie(
-                [procent_card, 100 - procent_card],
+                [procent_nivel, 100 - procent_nivel],
                 startangle=90,
-                colors=[scenariu["color"], C_GRAY_LIGHT],
+                colors=[color, C_GRAY_LIGHT],
                 wedgeprops={"width": 0.30, "edgecolor": C_WHITE, "linewidth": 2.5},
                 counterclock=False
             )
-            ax.text(0,  0.14, f"{procent_card}%",
+            ax.text(0,  0.14, f"{procent_nivel}%",
                     ha="center", va="center",
-                    fontsize=26, fontweight="bold",
+                    fontsize=24, fontweight="bold",
                     color=C_BLUE_DARK, fontfamily="DejaVu Sans")
-            ax.text(0, -0.20, scenariu["nivel_display"],
+            ax.text(0, -0.20, nivel_display,
                     ha="center", va="center",
-                    fontsize=10, fontweight="bold",
-                    color=scenariu["color"], fontfamily="DejaVu Sans")
+                    fontsize=9, fontweight="bold",
+                    color=color, fontfamily="DejaVu Sans")
             ax.set_aspect("equal")
-            plt.tight_layout(pad=0.5)
-            plt.savefig(buf_scenariu, format="PNG", bbox_inches="tight",
+            plt.tight_layout(pad=0.4)
+            plt.savefig(buf_nivel, format="PNG", bbox_inches="tight",
                         transparent=True, dpi=140)
             plt.close(fig)
-            buf_scenariu.seek(0)
+            buf_nivel.seek(0)
 
-            donut_img = Image(buf_scenariu, width=7.5 * cm, height=7.5 * cm)
+            donut_img = Image(buf_nivel, width=7.0 * cm, height=7.0 * cm)
 
-            # Text bloc dreapta
-            text_cell = [
-                Spacer(1, 0.6 * cm),
-                Paragraph(scenariu["mesaj"], card_mesaj_style),
-                Spacer(1, 0.3 * cm),
-                Paragraph(scenariu["sub"], card_sub_style),
-                Spacer(1, 0.6 * cm),
-            ]
+            lista_cat = [Spacer(1, 0.5 * cm)]
+            lista_cat.append(Paragraph(mesaj_text, card_mesaj_style))
+            lista_cat.append(Spacer(1, 0.2 * cm))
+            lista_cat.append(Paragraph(lang_cfg["sub"], card_sub_style))
+            lista_cat.append(Spacer(1, 0.3 * cm))
 
-            # Layout: donut stânga | text dreapta
-            LEFT_W  = MAIN_W * 0.42
-            RIGHT_W = MAIN_W * 0.58
+            for cat, _, _, _ in categorii_nivel:
+                titlu_cat = _short_title(cat, max_len=38)
+                lista_cat.append(Paragraph(f"• {titlu_cat}", cat_style))
+            lista_cat.append(Spacer(1, 0.5 * cm))
 
-            layout_tbl = Table(
-                [[donut_img, text_cell]],
-                colWidths=[LEFT_W, RIGHT_W]
-            )
+            LEFT_W  = MAIN_W * 0.40
+            RIGHT_W = MAIN_W * 0.60
+
+            layout_tbl = Table([[donut_img, lista_cat]], colWidths=[LEFT_W, RIGHT_W])
             layout_tbl.setStyle(TableStyle([
-                ("BACKGROUND",    (0, 0), (-1, -1), colors.HexColor(scenariu["color"])),
+                ("BACKGROUND",    (0, 0), (-1, -1), colors.HexColor(color)),
                 ("ALIGN",         (0, 0), (0, 0),   "CENTER"),
                 ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
                 ("ALIGN",         (1, 0), (1, 0),   "LEFT"),
-                ("LEFTPADDING",   (0, 0), (0, 0),   8),
-                ("RIGHTPADDING",  (0, 0), (0, 0),   8),
-                ("LEFTPADDING",   (1, 0), (1, 0),   16),
+                ("LEFTPADDING",   (0, 0), (0, 0),   10),
+                ("RIGHTPADDING",  (0, 0), (0, 0),   10),
+                ("LEFTPADDING",   (1, 0), (1, 0),   18),
                 ("RIGHTPADDING",  (1, 0), (1, 0),   16),
                 ("TOPPADDING",    (0, 0), (-1, -1), 0),
                 ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
