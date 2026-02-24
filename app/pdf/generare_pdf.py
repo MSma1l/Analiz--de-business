@@ -46,6 +46,7 @@ MARGIN  = (PAGE_W - MAIN_W) / 2
 # ==================== UTIL PDF ====================
 
 def append_existing_pdf(generated_pdf: str, extra_pdf: str, output_pdf: str):
+    
     merger = PdfMerger()
     merger.append(extra_pdf)
     merger.append(generated_pdf)
@@ -219,7 +220,7 @@ def generate_chart_bytes(scor: int, max_scor: int, nivel: str,
     fig.text(0.5, 0.01, titlu,
              ha="center", va="bottom",
              fontsize=7, fontweight="bold",
-             color=C_BLUE_DARK, fontfamily="DejaVu Sans")
+             color=C_GRAY_LIGHT, fontfamily="DejaVu Sans")
 
     plt.tight_layout(pad=0.2)
     plt.savefig(buf, format="PNG", bbox_inches="tight",
@@ -265,11 +266,12 @@ def generate_general_risk_chart_bytes(raport: list, language: str) -> io.BytesIO
         wedgeprops={"width": 0.30, "edgecolor": C_WHITE, "linewidth": 2.5},
         counterclock=False
     )
-
+# general donuts
     ax.text(0,  0.14, f"{procent_mediu}%",
             ha="center", va="center",
             fontsize=26, fontweight="bold",
             color=C_BLUE_DARK, fontfamily="DejaVu Sans")
+
 
     ax.text(0, -0.20, nivel_text,
             ha="center", va="center",
@@ -287,10 +289,6 @@ def generate_general_risk_chart_bytes(raport: list, language: str) -> io.BytesIO
 
 
 def _build_variants_block(procent_mediu: int, language: str) -> list:
-    """
-    Construieste blocul cu cele 3 variante de raspuns pentru pagina de scor general.
-    Textul apare DOAR in limba selectata de utilizator (ro sau ru).
-    """
     elements = []
 
     is_ro = language == "ro"
@@ -382,7 +380,6 @@ def _build_variants_block(procent_mediu: int, language: str) -> list:
 
     elements.append(Spacer(1, 0.2 * cm))
 
-    # Nota de subsol in limba utilizatorului
     nota_tbl = Table(
         [[Paragraph(nota, note_style)]],
         colWidths=[MAIN_W]
@@ -407,18 +404,17 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
     if language == "ro":
         titlu_doc     = "Raport de Evaluare a Riscului"
         subtitlu_doc  = "Analiză detaliată pe categorii · BizzCheck"
-        titlu_sectie  = "📊  Evaluare pe categorii"
-        titlu_general = "🎯  Scor General"
+        titlu_sectie  = "  Evaluare pe categorii"
+        titlu_general = "  Scor General"
     else:
         titlu_doc     = "Отчёт об оценке рисков"
         subtitlu_doc  = "Детальный анализ по категориям · BizzCheck"
-        titlu_sectie  = "📊  Оценка по категориям"
-        titlu_general = "🎯  Общий результат"
+        titlu_sectie  = "  Оценка по категориям"
+        titlu_general = "  Общий результат"
 
     elements = []
     elements.append(Spacer(1, 0.5 * cm))
 
-    # Header
     elements.append(_header_block(titlu_doc, subtitlu_doc))
     elements.append(Spacer(1, 0.6 * cm))
 
@@ -437,7 +433,6 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
             for cat, d in results_dict.items()
         ]
 
-        # ---- Categorii ----
         elements.append(_section_bar(titlu_sectie))
         elements.append(Spacer(1, 0.45 * cm))
 
@@ -476,7 +471,6 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
             ]))
             elements.append(tbl)
 
-        # ---- Pagina 3: Scor General cu cele 3 variante ----
         elements.append(PageBreak())
         elements.append(Spacer(1, 0.5 * cm))
         elements.append(_header_block(titlu_doc, subtitlu_doc))
@@ -484,14 +478,12 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
         elements.append(_section_bar(titlu_general))
         elements.append(Spacer(1, 0.35 * cm))
 
-        # Calcul procent mediu
         procente_all = [
             int((scor / max_scor) * 100)
             for _, scor, max_scor, _ in raport if max_scor > 0
         ]
         procent_mediu = int(sum(procente_all) / len(procente_all)) if procente_all else 0
 
-        # Grafic donut general (fara mesaj, doar grafic)
         general_buf = generate_general_risk_chart_bytes(raport, language)
         general_img = Image(general_buf, width=8.5 * cm, height=8.5 * cm)
 
@@ -506,13 +498,11 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
         elements.append(general_tbl)
         elements.append(Spacer(1, 0.3 * cm))
 
-        # ---- CELE 3 VARIANTE DE RASPUNS ----
         for el in _build_variants_block(procent_mediu, language):
             elements.append(el)
 
         elements.append(Spacer(1, 0.5 * cm))
 
-        # ---- Pagini per nivel de risc real ----
         grupe_risc = {"minim": [], "mediu": [], "ridicat": []}
         for cat, scor, max_scor, nivel in raport:
             n = nivel.lower()
@@ -533,16 +523,16 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
 
         config_risc = {
             "minim": {
-                "color": C_GREEN,
+                "color": C_GRAY_LIGHT,
                 "ro": {
-                    "emoji": "🏆",
+                    "emoji": "",
                     "titlu": "Performanță înaltă",
                     "mesaj_fn": lambda p: f"Ați atins {p}% din vârful ideal de performanță.",
                     "sub": "Aceste domenii funcționează excelent. Menține direcția!",
                     "nivel_display": "Risc Minim",
                 },
                 "ru": {
-                    "emoji": "🏆",
+                    "emoji": "",
                     "titlu": "Высокая эффективность",
                     "mesaj_fn": lambda p: f"Вы достигли {p}% от идеального пика эффективности.",
                     "sub": "Эти направления работают отлично. Сохраняйте курс!",
@@ -550,16 +540,16 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
                 },
             },
             "mediu": {
-                "color": C_ORANGE,
+                "color": C_GRAY_LIGHT,
                 "ro": {
-                    "emoji": "📈",
+                    "emoji": "",
                     "titlu": "În dezvoltare",
                     "mesaj_fn": lambda p: f"Sunteți la {p}% distanță de afacerea perfectă.",
                     "sub": "Există oportunități clare de îmbunătățire. Acționați acum!",
                     "nivel_display": "Risc Mediu",
                 },
                 "ru": {
-                    "emoji": "📈",
+                    "emoji": "",
                     "titlu": "В развитии",
                     "mesaj_fn": lambda p: f"Вы на {p}% пути к идеальному бизнесу.",
                     "sub": "Есть чёткие возможности для улучшения. Действуйте сейчас!",
@@ -567,16 +557,16 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
                 },
             },
             "ridicat": {
-                "color": C_RED,
+                "color": C_GRAY_LIGHT,
                 "ro": {
-                    "emoji": "⚠️",
+                    "emoji": "",
                     "titlu": "Necesită atenție urgentă",
                     "mesaj_fn": lambda p: f"Performanța actuală: {p}% din nivelul ideal.",
                     "sub": "Aceste domenii necesită intervenție imediată!",
                     "nivel_display": "Risc Ridicat",
                 },
                 "ru": {
-                    "emoji": "⚠️",
+                    "emoji": "",
                     "titlu": "Требует срочного внимания",
                     "mesaj_fn": lambda p: f"Текущий результат: {p}% от идеального уровня.",
                     "sub": "Эти направления требуют немедленного вмешательства!",
@@ -625,19 +615,19 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
                 nivel_display = "Risc Minim" if language == "ro" else "Минимальный риск"
                 mesaj_text = (f"Ati atins {procent_nivel}% din varful ideal de performanta."
                               if language == "ro" else
-                              f"Vy dostigli {procent_nivel}% ot idealnogo pika effektivnosti.")
+                              f"Вы достигли {procent_nivel}% от идеального пика ефф.")
             elif procent_nivel >= 40:
                 color = C_ORANGE
                 nivel_display = "Risc Mediu" if language == "ro" else "Средний риск"
                 mesaj_text = (f"Sunteti la {procent_nivel}% distanta de afacerea perfecta."
                               if language == "ro" else
-                              f"Vy na {procent_nivel}% puti k idealnomu biznesu.")
+                              f"Вы на {procent_nivel}% пути к идеальному бизнесу.")
             else:
                 color = C_RED
                 nivel_display = "Risc Ridicat" if language == "ro" else "Высокий риск"
                 mesaj_text = (f"Performanta actuala: {procent_nivel}% din nivelul ideal."
                               if language == "ro" else
-                              f"Tekushchiy rezultat: {procent_nivel}% ot idealnogo urovnya.")
+                              f"Текущий результат : {procent_nivel}% от идеального уровня.")
 
             elements.append(PageBreak())
             elements.append(Spacer(1, 0.5 * cm))
@@ -658,11 +648,12 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
             ax.text(0,  0.14, f"{procent_nivel}%",
                     ha="center", va="center",
                     fontsize=24, fontweight="bold",
-                    color=C_BLUE_DARK, fontfamily="DejaVu Sans")
+                    color=C_GRAY_LIGHT, fontfamily="DejaVu Sans")
             ax.text(0, -0.20, nivel_display,
                     ha="center", va="center",
                     fontsize=9, fontweight="bold",
-                    color=color, fontfamily="DejaVu Sans")
+                    color=C_GRAY_LIGHT,  # ← MODIFICAT: era `color`, acum C_GRAY_LIGHT
+                    fontfamily="DejaVu Sans")
             ax.set_aspect("equal")
             plt.tight_layout(pad=0.4)
             plt.savefig(buf_nivel, format="PNG", bbox_inches="tight",
