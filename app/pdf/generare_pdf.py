@@ -84,7 +84,7 @@ def _color_for_nivel(nivel: str, language: str) -> str:
         return C_GREEN
 
 
-def _short_title(categorie: str, max_len: int = 26) -> str:
+def _short_title(categorie: str, max_len: int = 150) -> str:
     titlu = categorie.split(". ", 1)[1] if ". " in categorie else categorie
     return titlu if len(titlu) <= max_len else titlu[:max_len - 1] + "…"
 
@@ -169,7 +169,7 @@ def _section_bar(text: str) -> Table:
     style = ParagraphStyle(
         "SecBar",
         fontName="DejaVu-Bold",
-        fontSize=11,
+        fontSize=12,
         textColor=colors.HexColor(C_WHITE),
         alignment=0,
         leading=16,
@@ -207,20 +207,20 @@ def generate_chart_bytes(scor: int, max_scor: int, nivel: str,
 
     ax.text(0,  0.10, f"{procent}%",
             ha="center", va="center",
-            fontsize=13, fontweight="bold",
+            fontsize=14, fontweight="bold",
             color=C_BLUE_DARK, fontfamily="DejaVu Sans")
 
     ax.text(0, -0.22, label,
             ha="center", va="center",
-            fontsize=6.5, fontweight="bold",
+            fontsize=10, fontweight="bold",
             color=color, fontfamily="DejaVu Sans")
 
     ax.set_aspect("equal")
 
     fig.text(0.5, 0.01, titlu,
              ha="center", va="bottom",
-             fontsize=7, fontweight="bold",
-             color=C_GRAY_LIGHT, fontfamily="DejaVu Sans")
+             fontsize=7.7, fontweight="bold",
+             color=C_BLUE_DARK, fontfamily="DejaVu Sans")
 
     plt.tight_layout(pad=0.2)
     plt.savefig(buf, format="PNG", bbox_inches="tight",
@@ -406,11 +406,24 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
         subtitlu_doc  = "Analiză detaliată pe categorii · BizzCheck"
         titlu_sectie  = "  Evaluare pe categorii"
         titlu_general = "  Scor General"
+        bloc_prefix   = "Bloc"
     else:
         titlu_doc     = "Отчёт об оценке рисков"
         subtitlu_doc  = "Детальный анализ по категориям · BizzCheck"
         titlu_sectie  = "  Оценка по категориям"
         titlu_general = "  Общий результат"
+        bloc_prefix   = "Блок"
+
+    # ---- Style for the block label shown above each donut chart ----
+    bloc_label_style = ParagraphStyle(
+        "BlocLabel",
+        fontName="DejaVu-Bold",
+        fontSize=10,
+        textColor=colors.HexColor(C_BLUE_DARK),
+        alignment=1,      # centered
+        leading=14,
+        spaceAfter=2,
+    )
 
     elements = []
     elements.append(Spacer(1, 0.5 * cm))
@@ -440,14 +453,25 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
         COLS     = 3
         COL_W    = MAIN_W / COLS
 
+        # ---- Build chart cells with block label above each donut ----
         chart_data = []
         row = []
-        for cat, scor, max_scor, nivel in raport:
+        for idx, (cat, scor, max_scor, nivel) in enumerate(raport, start=1):
             buf = generate_chart_bytes(scor, max_scor, nivel, cat, language)
-            row.append(Image(buf, width=IMG_SIZE, height=IMG_SIZE))
+
+            # Each cell is a list of flowables: label + image
+            bloc_label_text = f"{bloc_prefix} {idx}"
+            cell_content = [
+                Paragraph(bloc_label_text, bloc_label_style),
+                Spacer(1, 0.1 * cm),
+                Image(buf, width=IMG_SIZE, height=IMG_SIZE),
+            ]
+
+            row.append(cell_content)
             if len(row) == COLS:
                 chart_data.append(row)
                 row = []
+
         if row:
             while len(row) < COLS:
                 row.append(Spacer(COL_W, IMG_SIZE))
@@ -528,7 +552,7 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
                     "emoji": "",
                     "titlu": "Performanță înaltă",
                     "mesaj_fn": lambda p: f"Ați atins {p}% din vârful ideal de performanță.",
-                    "sub": "Aceste domenii funcționează excelent. Menține direcția!",
+                    "sub": "Aceste domenii funcționează excelent. Menții direcția!",
                     "nivel_display": "Risc Minim",
                 },
                 "ru": {
@@ -652,7 +676,7 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
             ax.text(0, -0.20, nivel_display,
                     ha="center", va="center",
                     fontsize=9, fontweight="bold",
-                    color=C_GRAY_LIGHT,  # ← MODIFICAT: era `color`, acum C_GRAY_LIGHT
+                    color=C_GRAY_LIGHT,
                     fontfamily="DejaVu Sans")
             ax.set_aspect("equal")
             plt.tight_layout(pad=0.4)
@@ -670,7 +694,7 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
             lista_cat.append(Spacer(1, 0.3 * cm))
 
             for cat, _, _, _ in categorii_nivel:
-                titlu_cat = _short_title(cat, max_len=38)
+                titlu_cat = _short_title(cat, max_len=150)
                 lista_cat.append(Paragraph(f"• {titlu_cat}", cat_style))
             lista_cat.append(Spacer(1, 0.5 * cm))
 
