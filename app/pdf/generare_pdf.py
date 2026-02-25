@@ -84,7 +84,16 @@ def _color_for_nivel(nivel: str, language: str) -> str:
         return C_GREEN
 
 
-def _short_title(categorie: str, max_len: int = 150) -> str:
+def _color_for_procent(procent: int) -> str:
+    """Culoare bazată pe procent: <65 roșu, 65-80 portocaliu, 80-100 verde."""
+    if procent >= 80:
+        return C_GREEN
+    elif procent >= 65:
+        return C_ORANGE
+    return C_RED
+
+
+def _short_title(categorie: str, max_len: int = 200) -> str:
     titlu = categorie.split(". ", 1)[1] if ". " in categorie else categorie
     return titlu if len(titlu) <= max_len else titlu[:max_len - 1] + "…"
 
@@ -169,7 +178,7 @@ def _section_bar(text: str) -> Table:
     style = ParagraphStyle(
         "SecBar",
         fontName="DejaVu-Bold",
-        fontSize=12,
+        fontSize=11,
         textColor=colors.HexColor(C_WHITE),
         alignment=0,
         leading=16,
@@ -191,7 +200,7 @@ def generate_chart_bytes(scor: int, max_scor: int, nivel: str,
                          categorie: str, language: str) -> io.BytesIO:
     buf     = io.BytesIO()
     procent = int((scor / max_scor) * 100) if max_scor > 0 else 0
-    color   = _color_for_nivel(nivel, language)
+    color   = _color_for_procent(procent)
     titlu   = _short_title(categorie)
     label   = _nivel_label(nivel, language)
 
@@ -212,15 +221,10 @@ def generate_chart_bytes(scor: int, max_scor: int, nivel: str,
 
     ax.text(0, -0.22, label,
             ha="center", va="center",
-            fontsize=10, fontweight="bold",
+            fontsize=7, fontweight="bold",
             color=color, fontfamily="DejaVu Sans")
 
     ax.set_aspect("equal")
-
-    fig.text(0.5, 0.01, titlu,
-             ha="center", va="bottom",
-             fontsize=7.7, fontweight="bold",
-             color=C_BLUE_DARK, fontfamily="DejaVu Sans")
 
     plt.tight_layout(pad=0.2)
     plt.savefig(buf, format="PNG", bbox_inches="tight",
@@ -240,21 +244,19 @@ def generate_general_risk_chart_bytes(raport: list, language: str) -> io.BytesIO
     ]
     procent_mediu = int(sum(procente) / len(procente)) if procente else 0
 
-    niveluri  = [nivel for _, _, _, nivel in raport]
-    worst     = _worst_nivel(niveluri, language)
-    color     = _color_for_nivel(worst, language)
+    color = _color_for_procent(procent_mediu)
 
     if language == "ro":
         nivel_text = (
-            "Risc Ridicat" if color == C_RED else
+            "Risc Minim"   if color == C_GREEN else
             "Risc Mediu"   if color == C_ORANGE else
-            "Risc Minim"
+            "Risc Ridicat"
         )
     else:
         nivel_text = (
-            "Высокий риск"     if color == C_RED else
+            "Минимальный риск" if color == C_GREEN else
             "Средний риск"     if color == C_ORANGE else
-            "Минимальный риск"
+            "Высокий риск"
         )
 
     fig, ax = plt.subplots(figsize=(4.0, 4.0), facecolor="none")
@@ -320,7 +322,6 @@ def _build_variants_block(procent_mediu: int, language: str) -> list:
     )
 
     if is_ro:
-        nota    = "* Aceasta este o evaluare preliminară — nu reprezintă rezultatul final."
         variants = [
             {
                 "label": "Varianta 1",
@@ -339,7 +340,6 @@ def _build_variants_block(procent_mediu: int, language: str) -> list:
             },
         ]
     else:
-        nota    = "* Это предварительная оценка — не является окончательным результатом."
         variants = [
             {
                 "label": "Вариант 1",
@@ -358,14 +358,14 @@ def _build_variants_block(procent_mediu: int, language: str) -> list:
             },
         ]
 
-    elements.append(Spacer(1, 0.3 * cm))
+    elements.append(Spacer(1, 0.15 * cm))
 
     for v in variants:
         cell_content = [
-            Spacer(1, 0.18 * cm),
+            Spacer(1, 0.1 * cm),
             Paragraph(v["label"], label_style),
             Paragraph(v["text"], text_style),
-            Spacer(1, 0.18 * cm),
+            Spacer(1, 0.1 * cm),
         ]
         row_tbl = Table([[cell_content]], colWidths=[MAIN_W])
         row_tbl.setStyle(TableStyle([
@@ -377,22 +377,6 @@ def _build_variants_block(procent_mediu: int, language: str) -> list:
         ]))
         elements.append(row_tbl)
         elements.append(Spacer(1, 0.18 * cm))
-
-    elements.append(Spacer(1, 0.2 * cm))
-
-    nota_tbl = Table(
-        [[Paragraph(nota, note_style)]],
-        colWidths=[MAIN_W]
-    )
-    nota_tbl.setStyle(TableStyle([
-        ("BACKGROUND",    (0, 0), (-1, -1), colors.HexColor(C_WHITE)),
-        ("LEFTPADDING",   (0, 0), (-1, -1), 10),
-        ("RIGHTPADDING",  (0, 0), (-1, -1), 10),
-        ("TOPPADDING",    (0, 0), (-1, -1), 6),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
-        ("BOX",           (0, 0), (-1, -1), 0.5, colors.HexColor(C_SEPARATOR)),
-    ]))
-    elements.append(nota_tbl)
 
     return elements
 
@@ -418,11 +402,11 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
     bloc_label_style = ParagraphStyle(
         "BlocLabel",
         fontName="DejaVu-Bold",
-        fontSize=10,
+        fontSize=14,
         textColor=colors.HexColor(C_BLUE_DARK),
-        alignment=1,      # centered
-        leading=14,
-        spaceAfter=2,
+        alignment=1,
+        leading=18,
+        spaceAfter=3,
     )
 
     elements = []
@@ -446,59 +430,6 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
             for cat, d in results_dict.items()
         ]
 
-        elements.append(_section_bar(titlu_sectie))
-        elements.append(Spacer(1, 0.45 * cm))
-
-        IMG_SIZE = 5.0 * cm
-        COLS     = 3
-        COL_W    = MAIN_W / COLS
-
-        # ---- Build chart cells with block label above each donut ----
-        chart_data = []
-        row = []
-        for idx, (cat, scor, max_scor, nivel) in enumerate(raport, start=1):
-            buf = generate_chart_bytes(scor, max_scor, nivel, cat, language)
-
-            # Each cell is a list of flowables: label + image
-            bloc_label_text = f"{bloc_prefix} {idx}"
-            cell_content = [
-                Paragraph(bloc_label_text, bloc_label_style),
-                Spacer(1, 0.1 * cm),
-                Image(buf, width=IMG_SIZE, height=IMG_SIZE),
-            ]
-
-            row.append(cell_content)
-            if len(row) == COLS:
-                chart_data.append(row)
-                row = []
-
-        if row:
-            while len(row) < COLS:
-                row.append(Spacer(COL_W, IMG_SIZE))
-            chart_data.append(row)
-
-        if chart_data:
-            row_styles = []
-            for i in range(len(chart_data)):
-                bg = C_BLUE_LIGHT if i % 2 == 0 else C_WHITE
-                row_styles.append(("BACKGROUND", (0, i), (-1, i), colors.HexColor(bg)))
-
-            tbl = Table(chart_data, colWidths=[COL_W] * COLS)
-            tbl.setStyle(TableStyle([
-                ("ALIGN",         (0, 0), (-1, -1), "CENTER"),
-                ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
-                ("TOPPADDING",    (0, 0), (-1, -1), 10),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
-                ("LEFTPADDING",   (0, 0), (-1, -1), 2),
-                ("RIGHTPADDING",  (0, 0), (-1, -1), 2),
-                *row_styles,
-            ]))
-            elements.append(tbl)
-
-        elements.append(PageBreak())
-        elements.append(Spacer(1, 0.5 * cm))
-        elements.append(_header_block(titlu_doc, subtitlu_doc))
-        elements.append(Spacer(1, 0.6 * cm))
         elements.append(_section_bar(titlu_general))
         elements.append(Spacer(1, 0.35 * cm))
 
@@ -508,24 +439,72 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
         ]
         procent_mediu = int(sum(procente_all) / len(procente_all)) if procente_all else 0
 
-        general_buf = generate_general_risk_chart_bytes(raport, language)
-        general_img = Image(general_buf, width=8.5 * cm, height=8.5 * cm)
+        # ---- Generate individual donuts 2 per row, bigger size ----
+        IMG_GEN   = 8.0 * cm
+        COLS_GEN  = 2
+        COL_W_GEN = MAIN_W / COLS_GEN
 
-        general_tbl = Table([[general_img]], colWidths=[MAIN_W])
-        general_tbl.setStyle(TableStyle([
-            ("ALIGN",         (0, 0), (-1, -1), "CENTER"),
-            ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
-            ("BACKGROUND",    (0, 0), (-1, -1), colors.HexColor(C_WHITE)),
-            ("TOPPADDING",    (0, 0), (-1, -1), 8),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
-        ]))
-        elements.append(general_tbl)
-        elements.append(Spacer(1, 0.3 * cm))
+        gen_label_style = ParagraphStyle(
+            "GenLabel",
+            fontName="DejaVu-Bold",
+            fontSize=15,
+            textColor=colors.HexColor(C_BLUE_DARK),
+            alignment=1,
+            leading=20,
+            spaceAfter=4,
+        )
+        gen_title_style = ParagraphStyle(
+            "GenTitle",
+            fontName="DejaVu-Bold",
+            fontSize=11,
+            textColor=colors.HexColor(C_BLUE_DARK),
+            alignment=1,
+            leading=15,
+            spaceAfter=3,
+        )
+
+        gen_data = []
+        gen_row = []
+        for g_idx, (cat, scor, max_scor, nivel) in enumerate(raport, start=1):
+            g_buf = generate_chart_bytes(scor, max_scor, nivel, cat, language)
+            full_title = cat.split(". ", 1)[1] if ". " in cat else cat
+            cell = [
+                Paragraph(f"{bloc_prefix} {g_idx}", gen_label_style),
+                Spacer(1, 0.08 * cm),
+                Paragraph(full_title, gen_title_style),
+                Spacer(1, 0.1 * cm),
+                Image(g_buf, width=IMG_GEN, height=IMG_GEN),
+            ]
+            gen_row.append(cell)
+            if len(gen_row) == COLS_GEN:
+                gen_data.append(gen_row)
+                gen_row = []
+        if gen_row:
+            while len(gen_row) < COLS_GEN:
+                gen_row.append(Spacer(COL_W_GEN, IMG_GEN))
+            gen_data.append(gen_row)
+
+        if gen_data:
+            gen_row_styles = []
+            for i in range(len(gen_data)):
+                bg = C_BLUE_LIGHT if i % 2 == 0 else C_WHITE
+                gen_row_styles.append(("BACKGROUND", (0, i), (-1, i), colors.HexColor(bg)))
+
+            gen_tbl = Table(gen_data, colWidths=[COL_W_GEN] * COLS_GEN)
+            gen_tbl.setStyle(TableStyle([
+                ("ALIGN",         (0, 0), (-1, -1), "CENTER"),
+                ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
+                ("TOPPADDING",    (0, 0), (-1, -1), 12),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 12),
+                ("LEFTPADDING",   (0, 0), (-1, -1), 4),
+                ("RIGHTPADDING",  (0, 0), (-1, -1), 4),
+                *gen_row_styles,
+            ]))
+            elements.append(gen_tbl)
+        elements.append(Spacer(1, 0.2 * cm))
 
         for el in _build_variants_block(procent_mediu, language):
             elements.append(el)
-
-        elements.append(Spacer(1, 0.5 * cm))
 
         grupe_risc = {"minim": [], "mediu": [], "ridicat": []}
         for cat, scor, max_scor, nivel in raport:
@@ -552,14 +531,14 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
                     "emoji": "",
                     "titlu": "Performanță înaltă",
                     "mesaj_fn": lambda p: f"Ați atins {p}% din vârful ideal de performanță.",
-                    "sub": "Aceste domenii funcționează excelent. Menții direcția!",
+                    "sub": "Aceste blocuri funcționează excelent. Menții direcția!",
                     "nivel_display": "Risc Minim",
                 },
                 "ru": {
                     "emoji": "",
                     "titlu": "Высокая эффективность",
                     "mesaj_fn": lambda p: f"Вы достигли {p}% от идеального пика эффективности.",
-                    "sub": "Эти направления работают отлично. Сохраняйте курс!",
+                    "sub": "Эти блоки работают отлично. Сохраняйте курс!",
                     "nivel_display": "Минимальный риск",
                 },
             },
@@ -586,14 +565,14 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
                     "emoji": "",
                     "titlu": "Necesită atenție urgentă",
                     "mesaj_fn": lambda p: f"Performanța actuală: {p}% din nivelul ideal.",
-                    "sub": "Aceste domenii necesită intervenție imediată!",
+                    "sub": "Aceste blocuri necesită intervenție imediată!",
                     "nivel_display": "Risc Ridicat",
                 },
                 "ru": {
                     "emoji": "",
                     "titlu": "Требует срочного внимания",
                     "mesaj_fn": lambda p: f"Текущий результат: {p}% от идеального уровня.",
-                    "sub": "Эти направления требуют немедленного вмешательства!",
+                    "sub": "Эти блоки требуют немедленного вмешательства!",
                     "nivel_display": "Высокий риск",
                 },
             },
@@ -634,24 +613,22 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
             ]
             procent_nivel = int(sum(procente_nivel) / len(procente_nivel)) if procente_nivel else 0
 
-            if procent_nivel >= 70:
-                color = C_GREEN
+            color = _color_for_procent(procent_nivel)
+            if color == C_GREEN:
                 nivel_display = "Risc Minim" if language == "ro" else "Минимальный риск"
                 mesaj_text = (f"Ati atins {procent_nivel}% din varful ideal de performanta."
                               if language == "ro" else
-                              f"Вы достигли {procent_nivel}% от идеального пика ефф.")
-            elif procent_nivel >= 40:
-                color = C_ORANGE
+                              f"Вы достигли {procent_nivel}% от идеального пика эфф.")
+            elif color == C_ORANGE:
                 nivel_display = "Risc Mediu" if language == "ro" else "Средний риск"
                 mesaj_text = (f"Sunteti la {procent_nivel}% distanta de afacerea perfecta."
                               if language == "ro" else
                               f"Вы на {procent_nivel}% пути к идеальному бизнесу.")
             else:
-                color = C_RED
                 nivel_display = "Risc Ridicat" if language == "ro" else "Высокий риск"
                 mesaj_text = (f"Performanta actuala: {procent_nivel}% din nivelul ideal."
                               if language == "ro" else
-                              f"Текущий результат : {procent_nivel}% от идеального уровня.")
+                              f"Текущий результат: {procent_nivel}% от идеального уровня.")
 
             elements.append(PageBreak())
             elements.append(Spacer(1, 0.5 * cm))
@@ -694,8 +671,10 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
             lista_cat.append(Spacer(1, 0.3 * cm))
 
             for cat, _, _, _ in categorii_nivel:
-                titlu_cat = _short_title(cat, max_len=150)
-                lista_cat.append(Paragraph(f"• {titlu_cat}", cat_style))
+                full_title = cat.split(". ", 1)[1] if ". " in cat else cat
+                # Găsim indexul global al blocului din raport
+                bloc_idx = next((i + 1 for i, (c, _, _, _) in enumerate(raport) if c == cat), "?")
+                lista_cat.append(Paragraph(f"• {bloc_prefix} {bloc_idx} — {full_title}", cat_style))
             lista_cat.append(Spacer(1, 0.5 * cm))
 
             LEFT_W  = MAIN_W * 0.40
