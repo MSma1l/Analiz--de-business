@@ -5,7 +5,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from reportlab.platypus import (
     Table, TableStyle, Paragraph, Spacer,
-    Image, SimpleDocTemplate, HRFlowable, PageBreak
+    Image, SimpleDocTemplate, PageBreak
 )
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.pagesizes import A4
@@ -26,27 +26,40 @@ try:
 except Exception:
     pdfmetrics.registerFont(TTFont("DejaVu-Bold", FONT_PATH))
 
-# ==================== PALETA ====================
-C_BLUE_DARK   = "#1A3A5C"
-C_BLUE_MID    = "#1E6FA8"
-C_BLUE_LIGHT  = "#D6E8F7"
-C_ORANGE      = "#F59E0B"
-C_GREEN       = "#2E7D5E"
-C_RED         = "#C0392B"
-C_GRAY_LIGHT  = "#EEF2F7"
-C_GRAY_TEXT   = "#4A5568"
+# ==================== PALETA BUSINESS PREMIUM ====================
+C_NAVY        = "#1C3F6E"
+C_STEEL       = "#2E6DA4"
 C_WHITE       = "#FFFFFF"
-C_SEPARATOR   = "#B8D0E8"
+C_GOLD        = "#D4A017"
+C_SLATE       = "#2C3E50"
+
+# Culori semafor — bazate pe PROCENT
+C_GREEN_PRO   = "#1E9E5E"   # >= 80%
+C_ORANGE_PRO  = "#D4861E"   # 65-79%
+C_RED_PRO     = "#B03030"   # < 65%
+
+# Carduri grupare risc — aceleasi culori
+C_BG_GREEN    = "#1E9E5E"
+C_BG_ORANGE   = "#C97520"
+C_BG_RED      = "#B03030"
+
+C_ROW_A       = "#EAF0F6"
+C_ROW_B       = "#FFFFFF"
 
 PAGE_W  = A4[0]
-MAIN_W  = PAGE_W * 0.80
+MAIN_W  = PAGE_W * 0.82
 MARGIN  = (PAGE_W - MAIN_W) / 2
+
+DONUTS_PER_PAGE = 4
+IMG_W = 8.0 * cm
+IMG_H = 8.0 * cm
+COLS  = 2
+COL_W = MAIN_W / COLS
 
 
 # ==================== UTIL PDF ====================
 
 def append_existing_pdf(generated_pdf: str, extra_pdf: str, output_pdf: str):
-    
     merger = PdfMerger()
     merger.append(extra_pdf)
     merger.append(generated_pdf)
@@ -68,29 +81,32 @@ def draw_chart_background(canvas, doc):
 
 # ==================== HELPERS ====================
 
-def _color_for_nivel(nivel: str, language: str) -> str:
-    n = nivel.lower()
-    if language == "ro":
-        if "ridicat" in n or "înalt" in n:
-            return C_RED
-        elif "mediu" in n:
-            return C_ORANGE
-        return C_GREEN
-    else:
-        if "высокий" in n:
-            return C_RED
-        elif "средний" in n:
-            return C_ORANGE
-        return C_GREEN
+def _calc_procent(scor: int, max_scor: int) -> int:
+    """
+    Calculeaza procentul unui bloc.
+    Daca max_scor == 0 SAU scor == 0 → returnează 0 (blocul apare cu 0%).
+    """
+    if max_scor <= 0 or scor <= 0:
+        return 0
+    return int((scor / max_scor) * 100)
 
 
 def _color_for_procent(procent: int) -> str:
-    """Culoare bazată pe procent: <65 roșu, 65-80 portocaliu, 80-100 verde."""
+    """Culoare bazata STRICT pe procent: <65 rosu, 65-79 portocaliu, >=80 verde."""
     if procent >= 80:
-        return C_GREEN
+        return C_GREEN_PRO
     elif procent >= 65:
-        return C_ORANGE
-    return C_RED
+        return C_ORANGE_PRO
+    return C_RED_PRO
+
+
+def _zona_for_procent(procent: int) -> str:
+    """Returneaza zona de risc bazata pe procent."""
+    if procent >= 80:
+        return "minim"
+    elif procent >= 65:
+        return "mediu"
+    return "ridicat"
 
 
 def _short_title(categorie: str, max_len: int = 200) -> str:
@@ -98,98 +114,51 @@ def _short_title(categorie: str, max_len: int = 200) -> str:
     return titlu if len(titlu) <= max_len else titlu[:max_len - 1] + "…"
 
 
-def _nivel_label(nivel: str, language: str) -> str:
-    n = nivel.lower()
-    if language == "ro":
-        if "ridicat" in n or "înalt" in n:
-            return "Ridicat"
-        elif "mediu" in n:
-            return "Mediu"
-        return "Minim"
-    else:
-        if "высокий" in n:
-            return "Высокий"
-        elif "средний" in n:
-            return "Средний"
-        return "Минимальный"
-
-
-def _worst_nivel(niveluri: list, language: str) -> str:
-    for n in niveluri:
-        nl = n.lower()
-        if language == "ro":
-            if "ridicat" in nl or "înalt" in nl:
-                return n
-        else:
-            if "высокий" in nl:
-                return n
-    for n in niveluri:
-        nl = n.lower()
-        if language == "ro":
-            if "mediu" in nl:
-                return n
-        else:
-            if "средний" in nl:
-                return n
-    return niveluri[0] if niveluri else ""
-
-
 # ==================== COMPONENTE LAYOUT ====================
 
 def _header_block(titlu_doc: str, subtitlu_doc: str) -> Table:
     title_style = ParagraphStyle(
-        "HdrTitle",
-        fontName="DejaVu-Bold",
-        fontSize=20,
-        textColor=colors.HexColor(C_WHITE),
-        alignment=1,
-        leading=28,
-        spaceAfter=5,
+        "HdrTitle", fontName="DejaVu-Bold", fontSize=20,
+        textColor=colors.HexColor(C_WHITE), alignment=1, leading=28, spaceAfter=4,
     )
     sub_style = ParagraphStyle(
-        "HdrSub",
-        fontName="DejaVu",
-        fontSize=10,
-        textColor=colors.HexColor(C_ORANGE),
-        alignment=1,
-        leading=15,
+        "HdrSub", fontName="DejaVu", fontSize=9,
+        textColor=colors.HexColor(C_GOLD), alignment=1, leading=14,
     )
     cell = [
-        Spacer(1, 0.4 * cm),
+        Spacer(1, 0.5 * cm),
         Paragraph(titlu_doc, title_style),
-        Spacer(1, 0.12 * cm),
+        Spacer(1, 0.1 * cm),
         Paragraph(subtitlu_doc, sub_style),
-        Spacer(1, 0.4 * cm),
+        Spacer(1, 0.5 * cm),
     ]
     tbl = Table([[cell]], colWidths=[MAIN_W])
     tbl.setStyle(TableStyle([
-        ("BACKGROUND",    (0, 0), (-1, -1), colors.HexColor(C_BLUE_DARK)),
+        ("BACKGROUND",    (0, 0), (-1, -1), colors.HexColor(C_NAVY)),
         ("ALIGN",         (0, 0), (-1, -1), "CENTER"),
         ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
-        ("LEFTPADDING",   (0, 0), (-1, -1), 20),
-        ("RIGHTPADDING",  (0, 0), (-1, -1), 20),
+        ("LEFTPADDING",   (0, 0), (-1, -1), 24),
+        ("RIGHTPADDING",  (0, 0), (-1, -1), 24),
         ("TOPPADDING",    (0, 0), (-1, -1), 0),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ("LINEBELOW",     (0, 0), (-1, -1), 3, colors.HexColor(C_GOLD)),
     ]))
     return tbl
 
 
 def _section_bar(text: str) -> Table:
     style = ParagraphStyle(
-        "SecBar",
-        fontName="DejaVu-Bold",
-        fontSize=11,
-        textColor=colors.HexColor(C_WHITE),
-        alignment=0,
-        leading=16,
+        "SecBar", fontName="DejaVu-Bold", fontSize=11,
+        textColor=colors.HexColor(C_WHITE), alignment=0, leading=16,
     )
     tbl = Table([[Paragraph(text, style)]], colWidths=[MAIN_W])
     tbl.setStyle(TableStyle([
-        ("BACKGROUND",    (0, 0), (-1, -1), colors.HexColor(C_BLUE_MID)),
-        ("LEFTPADDING",   (0, 0), (-1, -1), 14),
-        ("RIGHTPADDING",  (0, 0), (-1, -1), 14),
-        ("TOPPADDING",    (0, 0), (-1, -1), 7),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
+        ("BACKGROUND",    (0, 0), (-1, -1), colors.HexColor(C_STEEL)),
+        ("LEFTPADDING",   (0, 0), (-1, -1), 16),
+        ("RIGHTPADDING",  (0, 0), (-1, -1), 16),
+        ("TOPPADDING",    (0, 0), (-1, -1), 8),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+        ("LINEBEFORE",    (0, 0), (0, -1),  5, colors.HexColor(C_GOLD)),
     ]))
     return tbl
 
@@ -198,93 +167,75 @@ def _section_bar(text: str) -> Table:
 
 def generate_chart_bytes(scor: int, max_scor: int, nivel: str,
                          categorie: str, language: str) -> io.BytesIO:
+    """
+    Donut 8x8 — culoare bazata pe PROCENT, procent in mijloc.
+    Blocurile cu scor=0 sau max_scor=0 apar cu 0% (inel complet gri).
+    """
     buf     = io.BytesIO()
-    procent = int((scor / max_scor) * 100) if max_scor > 0 else 0
+    procent = _calc_procent(scor, max_scor)
     color   = _color_for_procent(procent)
-    titlu   = _short_title(categorie)
-    label   = _nivel_label(nivel, language)
 
-    fig, ax = plt.subplots(figsize=(2.6, 2.6), facecolor="none")
+    fig, ax = plt.subplots(figsize=(3.2, 3.2), facecolor="none")
 
-    ax.pie(
-        [procent, 100 - procent],
-        startangle=90,
-        colors=[color, C_GRAY_LIGHT],
-        wedgeprops={"width": 0.26, "edgecolor": C_WHITE, "linewidth": 1.8},
-        counterclock=False
-    )
+    if procent == 0:
+        # Inel complet gri — nicio felie colorata
+        ax.pie(
+            [100],
+            startangle=90,
+            colors=["#DDE3EA"],
+            wedgeprops={"width": 0.30, "edgecolor": "#FFFFFF", "linewidth": 2.5},
+            counterclock=False
+        )
+    else:
+        ax.pie(
+            [procent, 100 - procent],
+            startangle=90,
+            colors=[color, "#DDE3EA"],
+            wedgeprops={"width": 0.30, "edgecolor": "#FFFFFF", "linewidth": 2.5},
+            counterclock=False
+        )
 
-    ax.text(0,  0.10, f"{procent}%",
+    ax.text(0, 0, f"{procent}%",
             ha="center", va="center",
-            fontsize=14, fontweight="bold",
-            color=C_BLUE_DARK, fontfamily="DejaVu Sans")
-
-    ax.text(0, -0.22, label,
-            ha="center", va="center",
-            fontsize=7, fontweight="bold",
+            fontsize=17, fontweight="bold",
             color=color, fontfamily="DejaVu Sans")
-
     ax.set_aspect("equal")
-
-    plt.tight_layout(pad=0.2)
-    plt.savefig(buf, format="PNG", bbox_inches="tight",
-                transparent=True, dpi=130)
+    plt.tight_layout(pad=0.1)
+    plt.savefig(buf, format="PNG", bbox_inches="tight", transparent=True, dpi=150)
     plt.close(fig)
     buf.seek(0)
     return buf
 
 
-def generate_general_risk_chart_bytes(raport: list, language: str) -> io.BytesIO:
-    """Donut mare — procent mediu real (fara mesaj motivational, doar procentul)."""
+def _donut_nivel_bytes(procent: int, card_color: str) -> io.BytesIO:
+    """Donut pentru cardul de grupare — inel alb pe fond colorat, procent alb."""
     buf = io.BytesIO()
-
-    procente = [
-        int((scor / max_scor) * 100)
-        for _, scor, max_scor, _ in raport if max_scor > 0
-    ]
-    procent_mediu = int(sum(procente) / len(procente)) if procente else 0
-
-    color = _color_for_procent(procent_mediu)
-
-    if language == "ro":
-        nivel_text = (
-            "Risc Minim"   if color == C_GREEN else
-            "Risc Mediu"   if color == C_ORANGE else
-            "Risc Ridicat"
-        )
-    else:
-        nivel_text = (
-            "Минимальный риск" if color == C_GREEN else
-            "Средний риск"     if color == C_ORANGE else
-            "Высокий риск"
-        )
-
     fig, ax = plt.subplots(figsize=(4.0, 4.0), facecolor="none")
 
-    ax.pie(
-        [procent_mediu, 100 - procent_mediu],
-        startangle=90,
-        colors=[color, C_GRAY_LIGHT],
-        wedgeprops={"width": 0.30, "edgecolor": C_WHITE, "linewidth": 2.5},
-        counterclock=False
-    )
-# general donuts
-    ax.text(0,  0.14, f"{procent_mediu}%",
+    if procent == 0:
+        ax.pie(
+            [100],
+            startangle=90,
+            colors=["#FFFFFF40"],
+            wedgeprops={"width": 0.32, "edgecolor": card_color, "linewidth": 2.5},
+            counterclock=False
+        )
+    else:
+        ax.pie(
+            [procent, 100 - procent],
+            startangle=90,
+            colors=[C_WHITE, "#FFFFFF40"],
+            wedgeprops={"width": 0.32, "edgecolor": card_color, "linewidth": 2.5},
+            counterclock=False
+        )
+
+    ax.text(0, 0, f"{procent}%",
             ha="center", va="center",
-            fontsize=26, fontweight="bold",
-            color=C_BLUE_DARK, fontfamily="DejaVu Sans")
-
-
-    ax.text(0, -0.20, nivel_text,
-            ha="center", va="center",
-            fontsize=10, fontweight="bold",
-            color=color, fontfamily="DejaVu Sans")
-
+            fontsize=28, fontweight="bold",
+            color=C_WHITE, fontfamily="DejaVu Sans")
     ax.set_aspect("equal")
-
-    plt.tight_layout(pad=0.5)
-    plt.savefig(buf, format="PNG", bbox_inches="tight",
-                transparent=True, dpi=140)
+    plt.tight_layout(pad=0.3)
+    plt.savefig(buf, format="PNG", bbox_inches="tight", transparent=True, dpi=150)
     plt.close(fig)
     buf.seek(0)
     return buf
@@ -292,91 +243,142 @@ def generate_general_risk_chart_bytes(raport: list, language: str) -> io.BytesIO
 
 def _build_variants_block(procent_mediu: int, language: str) -> list:
     elements = []
-
     is_ro = language == "ro"
 
     label_style = ParagraphStyle(
-        "VarLabel",
-        fontName="DejaVu-Bold",
-        fontSize=10,
-        textColor=colors.HexColor(C_BLUE_MID),
-        leading=15,
-        spaceAfter=4,
+        "VarLabel", fontName="DejaVu-Bold", fontSize=9,
+        textColor=colors.HexColor(C_STEEL), leading=13, spaceAfter=2,
     )
     text_style = ParagraphStyle(
-        "VarText",
-        fontName="DejaVu-Bold",
-        fontSize=12,
-        textColor=colors.HexColor(C_BLUE_DARK),
-        leading=18,
-        spaceAfter=0,
-        leftIndent=10,
-    )
-    note_style = ParagraphStyle(
-        "VarNote",
-        fontName="DejaVu",
-        fontSize=8,
-        textColor=colors.HexColor(C_GRAY_TEXT),
-        leading=12,
-        alignment=1,
+        "VarText", fontName="DejaVu", fontSize=11,
+        textColor=colors.HexColor(C_SLATE), leading=16, spaceAfter=0, leftIndent=8,
     )
 
     if is_ro:
         variants = [
-            {
-                "label": "Varianta 1",
-                "text":  f"Ați atins {procent_mediu}% din vârful ideal de performanță.",
-                "bg":    C_BLUE_LIGHT,
-            },
-            {
-                "label": "Varianta 2",
-                "text":  f"Sunteți la {procent_mediu}% distanță de afacerea perfectă.",
-                "bg":    C_GRAY_LIGHT,
-            },
-            {
-                "label": "Varianta 3",
-                "text":  f"Performanța actuală: {procent_mediu}% din nivelul ideal.",
-                "bg":    C_BLUE_LIGHT,
-            },
+            {"label": "Varianta A",
+             "text": f"Ați atins {procent_mediu}% din vârful ideal de performanță.",
+             "bg": "#EAF0F6", "accent": C_STEEL},
+            {"label": "Varianta B",
+             "text": f"Sunteți la {procent_mediu}% distanță de afacerea perfectă.",
+             "bg": "#FDF6E3", "accent": C_ORANGE_PRO},
+            {"label": "Varianta C",
+             "text": f"Performanța actuală: {procent_mediu}% din nivelul ideal.",
+             "bg": "#EAF0F6", "accent": C_STEEL},
         ]
     else:
         variants = [
-            {
-                "label": "Вариант 1",
-                "text":  f"Вы достигли {procent_mediu}% от идеального пика эффективности.",
-                "bg":    C_BLUE_LIGHT,
-            },
-            {
-                "label": "Вариант 2",
-                "text":  f"Вы на {procent_mediu}% пути к идеальному бизнесу.",
-                "bg":    C_GRAY_LIGHT,
-            },
-            {
-                "label": "Вариант 3",
-                "text":  f"Текущий результат: {procent_mediu}% от идеального уровня.",
-                "bg":    C_BLUE_LIGHT,
-            },
+            {"label": "Вариант A",
+             "text": f"Вы достигли {procent_mediu}% от идеального пика эффективности.",
+             "bg": "#EAF0F6", "accent": C_STEEL},
+            {"label": "Вариант B",
+             "text": f"Вы на {procent_mediu}% пути к идеальному бизнесу.",
+             "bg": "#FDF6E3", "accent": C_ORANGE_PRO},
+            {"label": "Вариант C",
+             "text": f"Текущий результат: {procent_mediu}% от идеального уровня.",
+             "bg": "#EAF0F6", "accent": C_STEEL},
         ]
 
-    elements.append(Spacer(1, 0.15 * cm))
-
+    elements.append(Spacer(1, 0.2 * cm))
     for v in variants:
         cell_content = [
-            Spacer(1, 0.1 * cm),
+            Spacer(1, 0.14 * cm),
             Paragraph(v["label"], label_style),
             Paragraph(v["text"], text_style),
-            Spacer(1, 0.1 * cm),
+            Spacer(1, 0.14 * cm),
         ]
         row_tbl = Table([[cell_content]], colWidths=[MAIN_W])
         row_tbl.setStyle(TableStyle([
-            ("BACKGROUND",    (0, 0), (-1, -1), colors.HexColor(v["bg"])),
-            ("LEFTPADDING",   (0, 0), (-1, -1), 16),
-            ("RIGHTPADDING",  (0, 0), (-1, -1), 16),
-            ("TOPPADDING",    (0, 0), (-1, -1), 0),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+            ("BACKGROUND",   (0, 0), (-1, -1), colors.HexColor(v["bg"])),
+            ("LEFTPADDING",  (0, 0), (-1, -1), 14),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 14),
+            ("TOPPADDING",   (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING",(0, 0), (-1, -1), 0),
+            ("LINEBEFORE",   (0, 0), (0, -1),  4, colors.HexColor(v["accent"])),
         ]))
         elements.append(row_tbl)
-        elements.append(Spacer(1, 0.18 * cm))
+        elements.append(Spacer(1, 0.14 * cm))
+
+    return elements
+
+
+def _build_donut_pages(raport: list, titlu_doc: str, subtitlu_doc: str,
+                       titlu_general: str, bloc_prefix: str,
+                       procent_mediu: int, language: str) -> list:
+    """
+    Construieste paginile cu donuts: 4 per pagina (2 coloane x 2 randuri), 8x8 cm.
+    Prima pagina include header + section_bar + variants.
+    Paginile urmatoare incep cu PageBreak + header + section_bar.
+    TOATE blocurile apar, inclusiv cele cu scor=0.
+    """
+    elements = []
+
+    bloc_num_style = ParagraphStyle(
+        "BlocNum", fontName="DejaVu-Bold", fontSize=13,
+        textColor=colors.HexColor(C_NAVY), alignment=1, leading=18, spaceAfter=3,
+    )
+    bloc_title_style = ParagraphStyle(
+        "BlocTitle", fontName="DejaVu-Bold", fontSize=10,
+        textColor=colors.HexColor(C_STEEL), alignment=1, leading=14, spaceAfter=2,
+    )
+
+    chunks = [raport[i:i + DONUTS_PER_PAGE] for i in range(0, len(raport), DONUTS_PER_PAGE)]
+
+    for page_idx, chunk in enumerate(chunks):
+        if page_idx == 0:
+            pass
+        else:
+            elements.append(PageBreak())
+            elements.append(Spacer(1, 0.5 * cm))
+            elements.append(_header_block(titlu_doc, subtitlu_doc))
+            elements.append(Spacer(1, 0.45 * cm))
+            elements.append(_section_bar(titlu_general))
+            elements.append(Spacer(1, 0.4 * cm))
+
+        gen_data = []
+        gen_row  = []
+        start_idx = page_idx * DONUTS_PER_PAGE
+
+        for local_idx, (cat, scor, max_scor, nivel) in enumerate(chunk):
+            g_idx      = start_idx + local_idx + 1
+            g_buf      = generate_chart_bytes(scor, max_scor, nivel, cat, language)
+            full_title = cat.split(". ", 1)[1] if ". " in cat else cat
+            cell = [
+                Paragraph(f"{bloc_prefix} {g_idx}", bloc_num_style),
+                Spacer(1, 0.06 * cm),
+                Paragraph(full_title, bloc_title_style),
+                Spacer(1, 0.08 * cm),
+                Image(g_buf, width=IMG_W, height=IMG_H),
+                Spacer(1, 0.1 * cm),
+            ]
+            gen_row.append(cell)
+            if len(gen_row) == COLS:
+                gen_data.append(gen_row)
+                gen_row = []
+
+        if gen_row:
+            while len(gen_row) < COLS:
+                gen_row.append(Spacer(COL_W, IMG_H))
+            gen_data.append(gen_row)
+
+        row_styles = []
+        for i in range(len(gen_data)):
+            bg = C_ROW_A if i % 2 == 0 else C_ROW_B
+            row_styles.append(("BACKGROUND", (0, i), (-1, i), colors.HexColor(bg)))
+
+        gen_tbl = Table(gen_data, colWidths=[COL_W] * COLS)
+        gen_tbl.setStyle(TableStyle([
+            ("ALIGN",         (0, 0), (-1, -1), "CENTER"),
+            ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
+            ("TOPPADDING",    (0, 0), (-1, -1), 10),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+            ("LEFTPADDING",   (0, 0), (-1, -1), 6),
+            ("RIGHTPADDING",  (0, 0), (-1, -1), 6),
+            ("LINEAFTER",     (0, 0), (0, -1),  1, colors.HexColor("#C8D6E5")),
+            ("LINEBELOW",     (0, 0), (-1, -2), 1, colors.HexColor("#C8D6E5")),
+            *row_styles,
+        ]))
+        elements.append(gen_tbl)
 
     return elements
 
@@ -387,216 +389,140 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
 
     if language == "ro":
         titlu_doc     = "Raport de Evaluare a Riscului"
-        subtitlu_doc  = "Analiză detaliată pe categorii · BizzCheck"
-        titlu_sectie  = "  Evaluare pe categorii"
-        titlu_general = "  Scor General"
+        subtitlu_doc  = "Analiză detaliată pe categorii  ·  BizzCheck"
+        titlu_general = "  Scor General pe Categorii"
         bloc_prefix   = "Bloc"
     else:
         titlu_doc     = "Отчёт об оценке рисков"
-        subtitlu_doc  = "Детальный анализ по категориям · BizzCheck"
-        titlu_sectie  = "  Оценка по категориям"
-        titlu_general = "  Общий результат"
+        subtitlu_doc  = "Детальный анализ по категориям  ·  BizzCheck"
+        titlu_general = "  Общий результат по категориям"
         bloc_prefix   = "Блок"
-
-    # ---- Style for the block label shown above each donut chart ----
-    bloc_label_style = ParagraphStyle(
-        "BlocLabel",
-        fontName="DejaVu-Bold",
-        fontSize=14,
-        textColor=colors.HexColor(C_BLUE_DARK),
-        alignment=1,
-        leading=18,
-        spaceAfter=3,
-    )
 
     elements = []
     elements.append(Spacer(1, 0.5 * cm))
-
     elements.append(_header_block(titlu_doc, subtitlu_doc))
-    elements.append(Spacer(1, 0.6 * cm))
+    elements.append(Spacer(1, 0.55 * cm))
 
     results_dict = await get_user_results(user_id)
 
     if not results_dict:
         no_data_style = ParagraphStyle(
             "ND", fontName="DejaVu", fontSize=10,
-            textColor=colors.HexColor(C_BLUE_DARK)
+            textColor=colors.HexColor(C_NAVY)
         )
-        no_data = "Nu există rezultate disponibile." if language == "ro" else "Нет доступных результатов."
+        no_data = ("Nu există rezultate disponibile."
+                   if language == "ro" else "Нет доступных результатов.")
         elements.append(Paragraph(no_data, no_data_style))
     else:
+        # ---- TOATE blocurile intra in raport, inclusiv scor=0 ----
         raport = [
             (cat, d["scor"], d["max_scor"], d["nivel"])
             for cat, d in results_dict.items()
         ]
 
         elements.append(_section_bar(titlu_general))
-        elements.append(Spacer(1, 0.35 * cm))
+        elements.append(Spacer(1, 0.4 * cm))
 
-        procente_all = [
-            int((scor / max_scor) * 100)
-            for _, scor, max_scor, _ in raport if max_scor > 0
-        ]
+        # Media include TOATE blocurile; cele cu scor=0 contribuie cu 0%
+        procente_all = [_calc_procent(scor, max_scor) for _, scor, max_scor, _ in raport]
         procent_mediu = int(sum(procente_all) / len(procente_all)) if procente_all else 0
 
-        # ---- Generate individual donuts 2 per row, bigger size ----
-        IMG_GEN   = 8.0 * cm
-        COLS_GEN  = 2
-        COL_W_GEN = MAIN_W / COLS_GEN
+        # ---- Pagini cu donuts: 4 per pagina, 2 coloane x 2 randuri, 8x8 cm ----
+        for el in _build_donut_pages(raport, titlu_doc, subtitlu_doc,
+                                     titlu_general, bloc_prefix,
+                                     procent_mediu, language):
+            elements.append(el)
 
-        gen_label_style = ParagraphStyle(
-            "GenLabel",
-            fontName="DejaVu-Bold",
-            fontSize=15,
-            textColor=colors.HexColor(C_BLUE_DARK),
-            alignment=1,
-            leading=20,
-            spaceAfter=4,
-        )
-        gen_title_style = ParagraphStyle(
-            "GenTitle",
-            fontName="DejaVu-Bold",
-            fontSize=11,
-            textColor=colors.HexColor(C_BLUE_DARK),
-            alignment=1,
-            leading=15,
-            spaceAfter=3,
-        )
+        # ==================== VARIANTE EXPLICATIVE (DUPĂ TOATE DONUTS) ====================
+        elements.append(PageBreak())
+        elements.append(Spacer(1, 0.5 * cm))
+        elements.append(_header_block(titlu_doc, subtitlu_doc))
+        elements.append(Spacer(1, 0.45 * cm))
 
-        gen_data = []
-        gen_row = []
-        for g_idx, (cat, scor, max_scor, nivel) in enumerate(raport, start=1):
-            g_buf = generate_chart_bytes(scor, max_scor, nivel, cat, language)
-            full_title = cat.split(". ", 1)[1] if ". " in cat else cat
-            cell = [
-                Paragraph(f"{bloc_prefix} {g_idx}", gen_label_style),
-                Spacer(1, 0.08 * cm),
-                Paragraph(full_title, gen_title_style),
-                Spacer(1, 0.1 * cm),
-                Image(g_buf, width=IMG_GEN, height=IMG_GEN),
-            ]
-            gen_row.append(cell)
-            if len(gen_row) == COLS_GEN:
-                gen_data.append(gen_row)
-                gen_row = []
-        if gen_row:
-            while len(gen_row) < COLS_GEN:
-                gen_row.append(Spacer(COL_W_GEN, IMG_GEN))
-            gen_data.append(gen_row)
+        titlu_variants = "  Scor general" if language == "ro" else "  Интерпретация общего результата"
+        elements.append(_section_bar(titlu_variants))
+        elements.append(Spacer(1, 0.4 * cm))
 
-        if gen_data:
-            gen_row_styles = []
-            for i in range(len(gen_data)):
-                bg = C_BLUE_LIGHT if i % 2 == 0 else C_WHITE
-                gen_row_styles.append(("BACKGROUND", (0, i), (-1, i), colors.HexColor(bg)))
+        # ---- Donut simplu centrat cu scorul mediu general (fara fundal, fara text lateral) ----
+        buf_general = generate_chart_bytes(procent_mediu, 100, "", "", language)
+        donut_general_img = Image(buf_general, width=8.0 * cm, height=8.0 * cm)
 
-            gen_tbl = Table(gen_data, colWidths=[COL_W_GEN] * COLS_GEN)
-            gen_tbl.setStyle(TableStyle([
-                ("ALIGN",         (0, 0), (-1, -1), "CENTER"),
-                ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
-                ("TOPPADDING",    (0, 0), (-1, -1), 12),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 12),
-                ("LEFTPADDING",   (0, 0), (-1, -1), 4),
-                ("RIGHTPADDING",  (0, 0), (-1, -1), 4),
-                *gen_row_styles,
-            ]))
-            elements.append(gen_tbl)
-        elements.append(Spacer(1, 0.2 * cm))
+        donut_center_tbl = Table([[donut_general_img]], colWidths=[MAIN_W])
+        donut_center_tbl.setStyle(TableStyle([
+            ("ALIGN",         (0, 0), (-1, -1), "CENTER"),
+            ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
+            ("TOPPADDING",    (0, 0), (-1, -1), 0),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+        ]))
+        elements.append(donut_center_tbl)
+        elements.append(Spacer(1, 0.5 * cm))
 
         for el in _build_variants_block(procent_mediu, language):
             elements.append(el)
 
+        # ==================== GRUPARE RISC PE PROCENT ====================
+        # IMPORTANT: gruparea se face pe PROCENT calculat, NU pe eticheta din BD
+        # Blocurile cu scor=0 → procent=0 → zona "ridicat" (apar obligatoriu)
         grupe_risc = {"minim": [], "mediu": [], "ridicat": []}
         for cat, scor, max_scor, nivel in raport:
-            n = nivel.lower()
-            if language == "ro":
-                if "ridicat" in n or "înalt" in n:
-                    grupe_risc["ridicat"].append((cat, scor, max_scor, nivel))
-                elif "mediu" in n:
-                    grupe_risc["mediu"].append((cat, scor, max_scor, nivel))
-                else:
-                    grupe_risc["minim"].append((cat, scor, max_scor, nivel))
-            else:
-                if "высокий" in n:
-                    grupe_risc["ridicat"].append((cat, scor, max_scor, nivel))
-                elif "средний" in n:
-                    grupe_risc["mediu"].append((cat, scor, max_scor, nivel))
-                else:
-                    grupe_risc["minim"].append((cat, scor, max_scor, nivel))
+            procent = _calc_procent(scor, max_scor)
+            zona    = _zona_for_procent(procent)
+            print(f"[DEBUG] {cat[:40]} scor={scor} max={max_scor} procent={procent}% nivel_bd={nivel} zona={zona}")
+            grupe_risc[zona].append((cat, scor, max_scor, nivel))
 
         config_risc = {
-            "minim": {
-                "color": C_GRAY_LIGHT,
+            "ridicat": {
+                "card_color": C_BG_RED,
                 "ro": {
-                    "emoji": "",
-                    "titlu": "Performanță înaltă",
-                    "mesaj_fn": lambda p: f"Ați atins {p}% din vârful ideal de performanță.",
-                    "sub": "Aceste blocuri funcționează excelent. Menții direcția!",
-                    "nivel_display": "Risc Minim",
+                    "titlu":    "  Zone cu risc ridicat",
+                    "mesaj_fn": lambda p: f"Performanța actuală: {p}% din nivelul ideal.",
+                    "sub":      "Aceste blocuri necesită intervenție imediată.",
                 },
                 "ru": {
-                    "emoji": "",
-                    "titlu": "Высокая эффективность",
-                    "mesaj_fn": lambda p: f"Вы достигли {p}% от идеального пика эффективности.",
-                    "sub": "Эти блоки работают отлично. Сохраняйте курс!",
-                    "nivel_display": "Минимальный риск",
+                    "titlu":    "  Зоны высокого риска ",
+                    "mesaj_fn": lambda p: f"Текущий результат: {p}% от идеального уровня.",
+                    "sub":      "Эти блоки требуют немедленного вмешательства.",
                 },
             },
             "mediu": {
-                "color": C_GRAY_LIGHT,
+                "card_color": C_BG_ORANGE,
                 "ro": {
-                    "emoji": "",
-                    "titlu": "În dezvoltare",
+                    "titlu":    "  Zone în dezvoltare ",
                     "mesaj_fn": lambda p: f"Sunteți la {p}% distanță de afacerea perfectă.",
-                    "sub": "Există oportunități clare de îmbunătățire. Acționați acum!",
-                    "nivel_display": "Risc Mediu",
+                    "sub":      "Există oportunități clare de îmbunătățire.",
                 },
                 "ru": {
-                    "emoji": "",
-                    "titlu": "В развитии",
+                    "titlu":    "  Зоны развития ",
                     "mesaj_fn": lambda p: f"Вы на {p}% пути к идеальному бизнесу.",
-                    "sub": "Есть чёткие возможности для улучшения. Действуйте сейчас!",
-                    "nivel_display": "Средний риск",
+                    "sub":      "Есть чёткие возможности для улучшения.",
                 },
             },
-            "ridicat": {
-                "color": C_GRAY_LIGHT,
+            "minim": {
+                "card_color": C_BG_GREEN,
                 "ro": {
-                    "emoji": "",
-                    "titlu": "Necesită atenție urgentă",
-                    "mesaj_fn": lambda p: f"Performanța actuală: {p}% din nivelul ideal.",
-                    "sub": "Aceste blocuri necesită intervenție imediată!",
-                    "nivel_display": "Risc Ridicat",
+                    "titlu":    "  Zone cu performanță înaltă ",
+                    "mesaj_fn": lambda p: f"Ați atins {p}% din vârful ideal de performanță.",
+                    "sub":      "Aceste blocuri funcționează excelent. Mențineți direcția.",
                 },
                 "ru": {
-                    "emoji": "",
-                    "titlu": "Требует срочного внимания",
-                    "mesaj_fn": lambda p: f"Текущий результат: {p}% от идеального уровня.",
-                    "sub": "Эти блоки требуют немедленного вмешательства!",
-                    "nivel_display": "Высокий риск",
+                    "titlu":    "  Зоны высокой эффективности ",
+                    "mesaj_fn": lambda p: f"Вы достигли {p}% от идеального пика эффективности.",
+                    "sub":      "Эти блоки работают отлично. Сохраняйте курс.",
                 },
             },
         }
 
-        card_titlu_style = ParagraphStyle(
-            "CardTitlu", fontName="DejaVu-Bold", fontSize=16,
-            textColor=colors.HexColor(C_WHITE), leading=22,
-            alignment=0, spaceAfter=8,
-        )
         card_mesaj_style = ParagraphStyle(
-            "CardMesaj", fontName="DejaVu-Bold", fontSize=15,
-            textColor=colors.HexColor(C_WHITE), leading=22,
-            alignment=0, spaceAfter=8,
+            "CardMesaj", fontName="DejaVu-Bold", fontSize=14,
+            textColor=colors.HexColor(C_WHITE), leading=20, alignment=0, spaceAfter=6,
         )
         card_sub_style = ParagraphStyle(
-            "CardSub", fontName="DejaVu-Bold", fontSize=12,
-            textColor=colors.HexColor(C_WHITE), leading=18,
-            alignment=0,
+            "CardSub", fontName="DejaVu", fontSize=11,
+            textColor=colors.HexColor("#E8E8E8"), leading=16, alignment=0, spaceAfter=8,
         )
-        cat_style = ParagraphStyle(
-            "CatStyle", fontName="DejaVu-Bold", fontSize=11,
-            textColor=colors.HexColor(C_WHITE), leading=16,
-            alignment=0,
+        cat_item_style = ParagraphStyle(
+            "CatItem", fontName="DejaVu-Bold", fontSize=10,
+            textColor=colors.HexColor(C_WHITE), leading=15, alignment=0,
         )
 
         for nivel_key in ["ridicat", "mediu", "minim"]:
@@ -604,94 +530,63 @@ async def generate_pdf(user_id: int, language: str, filename="raport.pdf"):
             if not categorii_nivel:
                 continue
 
-            cfg      = config_risc[nivel_key]
-            lang_cfg = cfg[language]
+            cfg        = config_risc[nivel_key]
+            lang_cfg   = cfg[language]
+            card_color = cfg["card_color"]
 
-            procente_nivel = [
-                int((scor / max_scor) * 100)
-                for _, scor, max_scor, _ in categorii_nivel if max_scor > 0
-            ]
+            procente_nivel = [_calc_procent(scor, max_scor) for _, scor, max_scor, _ in categorii_nivel]
             procent_nivel = int(sum(procente_nivel) / len(procente_nivel)) if procente_nivel else 0
-
-            color = _color_for_procent(procent_nivel)
-            if color == C_GREEN:
-                nivel_display = "Risc Minim" if language == "ro" else "Минимальный риск"
-                mesaj_text = (f"Ati atins {procent_nivel}% din varful ideal de performanta."
-                              if language == "ro" else
-                              f"Вы достигли {procent_nivel}% от идеального пика эфф.")
-            elif color == C_ORANGE:
-                nivel_display = "Risc Mediu" if language == "ro" else "Средний риск"
-                mesaj_text = (f"Sunteti la {procent_nivel}% distanta de afacerea perfecta."
-                              if language == "ro" else
-                              f"Вы на {procent_nivel}% пути к идеальному бизнесу.")
-            else:
-                nivel_display = "Risc Ridicat" if language == "ro" else "Высокий риск"
-                mesaj_text = (f"Performanta actuala: {procent_nivel}% din nivelul ideal."
-                              if language == "ro" else
-                              f"Текущий результат: {procent_nivel}% от идеального уровня.")
+            mesaj_text    = lang_cfg["mesaj_fn"](procent_nivel)
 
             elements.append(PageBreak())
             elements.append(Spacer(1, 0.5 * cm))
             elements.append(_header_block(titlu_doc, subtitlu_doc))
             elements.append(Spacer(1, 0.45 * cm))
-            elements.append(_section_bar(f"{lang_cfg['emoji']}  {lang_cfg['titlu']}"))
+            elements.append(_section_bar(lang_cfg["titlu"]))
             elements.append(Spacer(1, 0.4 * cm))
 
-            buf_nivel = io.BytesIO()
-            fig, ax = plt.subplots(figsize=(3.6, 3.6), facecolor="none")
-            ax.pie(
-                [procent_nivel, 100 - procent_nivel],
-                startangle=90,
-                colors=[color, C_GRAY_LIGHT],
-                wedgeprops={"width": 0.30, "edgecolor": C_WHITE, "linewidth": 2.5},
-                counterclock=False
-            )
-            ax.text(0,  0.14, f"{procent_nivel}%",
-                    ha="center", va="center",
-                    fontsize=24, fontweight="bold",
-                    color=C_GRAY_LIGHT, fontfamily="DejaVu Sans")
-            ax.text(0, -0.20, nivel_display,
-                    ha="center", va="center",
-                    fontsize=9, fontweight="bold",
-                    color=C_GRAY_LIGHT,
-                    fontfamily="DejaVu Sans")
-            ax.set_aspect("equal")
-            plt.tight_layout(pad=0.4)
-            plt.savefig(buf_nivel, format="PNG", bbox_inches="tight",
-                        transparent=True, dpi=140)
-            plt.close(fig)
-            buf_nivel.seek(0)
+            buf_nivel = _donut_nivel_bytes(procent_nivel, card_color)
+            donut_img = Image(buf_nivel, width=8.0 * cm, height=8.0 * cm)
 
-            donut_img = Image(buf_nivel, width=7.0 * cm, height=7.0 * cm)
-
-            lista_cat = [Spacer(1, 0.5 * cm)]
+            lista_cat = [Spacer(1, 0.55 * cm)]
             lista_cat.append(Paragraph(mesaj_text, card_mesaj_style))
-            lista_cat.append(Spacer(1, 0.2 * cm))
+            lista_cat.append(Spacer(1, 0.18 * cm))
             lista_cat.append(Paragraph(lang_cfg["sub"], card_sub_style))
-            lista_cat.append(Spacer(1, 0.3 * cm))
+            lista_cat.append(Spacer(1, 0.28 * cm))
 
-            for cat, _, _, _ in categorii_nivel:
+            for cat, scor, max_scor, nivel in categorii_nivel:
                 full_title = cat.split(". ", 1)[1] if ". " in cat else cat
-                # Găsim indexul global al blocului din raport
-                bloc_idx = next((i + 1 for i, (c, _, _, _) in enumerate(raport) if c == cat), "?")
-                lista_cat.append(Paragraph(f"• {bloc_prefix} {bloc_idx} — {full_title}", cat_style))
-            lista_cat.append(Spacer(1, 0.5 * cm))
+                bloc_idx   = next(
+                    (i + 1 for i, (c, _, _, _) in enumerate(raport) if c == cat), "?"
+                )
+                procent_cat = _calc_procent(scor, max_scor)
+                lista_cat.append(
+                    Paragraph(
+                        f"— {bloc_prefix} {bloc_idx}:  {full_title}  ({procent_cat}%)",
+                        cat_item_style
+                    )
+                )
+                lista_cat.append(Spacer(1, 0.08 * cm))
+            lista_cat.append(Spacer(1, 0.55 * cm))
 
-            LEFT_W  = MAIN_W * 0.40
-            RIGHT_W = MAIN_W * 0.60
+            LEFT_W  = MAIN_W * 0.38
+            RIGHT_W = MAIN_W * 0.62
 
             layout_tbl = Table([[donut_img, lista_cat]], colWidths=[LEFT_W, RIGHT_W])
             layout_tbl.setStyle(TableStyle([
-                ("BACKGROUND",    (0, 0), (-1, -1), colors.HexColor(color)),
+                ("BACKGROUND",    (0, 0), (-1, -1), colors.HexColor(card_color)),
                 ("ALIGN",         (0, 0), (0, 0),   "CENTER"),
                 ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
                 ("ALIGN",         (1, 0), (1, 0),   "LEFT"),
-                ("LEFTPADDING",   (0, 0), (0, 0),   10),
-                ("RIGHTPADDING",  (0, 0), (0, 0),   10),
-                ("LEFTPADDING",   (1, 0), (1, 0),   18),
+                ("LEFTPADDING",   (0, 0), (0, 0),   12),
+                ("RIGHTPADDING",  (0, 0), (0, 0),   12),
+                ("LEFTPADDING",   (1, 0), (1, 0),   20),
                 ("RIGHTPADDING",  (1, 0), (1, 0),   16),
                 ("TOPPADDING",    (0, 0), (-1, -1), 0),
                 ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+                ("LINEABOVE",     (0, 0), (-1, 0),  2, colors.HexColor(C_GOLD)),
+                ("LINEBELOW",     (0, -1),(-1, -1), 2, colors.HexColor(C_GOLD)),
+                ("LINEAFTER",     (0, 0), (0, -1),  1, colors.HexColor("#FFFFFF50")),
             ]))
             elements.append(layout_tbl)
             elements.append(Spacer(1, 0.4 * cm))
