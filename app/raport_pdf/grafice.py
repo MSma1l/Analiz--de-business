@@ -110,28 +110,16 @@ def _build_variants_block(procent_mediu: int, language: str) -> list:  # Functie
     )
 
     if is_ro:  # Daca limba este romana
-        variants = [  # Definim cele trei variante de interpretare in romana
-            {"label": "Varianta A",  # Eticheta primei variante
-             "text": f"Ați atins {procent_mediu}% din vârful ideal de performanță.",  # Textul explicativ cu procentul mediu
-             "bg": "#EAF0F6", "accent": C_STEEL},  # Culoare fundal si accent
-            {"label": "Varianta B",  # Eticheta celei de-a doua variante
-             "text": f"Sunteți la {procent_mediu}% distanță de afacerea perfectă.",  # Textul explicativ cu procentul mediu
+        variants = [  # Definim varianta unica de interpretare in romana
+            {"label": "Concluzie",  # Eticheta variantei (doar Concluzie)
+             "text": f"Sunteți la {procent_mediu}% distanță de afacerea perfectă.",  # Textul explicativ cu procentul mediu (din Varianta B)
              "bg": "#FDF6E3", "accent": C_ORANGE_PRO},  # Culoare fundal si accent portocaliu
-            {"label": "Varianta C",  # Eticheta celei de-a treia variante
-             "text": f"Performanța actuală: {procent_mediu}% din nivelul ideal.",  # Textul explicativ cu procentul mediu
-             "bg": "#EAF0F6", "accent": C_STEEL},  # Culoare fundal si accent
         ]
     else:  # Daca limba este rusa
-        variants = [  # Definim cele trei variante de interpretare in rusa
-            {"label": "Вариант A",  # Eticheta primei variante in rusa
-             "text": f"Вы достигли {procent_mediu}% от идеального пика эффективности.",  # Textul explicativ in rusa
-             "bg": "#EAF0F6", "accent": C_STEEL},  # Culoare fundal si accent
-            {"label": "Вариант B",  # Eticheta celei de-a doua variante in rusa
-             "text": f"Вы на {procent_mediu}% пути к идеальному бизнесу.",  # Textul explicativ in rusa
+        variants = [  # Definim varianta unica de interpretare in rusa
+            {"label": "Заключение",  # Eticheta variantei in rusa (doar Заключение - Concluzie)
+             "text": f"Вы на {procent_mediu}% пути к идеальному бизнесу.",  # Textul explicativ in rusa (din Varianta B)
              "bg": "#FDF6E3", "accent": C_ORANGE_PRO},  # Culoare fundal si accent portocaliu
-            {"label": "Вариант C",  # Eticheta celei de-a treia variante in rusa
-             "text": f"Текущий результат: {procent_mediu}% от идеального уровня.",  # Textul explicativ in rusa
-             "bg": "#EAF0F6", "accent": C_STEEL},  # Culoare fundal si accent
         ]
 
     elements.append(Spacer(1, 0.2 * cm))  # Adaugam un spatiu gol de 0.2 cm inainte de variante

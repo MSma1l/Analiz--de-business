@@ -8,7 +8,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 1. Fondatori și administrare",
+      "categorie": "Blocul 1. Fondatori, management",
       "scor_min": 26,
       "scor_max": 31,
       "nivel": "Risc minim",
@@ -22,7 +22,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 1. Fondatori și administrare",
+      "categorie": "Blocul 1. Fondatori, management",
       "scor_min": 17,
       "scor_max": 25,
       "nivel": "Risc mediu",
@@ -36,7 +36,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 1. Fondatori și administrare",
+      "categorie": "Blocul 1. Fondatori, management",
       "scor_min": 0,
       "scor_max": 16,
       "nivel": "Risc ridicat",
@@ -92,7 +92,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 3. Finanțe și disciplina fiscală",
+      "categorie": "Blocul 3. Finanțe și disciplină fiscală",
       "scor_min": 32,
       "scor_max": 42,
       "nivel": "Risc minim",
@@ -106,7 +106,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 3. Finanțe și disciplina fiscală",
+      "categorie": "Blocul 3. Finanțe și disciplină fiscală",
       "scor_min": 24,
       "scor_max": 31,
       "nivel": "Risc mediu",
@@ -120,7 +120,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 3. Finanțe și disciplina fiscală",
+      "categorie": "Blocul 3. Finanțe și disciplină fiscală",
       "scor_min": 0,
       "scor_max": 23,
       "nivel": "Risc ridicat",
@@ -134,7 +134,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 4. Răspunderea personală și insolvența",
+      "categorie": "Blocul 4. Responsabilitate personală și faliment",
       "scor_min": 10,
       "scor_max": 999,
       "nivel": "Risc minim",
@@ -148,7 +148,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 4. Răspunderea personală și insolvența",
+      "categorie": "Blocul 4. Responsabilitate personală și faliment",
       "scor_min": 0,
       "scor_max": 9,
       "nivel": "Risc ridicat",
@@ -162,7 +162,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 5. Contractanți și activitate efectivă",
+      "categorie": "Blocul 5. Contrapărți și activitate reală",
       "scor_min": 13,
       "scor_max": 999,
       "nivel": "Risc minim",
@@ -176,7 +176,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 5. Contractanți și activitate efectivă",
+      "categorie": "Blocul 5. Contrapărți și activitate reală",
       "scor_min": 0,
       "scor_max": 12,
       "nivel": "Risc ridicat",
@@ -190,7 +190,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 6. Echipa și riscuri de piață",
+      "categorie": "Blocul 6. Personal și riscuri de piață",
       "scor_min": 9,
       "scor_max": 999,
       "nivel": "Risc minim",
@@ -204,7 +204,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 6. Echipa și riscuri de piață",
+      "categorie": "Blocul 6. Personal și riscuri de piață",
       "scor_min": 0,
       "scor_max": 8,
       "nivel": "Risc ridicat",
@@ -218,7 +218,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 7. Date și IT",
+      "categorie": "Blocul 7. Date, IT",
       "scor_min": 16,
       "scor_max": 24,
       "nivel": "Risc minim",
@@ -232,7 +232,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 7. Date și IT",
+      "categorie": "Blocul 7. Date, IT",
       "scor_min": 12,
       "scor_max": 15,
       "nivel": "Risc mediu",
@@ -246,7 +246,7 @@
       "language": "ru"
     },
     {
-      "categorie": "Blocul 7. Date și IT",
+      "categorie": "Blocul 7. Date, IT",
       "scor_min": 0,
       "scor_max": 11,
       "nivel": "Risc ridicat",

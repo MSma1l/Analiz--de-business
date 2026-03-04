@@ -21,7 +21,7 @@ async def start_bot(message: Message):  # Definim functia asincrona care se exec
     )
 
     await message.answer(  # Trimitem un mesaj de bun venit utilizatorului
-        "Bun venit! Mă numesc BizzCheck \nДобро пожаловать! Меня зовут BizzCheck \n\nAlegeți limba / Выберите язык:",  # Textul de bun venit in romana si rusa cu cererea de a alege limba
+        "Bun venit! Mă numesc BizCheck \nДобро пожаловать! Меня зовут BizCheck \n\nAlegeți limba / Выберите язык:",  # Textul de bun venit in romana si rusa cu cererea de a alege limba
         reply_markup=language_keyboard()  # Atasam tastatura inline cu butoanele de selectare a limbii
     )
 
@@ -35,13 +35,13 @@ async def language_selected(callback: CallbackQuery):  # Definim functia asincro
     user = await get_user_by_telegram_id(callback.from_user.id)  # Obtinem obiectul utilizatorului din baza de date dupa ID-ul Telegram
 
     texts = {  # Cream un dictionar cu textele de bun venit in ambele limbi
-        "ro": """🏢 BizzCheck Bot
+        "ro": """🏢 BizCheck Bot
 
     Bine ai venit în centrul tău de analiză!
     📈 Analiza performanței afacerii
     📊 Evaluarea stării businessului
     📋 Rapoarte și comparații inteligente""",  # Textul de bun venit in limba romana cu descrierea functiilor botului
-        "ru": """🏢 BizzCheck Bot
+        "ru": """🏢 BizCheck Bot
 
     Добро пожаловать в центр бизнес-анализа!
     📈 Анализ эффективности бизнеса
