@@ -1,7 +1,7 @@
 import asyncio
 from sqlalchemy import select
 from bd_sqlite.conexiune import async_session
-from bd_sqlite.models import Intrebare, PragRisc
+from bd_sqlite.modele import Intrebare, PragRisc
 
 async def check():
     async with async_session() as session:

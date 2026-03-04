@@ -1,19 +1,19 @@
-from bd_sqlite.fuction_bd import (
-    get_max_score_by_category,
-    calculate_score_by_category,
-    get_nivel_risc,
-    save_results_to_db,
+from bd_sqlite.functii_bd import (  # Importam functiile necesare din modulul de lucru cu baza de date
+    get_max_score_by_category,  # Functia care obtine scorul maxim posibil pentru fiecare categorie
+    calculate_score_by_category,  # Functia care calculeaza scorul utilizatorului pe fiecare categorie
+    get_nivel_risc,  # Functia care determina nivelul de risc pe baza scorului
+    save_results_to_db,  # Functia care salveaza rezultatele finale in baza de date
 )
-from bd_sqlite.conexiune import async_session
-from bd_sqlite.models import User
-from sqlalchemy import select, update
+from bd_sqlite.conexiune import async_session  # Importam sesiunea asincrona pentru conectarea la baza de date
+from bd_sqlite.modele import User  # Importam modelul User care reprezinta tabelul utilizatorilor
+from sqlalchemy import select, update  # Importam functiile select si update din SQLAlchemy pentru interogari SQL
 
 
 # =====================================================
 # FINALIZARE TEST
 # =====================================================
 
-async def finalize_test(user_id: int):
+async def finalize_test(user_id: int):  # Functia asincrona care finalizeaza testul pentru un utilizator dat
     """
     1. Calculează scor pe categorii
     2. Determină risc din interval
@@ -22,114 +22,114 @@ async def finalize_test(user_id: int):
     5. Returnează (raport, language)
     """
 
-    async with async_session() as session:
-        result = await session.execute(
-            select(User).where(User.id == user_id)
+    async with async_session() as session:  # Deschidem o sesiune asincrona cu baza de date
+        result = await session.execute(  # Executam o interogare SQL de selectare
+            select(User).where(User.id == user_id)  # Selectam utilizatorul cu ID-ul specificat
         )
-        user = result.scalar_one()
-        language = user.language or "ro"
+        user = result.scalar_one()  # Extragem exact un singur rezultat (obiectul User)
+        language = user.language or "ro"  # Obtinem limba utilizatorului sau folosim romana ca limba implicita
 
-    max_scores = await get_max_score_by_category(language)
+    max_scores = await get_max_score_by_category(language)  # Obtinem scorurile maxime posibile pentru fiecare categorie in limba utilizatorului
 
-    scoruri_categorii = await calculate_score_by_category(user_id, language)
+    scoruri_categorii = await calculate_score_by_category(user_id, language)  # Calculam scorurile utilizatorului pentru fiecare categorie
 
-    raport = []
-    for categorie, scor in scoruri_categorii:
-        nivel = await get_nivel_risc(categorie, scor, language)
-        raport.append((categorie, scor, nivel))
+    raport = []  # Initializam o lista goala care va contine raportul final
+    for categorie, scor in scoruri_categorii:  # Iteram prin fiecare categorie si scorul corespunzator
+        nivel = await get_nivel_risc(categorie, scor, language)  # Determinam nivelul de risc pe baza categoriei si scorului
+        raport.append((categorie, scor, nivel))  # Adaugam in raport un tuplu cu categoria, scorul si nivelul de risc
 
-    await save_results_to_db(user_id, raport, max_scores)
+    await save_results_to_db(user_id, raport, max_scores)  # Salvam rezultatele raportului in baza de date impreuna cu scorurile maxime
 
-    scor_total = sum(scor for _, scor, _ in raport)
+    scor_total = sum(scor for _, scor, _ in raport)  # Calculam scorul total insumand scorurile tuturor categoriilor
 
-    async with async_session() as session:
-        await session.execute(
-            update(User)
-            .where(User.id == user_id)
-            .values(score=scor_total, test_completed=True)
+    async with async_session() as session:  # Deschidem o noua sesiune asincrona cu baza de date
+        await session.execute(  # Executam o comanda SQL de actualizare
+            update(User)  # Cream o comanda de update pentru tabelul User
+            .where(User.id == user_id)  # Filtram dupa ID-ul utilizatorului
+            .values(score=scor_total, test_completed=True)  # Setam scorul total si marcam testul ca finalizat
         )
-        await session.commit()
+        await session.commit()  # Confirmam modificarile in baza de date
 
-    return raport, language
+    return raport, language  # Returnam raportul cu rezultatele si limba utilizatorului
 
 
 # =====================================================
 # RAPORT TEXT TELEGRAM
 # =====================================================
 
-def format_report(raport, language="ro"):
+def format_report(raport, language="ro"):  # Functia care formateaza raportul pentru afisarea in Telegram
     """
     Formatează raportul pentru afișare în Telegram.
     Grupează blocurile pe niveluri de risc cu recomandări.
     """
 
-    if language == "ro":
-        titlu = "📊 *Rezultat final:*"
-        texte_risc = {
-            "minim":   "Riscuri minime - recomandăm verificare anuală",
-            "mediu":   "Risc Mediu - consultați când apar probleme",
-            "ridicat": "Risc Ridicat - trebuie verificat urgent"
+    if language == "ro":  # Daca limba utilizatorului este romana
+        titlu = "📊 *Rezultat final:*"  # Setam titlul raportului in romana
+        texte_risc = {  # Definim textele descriptive pentru fiecare nivel de risc in romana
+            "minim":   "Riscuri minime - recomandăm verificare anuală",  # Textul pentru risc minim
+            "mediu":   "Risc Mediu - consultați când apar probleme",  # Textul pentru risc mediu
+            "ridicat": "Risc Ridicat - trebuie verificat urgent"  # Textul pentru risc ridicat
         }
-        text_final = "\n📄 Raportul PDF detaliat te așteaptă în meniu."
-    else:  # ru
-        titlu = "📊 *Итоговый результат:*"
-        texte_risc = {
-            "minim":   "Риски минимальные - рекомендуем проверять раз в год",
-            "mediu":   "Средний Риск - обратитесь когда будут проблемы",
-            "ridicat": "Высокий Риск проблем - требуется срочная проверка"
+        text_final = "\n📄 Raportul PDF detaliat te așteaptă în meniu."  # Mesajul final care indica disponibilitatea raportului PDF
+    else:  # ru  # Daca limba utilizatorului este rusa
+        titlu = "📊 *Итоговый результат:*"  # Setam titlul raportului in rusa
+        texte_risc = {  # Definim textele descriptive pentru fiecare nivel de risc in rusa
+            "minim":   "Риски минимальные - рекомендуем проверять раз в год",  # Textul pentru risc minim in rusa
+            "mediu":   "Средний Риск - обратитесь когда будут проблемы",  # Textul pentru risc mediu in rusa
+            "ridicat": "Высокий Риск проблем - требуется срочная проверка"  # Textul pentru risc ridicat in rusa
         }
-        text_final = "\n📄 Детальный PDF отчет ждёт вас в меню."
+        text_final = "\n📄 Детальный PDF отчет ждёт вас в меню."  # Mesajul final in rusa care indica disponibilitatea raportului PDF
 
-    emoji_map = {
-        "minim":   "🟢",
-        "mediu":   "🟡",
-        "ridicat": "🔴"
+    emoji_map = {  # Dictionar care asociaza fiecarui nivel de risc un emoji colorat
+        "minim":   "🟢",  # Cerculet verde pentru risc minim
+        "mediu":   "🟡",  # Cerculet galben pentru risc mediu
+        "ridicat": "🔴"  # Cerculet rosu pentru risc ridicat
     }
 
     # =====================================================
     # GRUPARE BLOCURI PE NIVEL
     # =====================================================
-    grupe = {"minim": [], "mediu": [], "ridicat": []}
+    grupe = {"minim": [], "mediu": [], "ridicat": []}  # Initializam un dictionar cu liste goale pentru fiecare nivel de risc
 
-    for item in raport:
-        if len(item) == 4:
-            categorie, scor, max_scor, nivel = item
-        else:
-            categorie, scor, nivel = item
+    for item in raport:  # Iteram prin fiecare element al raportului
+        if len(item) == 4:  # Daca elementul are 4 componente (categorie, scor, scor_maxim, nivel)
+            categorie, scor, max_scor, nivel = item  # Despachetam cele 4 valori
+        else:  # Daca elementul are 3 componente (categorie, scor, nivel)
+            categorie, scor, nivel = item  # Despachetam cele 3 valori
 
-        nivel_lower = nivel.lower()
-        if language == "ro":
-            if "ridicat" in nivel_lower or "înalt" in nivel_lower:
-                grupe["ridicat"].append(categorie)
-            elif "mediu" in nivel_lower:
-                grupe["mediu"].append(categorie)
-            else:
-                grupe["minim"].append(categorie)
-        else:  # ru
-            if "высокий" in nivel_lower:
-                grupe["ridicat"].append(categorie)
-            elif "средний" in nivel_lower:
-                grupe["mediu"].append(categorie)
-            else:
-                grupe["minim"].append(categorie)
+        nivel_lower = nivel.lower()  # Convertim nivelul de risc la litere mici pentru comparare uniforma
+        if language == "ro":  # Daca limba este romana, verificam nivelul in romana
+            if "ridicat" in nivel_lower or "înalt" in nivel_lower:  # Daca nivelul contine "ridicat" sau "inalt"
+                grupe["ridicat"].append(categorie)  # Adaugam categoria in grupa de risc ridicat
+            elif "mediu" in nivel_lower:  # Daca nivelul contine "mediu"
+                grupe["mediu"].append(categorie)  # Adaugam categoria in grupa de risc mediu
+            else:  # In orice alt caz
+                grupe["minim"].append(categorie)  # Adaugam categoria in grupa de risc minim
+        else:  # ru  # Daca limba este rusa, verificam nivelul in rusa
+            if "высокий" in nivel_lower:  # Daca nivelul contine "vysokii" (ridicat in rusa)
+                grupe["ridicat"].append(categorie)  # Adaugam categoria in grupa de risc ridicat
+            elif "средний" in nivel_lower:  # Daca nivelul contine "srednii" (mediu in rusa)
+                grupe["mediu"].append(categorie)  # Adaugam categoria in grupa de risc mediu
+            else:  # In orice alt caz
+                grupe["minim"].append(categorie)  # Adaugam categoria in grupa de risc minim
 
     # =====================================================
     # CONSTRUIRE TEXT FINAL
     # =====================================================
-    text = f"{titlu}\n\n"
+    text = f"{titlu}\n\n"  # Initializam textul raportului cu titlul si doua randuri noi
 
-    for cheie in ["ridicat", "mediu", "minim"]:
-        blocuri = grupe[cheie]
-        if not blocuri:
-            continue
+    for cheie in ["ridicat", "mediu", "minim"]:  # Iteram prin nivelurile de risc in ordinea gravitatii (de la ridicat la minim)
+        blocuri = grupe[cheie]  # Obtinem lista de categorii pentru nivelul curent de risc
+        if not blocuri:  # Daca nu exista categorii pentru acest nivel de risc
+            continue  # Sarim la urmatorul nivel de risc
 
-        emoji = emoji_map[cheie]
-        label = texte_risc[cheie]
+        emoji = emoji_map[cheie]  # Obtinem emoji-ul corespunzator nivelului de risc
+        label = texte_risc[cheie]  # Obtinem textul descriptiv pentru nivelul de risc
 
-        text += f"{emoji} {label}\n"
-        for bloc in blocuri:
-            text += f"    └ {bloc}\n"
-        text += "\n"
+        text += f"{emoji} {label}\n"  # Adaugam linia cu emoji-ul si descrierea nivelului de risc
+        for bloc in blocuri:  # Iteram prin categoriile din acest nivel de risc
+            text += f"    └ {bloc}\n"  # Adaugam fiecare categorie cu indentare si simbol de ramificatie
+        text += "\n"  # Adaugam un rand gol dupa fiecare grup de nivel de risc
 
-    text += text_final
-    return text
+    text += text_final  # Adaugam mesajul final despre disponibilitatea raportului PDF
+    return text  # Returnam textul complet al raportului formatat
