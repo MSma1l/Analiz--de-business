@@ -1,12 +1,16 @@
+import asyncio  # Importam asyncio pentru retry logic cu sleep la concurenta SQLite
 from bd_sqlite.functii_bd import (  # Importam functiile necesare din modulul de lucru cu baza de date
     get_max_score_by_category,  # Functia care obtine scorul maxim posibil pentru fiecare categorie
     calculate_score_by_category,  # Functia care calculeaza scorul utilizatorului pe fiecare categorie
     get_nivel_risc,  # Functia care determina nivelul de risc pe baza scorului
     save_results_to_db,  # Functia care salveaza rezultatele finale in baza de date
+    get_questions_per_category,  # Functia care returneaza numarul de intrebari pe fiecare categorie
+    MAX_RETRIES, RETRY_BASE_DELAY,  # Constantele pentru retry logic
 )
 from bd_sqlite.conexiune import async_session  # Importam sesiunea asincrona pentru conectarea la baza de date
 from bd_sqlite.modele import User  # Importam modelul User care reprezinta tabelul utilizatorilor
 from sqlalchemy import select, update  # Importam functiile select si update din SQLAlchemy pentru interogari SQL
+from sqlalchemy.exc import OperationalError  # Importam OperationalError pentru retry logic la BD blocat
 
 
 # =====================================================
@@ -17,9 +21,10 @@ async def finalize_test(user_id: int):  # Functia asincrona care finalizeaza tes
     """
     1. Calculează scor pe categorii
     2. Determină risc din interval
-    3. Salvează rezultate în BD (inclusiv max_scor)
-    4. Marchează test ca finalizat
-    5. Returnează (raport, language)
+    3. Adaugă categoriile cu scor 0 (fără niciun YES) în raport
+    4. Salvează rezultate în BD (inclusiv max_scor)
+    5. Marchează test ca finalizat
+    6. Returnează (raport, language)
     """
 
     async with async_session() as session:  # Deschidem o sesiune asincrona cu baza de date
@@ -33,22 +38,40 @@ async def finalize_test(user_id: int):  # Functia asincrona care finalizeaza tes
 
     scoruri_categorii = await calculate_score_by_category(user_id, language)  # Calculam scorurile utilizatorului pentru fiecare categorie
 
+    # Construim un set cu categoriile care au cel putin un raspuns YES
+    categorii_cu_scor = {categorie for categorie, _ in scoruri_categorii}
+
     raport = []  # Initializam o lista goala care va contine raportul final
     for categorie, scor in scoruri_categorii:  # Iteram prin fiecare categorie si scorul corespunzator
         nivel = await get_nivel_risc(categorie, scor, language)  # Determinam nivelul de risc pe baza categoriei si scorului
         raport.append((categorie, scor, nivel))  # Adaugam in raport un tuplu cu categoria, scorul si nivelul de risc
 
+    # FIX BUG 3: Adaugam categoriile care au scor 0 (toate raspunsurile NO/IDK) — altfel lipsesc din raport si PDF
+    for categorie in max_scores:  # Iteram prin toate categoriile existente
+        if categorie not in categorii_cu_scor:  # Daca categoria nu a aparut in scorurile calculate (0 raspunsuri YES)
+            nivel = await get_nivel_risc(categorie, 0, language)  # Determinam nivelul de risc pentru scor 0
+            raport.append((categorie, 0, nivel))  # Adaugam categoria cu scor 0 in raport
+
     await save_results_to_db(user_id, raport, max_scores)  # Salvam rezultatele raportului in baza de date impreuna cu scorurile maxime
 
     scor_total = sum(scor for _, scor, _ in raport)  # Calculam scorul total insumand scorurile tuturor categoriilor
 
-    async with async_session() as session:  # Deschidem o noua sesiune asincrona cu baza de date
-        await session.execute(  # Executam o comanda SQL de actualizare
-            update(User)  # Cream o comanda de update pentru tabelul User
-            .where(User.id == user_id)  # Filtram dupa ID-ul utilizatorului
-            .values(score=scor_total, test_completed=True)  # Setam scorul total si marcam testul ca finalizat
-        )
-        await session.commit()  # Confirmam modificarile in baza de date
+    # Retry logic pentru marcarea testului ca finalizat — previne pierderea starii la concurenta mare
+    for attempt in range(MAX_RETRIES):
+        try:
+            async with async_session() as session:  # Deschidem o noua sesiune asincrona cu baza de date
+                await session.execute(  # Executam o comanda SQL de actualizare
+                    update(User)  # Cream o comanda de update pentru tabelul User
+                    .where(User.id == user_id)  # Filtram dupa ID-ul utilizatorului
+                    .values(score=scor_total, test_completed=True)  # Setam scorul total si marcam testul ca finalizat
+                )
+                await session.commit()  # Confirmam modificarile in baza de date
+            break  # Tranzactia a reusit, iesim din bucla
+        except OperationalError:
+            if attempt < MAX_RETRIES - 1:
+                await asyncio.sleep(RETRY_BASE_DELAY * (attempt + 1))  # Asteptam cu backoff inainte de reincercare
+            else:
+                raise  # Dupa MAX_RETRIES incercari, aruncam eroarea
 
     return raport, language  # Returnam raportul cu rezultatele si limba utilizatorului
 

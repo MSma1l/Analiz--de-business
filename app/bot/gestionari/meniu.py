@@ -57,6 +57,13 @@ async def save_company_name(message: Message, state: FSMContext):  # Definim fun
 
     await state.update_data(company_name=company_name)  # Salvam numele companiei in datele starii FSM
 
+    # FIX BUG 4: Salvam imediat company_name in BD — daca bot-ul se restarteaza, datele nu se pierd complet
+    async with async_session() as session:
+        await session.execute(
+            update(User).where(User.id == user.id).values(company_name=company_name)
+        )
+        await session.commit()
+
     texts_number = {  # Definim dictionarul cu textele care cer numarul companiei
         "ro": "📞 Introdu numărul companiei:",  # Textul in limba romana
         "ru": "📞 Введите номер компании:"  # Textul in limba rusa
@@ -80,6 +87,13 @@ async def save_company_number(message: Message, state: FSMContext):  # Definim f
         return  # Oprim executia functiei daca validarea a esuat
 
     await state.update_data(number_company=number_company)  # Salvam numarul companiei in datele starii FSM
+
+    # FIX BUG 4: Salvam imediat number_company in BD — daca bot-ul se restarteaza, datele nu se pierd
+    async with async_session() as session:
+        await session.execute(
+            update(User).where(User.id == user.id).values(number_company=number_company)
+        )
+        await session.commit()
 
     texts_email = {  # Definim dictionarul cu textele care cer emailul
         "ro": "📧 Introdu emailul:",  # Textul in limba romana

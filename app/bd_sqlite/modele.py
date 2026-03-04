@@ -35,7 +35,7 @@ class User(Base):  # Defineste modelul User care mosteneste clasa de baza
     score: Mapped[int | None] = mapped_column(Integer)  # Coloana pentru scorul total al utilizatorului (optional)
 
     company_name: Mapped[str | None] = mapped_column(String(100))  # Coloana pentru numele companiei utilizatorului (optional, max 100 caractere)
-    number_company: Mapped[int | None] = mapped_column(Integer)  # Coloana pentru numarul de telefon al companiei (optional)
+    number_company: Mapped[str | None] = mapped_column(String(20))  # Coloana pentru numarul de telefon al companiei (optional, String pentru numere mari si prefixe +373)
     email_company: Mapped[str | None] = mapped_column(String(100))  # Coloana pentru adresa de email a companiei (optional, max 100 caractere)
 
 

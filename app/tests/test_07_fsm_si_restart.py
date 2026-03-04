@@ -242,7 +242,7 @@ async def test_full_user_state_persistence(seeded_db):
             test_completed=False,
             score=42,
             company_name="TestCorp",
-            number_company=69123456,
+            number_company="069123456",
             email_company="test@corp.md"
         )
         session.add(user)
@@ -262,5 +262,5 @@ async def test_full_user_state_persistence(seeded_db):
     assert user.test_completed is False
     assert user.score == 42
     assert user.company_name == "TestCorp"
-    assert user.number_company == 69123456
+    assert user.number_company == "069123456"
     assert user.email_company == "test@corp.md"

@@ -359,30 +359,24 @@ async def test_company_position_requires_completed_test(seeded_db):
 
 
 # ----------------------------------------------------------
-# TEST 4.14: BUG POTENTIAL - number_company e Integer dar primeste text
+# TEST 4.14: number_company acum e String — suporta numere mari si prefixe
 # ----------------------------------------------------------
 @pytest.mark.asyncio
-async def test_phone_number_as_integer_overflow(seeded_db):
+async def test_phone_number_as_string(seeded_db):
     """
-    BUG DETECTAT: number_company este Integer in model, dar numere de telefon
-    mari (ex: +37369123456) pot depasi limita Integer (2^31-1 = 2147483647).
-    Numarul +37369123456 = 37369123456 depaseste Integer.
+    FIX APLICAT: number_company este acum String(20) in model.
+    Suporta numere mari, prefixe (+373) si formate internationale.
     """
     user_id = await _create_user(seeded_db, telegram_id=400014)
 
-    # Incercam sa salvam un numar de telefon mare
-    big_number = 37369123456  # Numar tipic moldovenesc cu prefix
+    phone = "+37369123456"  # Numar tipic moldovenesc cu prefix international
 
-    try:
-        async with seeded_db() as session:
-            await session.execute(
-                update(User).where(User.id == user_id).values(number_company=big_number)
-            )
-            await session.commit()
+    async with seeded_db() as session:
+        await session.execute(
+            update(User).where(User.id == user_id).values(number_company=phone)
+        )
+        await session.commit()
 
-        async with seeded_db() as session:
-            user = (await session.execute(select(User).where(User.id == user_id))).scalar_one()
-            # SQLite suporta numere mari, dar Integer Python ar putea cauza probleme
-            assert user.number_company == big_number
-    except Exception as e:
-        pytest.fail(f"BUG: Numarul de telefon mare cauzeaza eroare: {e}")
+    async with seeded_db() as session:
+        user = (await session.execute(select(User).where(User.id == user_id))).scalar_one()
+        assert user.number_company == phone, f"Numarul trebuie salvat ca string: {user.number_company}"

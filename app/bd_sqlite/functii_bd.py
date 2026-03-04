@@ -1,5 +1,7 @@
 # Importam functiile necesare din SQLAlchemy: select (interogare), update (actualizare), delete (stergere), func (functii agregate), and_ (conditie logica SI)
+import asyncio  # Importam asyncio pentru retry logic cu sleep la concurenta SQLite
 from sqlalchemy import select, update, delete, func, and_
+from sqlalchemy.exc import OperationalError  # Importam OperationalError pentru a prinde erorile de database locked
 # Importam sesiunea asincrona pentru conectarea la baza de date
 from bd_sqlite.conexiune import async_session
 # Importam modelele tabelelor din baza de date
@@ -10,6 +12,10 @@ from bd_sqlite.modele import (
     Rezultat,    # Modelul rezultatului
     PragRisc     # Modelul pragului de risc
 )
+
+# Numarul maxim de reincercari si delay-ul de baza (in secunde) pentru operatiile de scriere in BD
+MAX_RETRIES = 3  # De cate ori reincercam o tranzactie daca BD-ul e blocat
+RETRY_BASE_DELAY = 0.05  # Delay-ul de baza in secunde (creste exponential: 0.05, 0.1, 0.15)
 
 # =====================================================
 # USER
@@ -153,43 +159,56 @@ async def save_answer_and_advance(user_id: int, intrebare_id: int, weight: str, 
     """
     Salveaza raspunsul si actualizeaza current_index intr-o singura tranzactie.
     Reduce numarul de scrieri in BD de la 2 la 1 — imbunatateste performanta.
+    Include retry logic cu exponential backoff pentru cazurile cand BD-ul e blocat
+    de alte tranzactii concurente (ex: 30 utilizatori simultani).
     """
-    # Deschidem o sesiune asincrona catre baza de date
-    async with async_session() as session:
+    # Reincercam tranzactia de MAX_RETRIES ori daca BD-ul e blocat (database locked)
+    for attempt in range(MAX_RETRIES):
+        try:
+            # Deschidem o sesiune asincrona catre baza de date
+            async with async_session() as session:
 
-        # Cautam daca exista deja un raspuns al utilizatorului pentru aceasta intrebare
-        result = await session.execute(
-            select(Raspuns).where(
-                Raspuns.user_id == user_id,            # Filtram dupa ID-ul utilizatorului
-                Raspuns.intrebare_id == intrebare_id    # Filtram dupa ID-ul intrebarii
-            )
-        )
-
-        # Extragem raspunsul existent sau None
-        existing = result.scalar_one_or_none()
-
-        # Daca raspunsul exista deja, ii actualizam valoarea (weight)
-        if existing:
-            existing.weight = weight
-        # Daca nu exista, cream un raspuns nou si il adaugam in sesiune
-        else:
-            session.add(
-                Raspuns(
-                    user_id=user_id,              # ID-ul utilizatorului care raspunde
-                    intrebare_id=intrebare_id,    # ID-ul intrebarii la care raspunde
-                    weight=weight                 # Valoarea raspunsului (YES/NO/IDK)
+                # Cautam daca exista deja un raspuns al utilizatorului pentru aceasta intrebare
+                result = await session.execute(
+                    select(Raspuns).where(
+                        Raspuns.user_id == user_id,            # Filtram dupa ID-ul utilizatorului
+                        Raspuns.intrebare_id == intrebare_id    # Filtram dupa ID-ul intrebarii
+                    )
                 )
-            )
 
-        # Actualizam indexul intrebarii curente in aceeasi tranzactie
-        await session.execute(
-            update(User)
-            .where(User.id == user_id)              # Filtram dupa ID-ul utilizatorului
-            .values(current_index=new_index)         # Setam noul index al intrebarii
-        )
+                # Extragem raspunsul existent sau None
+                existing = result.scalar_one_or_none()
 
-        # Salvam ambele modificari intr-un singur commit (o singura scriere in BD)
-        await session.commit()
+                # Daca raspunsul exista deja, ii actualizam valoarea (weight)
+                if existing:
+                    existing.weight = weight
+                # Daca nu exista, cream un raspuns nou si il adaugam in sesiune
+                else:
+                    session.add(
+                        Raspuns(
+                            user_id=user_id,              # ID-ul utilizatorului care raspunde
+                            intrebare_id=intrebare_id,    # ID-ul intrebarii la care raspunde
+                            weight=weight                 # Valoarea raspunsului (YES/NO/IDK)
+                        )
+                    )
+
+                # Actualizam indexul intrebarii curente in aceeasi tranzactie
+                await session.execute(
+                    update(User)
+                    .where(User.id == user_id)              # Filtram dupa ID-ul utilizatorului
+                    .values(current_index=new_index)         # Setam noul index al intrebarii
+                )
+
+                # Salvam ambele modificari intr-un singur commit (o singura scriere in BD)
+                await session.commit()
+                return  # Tranzactia a reusit, iesim din functie
+
+        except OperationalError:
+            # BD-ul e blocat de alta tranzactie — asteptam si reincercam
+            if attempt < MAX_RETRIES - 1:
+                await asyncio.sleep(RETRY_BASE_DELAY * (attempt + 1))  # Exponential backoff: 0.05s, 0.1s, 0.15s
+            else:
+                raise  # Dupa MAX_RETRIES incercari, aruncam eroarea mai departe
 
 
 # =====================================================
@@ -313,44 +332,54 @@ async def save_results_to_db(user_id: int, raport, max_scores: dict):
     Salvează rezultatele pe categorii în tabela Rezultat
     raport = [(categorie, scor, nivel), ...]
     max_scores = {categorie: max_scor}
+    Include retry logic pentru concurenta SQLite.
     """
-    # Deschidem o sesiune asincrona catre baza de date
-    async with async_session() as session:
+    for attempt in range(MAX_RETRIES):
+        try:
+            # Deschidem o sesiune asincrona catre baza de date
+            async with async_session() as session:
 
-        # Parcurgem fiecare element din raport (categorie, scor, nivel)
-        for categorie, scor, nivel in raport:
-            # Obtinem scorul maxim pentru categoria curenta, sau folosim scorul curent daca nu exista
-            max_scor = max_scores.get(categorie, scor)
+                # Parcurgem fiecare element din raport (categorie, scor, nivel)
+                for categorie, scor, nivel in raport:
+                    # Obtinem scorul maxim pentru categoria curenta, sau folosim scorul curent daca nu exista
+                    max_scor = max_scores.get(categorie, scor)
 
-            # Cautam daca exista deja un rezultat salvat pentru acest utilizator si aceasta categorie
-            result = await session.execute(
-                select(Rezultat).where(
-                    Rezultat.user_id == user_id,        # Filtram dupa ID-ul utilizatorului
-                    Rezultat.categorie == categorie      # Filtram dupa categorie
-                )
-            )
-            # Extragem rezultatul existent sau None
-            existing = result.scalar_one_or_none()
-
-            # Daca rezultatul exista deja, ii actualizam valorile
-            if existing:
-                existing.scor = scor            # Actualizam scorul
-                existing.max_scor = max_scor    # Actualizam scorul maxim
-                existing.nivel = nivel          # Actualizam nivelul de risc
-            # Daca nu exista, cream un rezultat nou si il adaugam in sesiune
-            else:
-                session.add(
-                    Rezultat(
-                        user_id=user_id,        # ID-ul utilizatorului
-                        categorie=categorie,    # Numele categoriei
-                        scor=scor,              # Scorul obtinut
-                        max_scor=max_scor,      # Scorul maxim posibil
-                        nivel=nivel             # Nivelul de risc
+                    # Cautam daca exista deja un rezultat salvat pentru acest utilizator si aceasta categorie
+                    result = await session.execute(
+                        select(Rezultat).where(
+                            Rezultat.user_id == user_id,        # Filtram dupa ID-ul utilizatorului
+                            Rezultat.categorie == categorie      # Filtram dupa categorie
+                        )
                     )
-                )
+                    # Extragem rezultatul existent sau None
+                    existing = result.scalar_one_or_none()
 
-        # Salvam toate modificarile in baza de date
-        await session.commit()
+                    # Daca rezultatul exista deja, ii actualizam valorile
+                    if existing:
+                        existing.scor = scor            # Actualizam scorul
+                        existing.max_scor = max_scor    # Actualizam scorul maxim
+                        existing.nivel = nivel          # Actualizam nivelul de risc
+                    # Daca nu exista, cream un rezultat nou si il adaugam in sesiune
+                    else:
+                        session.add(
+                            Rezultat(
+                                user_id=user_id,        # ID-ul utilizatorului
+                                categorie=categorie,    # Numele categoriei
+                                scor=scor,              # Scorul obtinut
+                                max_scor=max_scor,      # Scorul maxim posibil
+                                nivel=nivel             # Nivelul de risc
+                            )
+                        )
+
+                # Salvam toate modificarile in baza de date
+                await session.commit()
+                return  # Tranzactia a reusit, iesim din functie
+
+            except OperationalError:
+                if attempt < MAX_RETRIES - 1:
+                    await asyncio.sleep(RETRY_BASE_DELAY * (attempt + 1))
+                else:
+                    raise
 
 
 # =====================================================

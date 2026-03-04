@@ -35,58 +35,40 @@ async def test_duplicate_telegram_id_raises_error(seeded_db):
 
 
 # ----------------------------------------------------------
-# TEST 3.2: Raspuns cu user_id inexistent
+# TEST 3.2: Raspuns cu user_id inexistent — FK CONSTRAINT ON
 # ----------------------------------------------------------
 @pytest.mark.asyncio
 async def test_answer_with_nonexistent_user(seeded_db):
     """
-    BUG DETECTAT: SQLite NU enforteaza FK constraints implicit!
-    Raspunsuri cu user_id inexistent se salveaza FARA eroare.
-    Fix recomandat: PRAGMA foreign_keys=ON in conexiune.py
+    Cu PRAGMA foreign_keys=ON, raspunsuri cu user_id inexistent
+    arunca IntegrityError — datele orfane sunt blocate.
     """
     async with seeded_db() as session:
         q = (await session.execute(
             select(Intrebare).where(Intrebare.language == "ro").limit(1)
         )).scalar_one()
 
-    async with seeded_db() as session:
-        session.add(Raspuns(user_id=99999, intrebare_id=q.id, weight="YES"))
-        await session.commit()
-
-    async with seeded_db() as session:
-        orphan = (await session.execute(
-            select(Raspuns).where(Raspuns.user_id == 99999)
-        )).scalar_one_or_none()
-
-    # Documentam bug-ul: SQLite permite date orfane
-    if orphan is not None:
-        print("\n⚠️  BUG: SQLite permite raspunsuri cu user_id inexistent (99999)!")
-        print("   Fix: Adauga 'cursor.execute(\"PRAGMA foreign_keys=ON\")' in conexiune.py")
+    with pytest.raises(IntegrityError):
+        async with seeded_db() as session:
+            session.add(Raspuns(user_id=99999, intrebare_id=q.id, weight="YES"))
+            await session.commit()
 
 
 # ----------------------------------------------------------
-# TEST 3.3: Raspuns cu intrebare_id inexistent
+# TEST 3.3: Raspuns cu intrebare_id inexistent — FK CONSTRAINT ON
 # ----------------------------------------------------------
 @pytest.mark.asyncio
 async def test_answer_with_nonexistent_question(seeded_db):
     """
-    BUG DETECTAT: SQLite NU enforteaza FK constraints implicit!
-    Fix recomandat: PRAGMA foreign_keys=ON in conexiune.py
+    Cu PRAGMA foreign_keys=ON, raspunsuri cu intrebare_id inexistent
+    arunca IntegrityError — nu se mai pot salva date invalide.
     """
     user_id = await _create_user(seeded_db, telegram_id=300003)
 
-    async with seeded_db() as session:
-        session.add(Raspuns(user_id=user_id, intrebare_id=99999, weight="YES"))
-        await session.commit()
-
-    async with seeded_db() as session:
-        orphan = (await session.execute(
-            select(Raspuns).where(Raspuns.intrebare_id == 99999)
-        )).scalar_one_or_none()
-
-    if orphan is not None:
-        print("\n⚠️  BUG: SQLite permite raspunsuri cu intrebare_id inexistent (99999)!")
-        print("   Fix: Adauga 'cursor.execute(\"PRAGMA foreign_keys=ON\")' in conexiune.py")
+    with pytest.raises(IntegrityError):
+        async with seeded_db() as session:
+            session.add(Raspuns(user_id=user_id, intrebare_id=99999, weight="YES"))
+            await session.commit()
 
 
 # ----------------------------------------------------------
@@ -121,35 +103,34 @@ async def test_atomic_save_answer_and_advance(seeded_db):
 
 
 # ----------------------------------------------------------
-# TEST 3.5: Rollback la eroare in tranzactie
+# TEST 3.5: Rollback la eroare in tranzactie — FK ON
 # ----------------------------------------------------------
 @pytest.mark.asyncio
 async def test_rollback_on_error(seeded_db):
     """
-    BUG CONFIRMAT: SQLite fara PRAGMA foreign_keys=ON nu detecteaza
-    FK violations, deci commit-ul NU esueaza si ambele raspunsuri se salveaza.
-    Aceasta inseamna ca date invalide pot ajunge in BD.
+    Cu PRAGMA foreign_keys=ON, tranzactia cu FK invalid esueaza
+    si se face rollback complet — niciun raspuns nu se salveaza.
     """
     user_id = await _create_user(seeded_db, telegram_id=300005)
 
-    async with seeded_db() as session:
-        q = (await session.execute(
-            select(Intrebare).where(Intrebare.language == "ro", Intrebare.index == 1)
-        )).scalar_one()
-        session.add(Raspuns(user_id=user_id, intrebare_id=q.id, weight="YES"))
-        session.add(Raspuns(user_id=user_id, intrebare_id=99999, weight="NO"))
-        await session.commit()  # Nu esueaza din cauza lipsei PRAGMA foreign_keys=ON
+    try:
+        async with seeded_db() as session:
+            q = (await session.execute(
+                select(Intrebare).where(Intrebare.language == "ro", Intrebare.index == 1)
+            )).scalar_one()
+            session.add(Raspuns(user_id=user_id, intrebare_id=q.id, weight="YES"))
+            session.add(Raspuns(user_id=user_id, intrebare_id=99999, weight="NO"))
+            await session.commit()  # Acum esueaza cu FK ON!
+    except IntegrityError:
+        pass
 
+    # Verificam ca nu s-a salvat nimic (rollback complet)
     async with seeded_db() as session:
         count = (await session.execute(
             select(func.count(Raspuns.id)).where(Raspuns.user_id == user_id)
         )).scalar()
 
-    # Cu FK off, se salveaza 2 raspunsuri (inclusiv cel invalid)
-    if count == 2:
-        print("\n⚠️  BUG CONFIRMAT: Fara PRAGMA foreign_keys=ON, date invalide se salveaza!")
-        print("   2 raspunsuri salvate (inclusiv cu intrebare_id=99999 inexistent)")
-        print("   Fix: Adauga 'cursor.execute(\"PRAGMA foreign_keys=ON\")' in conexiune.py")
+    assert count == 0, f"Dupa rollback nu ar trebui sa existe raspunsuri, gasit {count}"
 
 
 # ----------------------------------------------------------

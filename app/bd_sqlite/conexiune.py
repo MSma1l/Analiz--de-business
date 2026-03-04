@@ -17,6 +17,7 @@ engine = create_async_engine(  # Creeaza motorul asincron pentru conectarea la b
 @event.listens_for(engine.sync_engine, "connect")  # Interceptam fiecare conexiune noua la baza de date
 def _set_sqlite_pragma(dbapi_connection, connection_record):  # Functia care seteaza pragmele SQLite pentru performanta
     cursor = dbapi_connection.cursor()  # Obtinem un cursor pentru executarea comenzilor SQL
+    cursor.execute("PRAGMA foreign_keys=ON")  # Activam verificarea cheilor externe — previne date orfane in BD (raspunsuri fara user valid etc.)
     cursor.execute("PRAGMA journal_mode=WAL")  # Activam WAL (Write-Ahead Logging) — permite citiri si scrieri simultane fara blocare
     cursor.execute("PRAGMA synchronous=NORMAL")  # Setam sincronizarea la NORMAL — mai rapid decat FULL, sigur cu WAL
     cursor.execute("PRAGMA cache_size=-8000")  # Setam cache-ul la 8MB (valoare negativa = kilobytes) pentru acces mai rapid la date
