@@ -375,11 +375,11 @@ async def save_results_to_db(user_id: int, raport, max_scores: dict):
                 await session.commit()
                 return  # Tranzactia a reusit, iesim din functie
 
-            except OperationalError:
-                if attempt < MAX_RETRIES - 1:
-                    await asyncio.sleep(RETRY_BASE_DELAY * (attempt + 1))
-                else:
-                    raise
+        except OperationalError:
+            if attempt < MAX_RETRIES - 1:
+                await asyncio.sleep(RETRY_BASE_DELAY * (attempt + 1))
+            else:
+                raise
 
 
 # =====================================================

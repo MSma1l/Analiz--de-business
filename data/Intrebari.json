@@ -8,10 +8,10 @@
       "weight": 4
     },
     {
-      "category": "Blocul 1. Fondatori, management",
+      "category": "Blocul 1. Fondatori și administrare",
       "index": 1,
       "language": "ro",
-      "text": "În compania dumneavoastră este un singur fondator?",
+      "text": "În compania dumneavoastră există un singur fondator?",
       "weight": 4
     },
     {
@@ -22,10 +22,10 @@
       "weight": 3
     },
     {
-      "category": "Blocul 1. Fondatori, management",
+      "category": "Blocul 1. Fondatori și administrare",
       "index": 2,
       "language": "ro",
-      "text": "Este directorul și fondatorul aceeași persoană?",
+      "text": "Directorul și fondatorul sunt una și aceeași persoană?",
       "weight": 3
     },
     {
@@ -36,10 +36,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 1. Fondatori, management",
+      "category": "Blocul 1. Fondatori și administrare",
       "index": 3,
       "language": "ro",
-      "text": "Dacă sunt mai mulți fondatori: există între ei un acord de parteneriat în scris (distribuirea rolurilor, competențelor, banilor, ieșirea din afacere)?",
+      "text": "Dacă sunt mai mulți fondatori: există între aceștia un acord de asociere în formă scrisă (privind distribuirea rolurilor, competențelor, beneficiilor și modalitatea de ieșire din afacere)?",
       "weight": 5
     },
     {
@@ -50,10 +50,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 1. Fondatori, management",
+      "category": "Blocul 1. Fondatori și administrare",
       "index": 4,
       "language": "ro",
-      "text": "În compania dumneavoastră este stabilit în scris cine și în ce limite ia deciziile manageriale cheie?",
+      "text": "În cadrul companiei este stabilit în scris cine și în ce limite adoptă deciziile manageriale esențiale?",
       "weight": 5
     },
     {
@@ -64,10 +64,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 1. Fondatori, management",
+      "category": "Blocul 1. Fondatori și administrare",
       "index": 5,
       "language": "ro",
-      "text": "Există o procedură prestabilită despre cum se iau deciziile cheie (cine semnează, cine aprobă plățile, ce tranzacții necesită consimțământul fondatorilor)?",
+      "text": "Există o procedură clar definită privind adoptarea deciziilor-cheie (cine semnează, cine aprobă plățile, ce tranzacții necesită acordul fondatorilor)?",
       "weight": 5
     },
     {
@@ -78,10 +78,10 @@
       "weight": 4
     },
     {
-      "category": "Blocul 1. Fondatori, management",
+      "category": "Blocul 1. Fondatori și administrare",
       "index": 6,
       "language": "ro",
-      "text": "Există un mecanism stabilit (de exemplu, răscumpărarea cotei-părți, opțiuni, mediere etc.) pentru rezolvarea situațiilor de impas între fondatori (dacă opiniile sunt împărțite)?",
+      "text": "Este prevăzut un mecanism (de exemplu, răscumpărarea părții sociale, opțiunea, mediere etc.) pentru soluționarea situațiilor de blocaj între fondatori (în cazul unor opinii divergente)?",
       "weight": 4
     },
     {
@@ -92,10 +92,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 1. Fondatori, management",
+      "category": "Blocul 1. Fondatori și administrare",
       "index": 7,
       "language": "ro",
-      "text": "Când documentele sunt semnate nu de director, are acea persoană o autorizație oficială (procură sau ordin)?",
+      "text": "În cazul în care documentele sunt semnate de o altă persoană decât directorul, deține aceasta împuternicire oficială (prin procură sau ordin)?",
       "weight": 5
     },
     {
@@ -109,7 +109,7 @@
       "category": "Blocul 2. Afiliere și control bancar",
       "index": 8,
       "language": "ro",
-      "text": "Coincid datele despre Beneficiarul efectiv pe care le-ați prezentat la bancă cu cele înregistrate în ASP?",
+      "text": "Coincid datele beneficiarului efectiv declarate băncii cu cele înregistrate la ASP?",
       "weight": 5
     },
     {
@@ -123,7 +123,7 @@
       "category": "Blocul 2. Afiliere și control bancar",
       "index": 9,
       "language": "ro",
-      "text": "Participă soțul sau soția fondatorului sau directorului la activitatea companiei?",
+      "text": "Participă soția/soțul fondatorului sau directorului în activitatea companiei?",
       "weight": 4
     },
     {
@@ -137,7 +137,7 @@
       "category": "Blocul 2. Afiliere și control bancar",
       "index": 10,
       "language": "ro",
-      "text": "Aveți decizii documentate ale Adunării Generale pentru toate tranzacțiile cu companiile rudelor fondatorului sau directorului?",
+      "text": "Există hotărâri documentate ale Adunării Generale pentru toate tranzacțiile încheiate cu companii aparținând rudelor fondatorului sau ale directorului?",
       "weight": 5
     },
     {
@@ -151,7 +151,7 @@
       "category": "Blocul 2. Afiliere și control bancar",
       "index": 11,
       "language": "ro",
-      "text": "Persoana indicată în statut și în extrasul din registru ca participant (proprietar) al companiei, este cu adevărat proprietarul efectiv al afacerii sau este indicată formal, iar proprietarul efectiv este o altă persoană?",
+      "text": "Este persoana indicată în Statut și în extrasul din Registrul persoanelor juridice în calitate de asociat (proprietar) și beneficiarul efectiv real al afacerii sau are doar un rol formal, beneficiarul efectiv fiind o altă persoană?",
       "weight": 5
     },
     {
@@ -162,10 +162,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "category": "Blocul 3. Finanțe și disciplina fiscală",
       "index": 12,
       "language": "ro",
-      "text": "Sunt separați banii personali ai proprietarilor de banii companiei?",
+      "text": "Sunt separate fondurile personale ale proprietarilor de fondurile companiei?",
       "weight": 5
     },
     {
@@ -176,10 +176,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "category": "Blocul 3. Finanțe și disciplina fiscală",
       "index": 13,
       "language": "ro",
-      "text": "Sunt înregistrate aporturile financiare de la fondatori ca împrumuturi oficiale cu contracte, sau pur și simplu \"cad\" pe cont?",
+      "text": "Aporturile financiare ale fondatorilor sunt formalizate ca împrumuturi oficiale, în baza unor contracte, sau sunt transferate pur și simplu în contul companiei?",
       "weight": 5
     },
     {
@@ -190,10 +190,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "category": "Blocul 3. Finanțe și disciplina fiscală",
       "index": 14,
       "language": "ro",
-      "text": "Au existat întârzieri la plata impozitelor, salariilor sau plăților obligatorii în ultimii 3 ani?",
+      "text": "Au existat întârzieri la plata impozitelor, salariilor sau a altor obligații legale în ultimii 3 ani?",
       "weight": 5
     },
     {
@@ -204,10 +204,10 @@
       "weight": 4
     },
     {
-      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "category": "Blocul 3. Finanțe și disciplina fiscală",
       "index": 15,
       "language": "ro",
-      "text": "Depășește retragerea de numerar de pe cardul corporativ sau de pe contul companiei 10% din cifra de afaceri lunară?",
+      "text": "Retragerile de numerar de pe cardul corporativ sau din contul companiei depășesc 10% din cifra de afaceri lunară?",
       "weight": 4
     },
     {
@@ -218,10 +218,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "category": "Blocul 3. Finanțe și disciplina fiscală",
       "index": 16,
       "language": "ro",
-      "text": "Luați TVA-ul la deducere strict în perioada în care a fost aplicată semnătura electronică pe e-Factura (și nu după data emiterii)?",
+      "text": "Deduceți TVA strict în perioada în care a fost aplicată semnătura electronică pe e-Factură (și nu în funcție de data emiterii)?",
       "weight": 5
     },
     {
@@ -232,10 +232,10 @@
       "weight": 3
     },
     {
-      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "category": "Blocul 3. Finanțe și disciplina fiscală",
       "index": 17,
       "language": "ro",
-      "text": "Ați comparat anual \"Sarcina fiscală\" (impozite/cifra de afaceri) cu media pe ramură conform datelor SFS?",
+      "text": "Ați comparat anual nivelul „presiunii fiscale (impozite/cifră de afaceri) cu media sectorială conform datelor SFS?",
       "weight": 3
     },
     {
@@ -246,10 +246,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "category": "Blocul 3. Finanțe și disciplina fiscală",
       "index": 18,
       "language": "ro",
-      "text": "Depășesc Activele Nete mărimea Capitalului Statutar conform ultimului bilanț?",
+      "text": "Depășesc activele nete valoarea capitalului social conform ultimului bilanț?",
       "weight": 5
     },
     {
@@ -260,10 +260,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "category": "Blocul 3. Finanțe și disciplina fiscală",
       "index": 19,
       "language": "ro",
-      "text": "Decontați cheltuielile pentru necesitățile personale ale fondatorilor sau directorului (automobile, vacanțe, achiziții personale) ca cheltuieli ale companiei?",
+      "text": "Sunt înregistrate cheltuieli cu caracter personal ale fondatorilor sau directorului (automobilul, vacanțe, achiziții personale) ca cheltuieli ale companiei?",
       "weight": 5
     },
     {
@@ -274,10 +274,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 3. Finanțe și disciplină fiscală",
+      "category": "Blocul 3. Finanțe și disciplina fiscală",
       "index": 20,
       "language": "ro",
-      "text": "Ați anulat datorii pur și simplu pe baza unui ordin intern, fără hotărâre judecătorească?",
+      "text": "Au fost radiate datorii exclusiv în baza unui ordin intern, fără existența vreunei hotărâri judecătorești?",
       "weight": 5
     },
     {
@@ -288,10 +288,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 4. Responsabilitate personală și faliment",
+      "category": "Blocul 4. Răspunderea personală și insolvența",
       "index": 21,
       "language": "ro",
-      "text": "Știți în ce cazuri problemele companiei pot duce la responsabilitate financiară personală a directorului sau fondatorului?",
+      "text": "Cunoașteți în ce situații dificultățile financiare ale companiei pot atrage răspunderea patrimonială personală a directorului sau a fondatorului?",
       "weight": 5
     },
     {
@@ -302,10 +302,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 4. Responsabilitate personală și faliment",
+      "category": "Blocul 4. Răspunderea personală și insolvența",
       "index": 22,
       "language": "ro",
-      "text": "Au semnat fondatorul sau directorul garanții personale pentru obligațiile companiei (credite, chirie, contracte cheie)?",
+      "text": "Au semnat fondatorul sau directorul garanții personale pentru obligațiile companiei (credite, contracte de locațiune sau alte contracte esențiale)?",
       "weight": 5
     },
     {
@@ -316,10 +316,10 @@
       "weight": 4
     },
     {
-      "category": "Blocul 5. Contrapărți și activitate reală",
+      "category": "Blocul 5. Contractanți și activitate efectivă",
       "index": 23,
       "language": "ro",
-      "text": "Verificați contrapartidele înainte de tranzacție (companie, beneficiari, datorii)?",
+      "text": "Verificați partenerii contractuali înainte de încheierea tranzacțiilor (compania, beneficiarii efectivi, eventuale datorii)?",
       "weight": 4
     },
     {
@@ -330,10 +330,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 5. Contrapărți și activitate reală",
+      "category": "Blocul 5. Contractanți și activitate efectivă",
       "index": 24,
       "language": "ro",
-      "text": "Corespunde activitatea reală a companiei cu cea indicată în documente și registre?",
+      "text": "Activitatea efectiv desfășurată de companie corespunde celei declarate în documentele constitutive și în registrele oficiale?",
       "weight": 5
     },
     {
@@ -344,10 +344,10 @@
       "weight": 4
     },
     {
-      "category": "Blocul 5. Contrapărți și activitate reală",
+      "category": "Blocul 5. Contractanți și activitate efectivă",
       "index": 25,
       "language": "ro",
-      "text": "Efectuați inventarierea anuală obligatorie în companie?",
+      "text": "Efectuați inventarierea anuală obligatorie în cadrul companiei?",
       "weight": 4
     },
     {
@@ -358,10 +358,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 6. Personal și riscuri de piață",
+      "category": "Blocul 6. Echipa și riscuri de piață",
       "index": 26,
       "language": "ro",
-      "text": "Plătiți angajaților bonusuri, premii sau plăți suplimentare în numerar care nu trec prin statele de plată?",
+      "text": "Acordați angajaților bonusuri, prime sau alte plăți în numerar care nu sunt reflectate în statele de plată?",
       "weight": 5
     },
     {
@@ -372,10 +372,10 @@
       "weight": 4
     },
     {
-      "category": "Blocul 6. Personal și riscuri de piață",
+      "category": "Blocul 6. Echipa și riscuri de piață",
       "index": 27,
       "language": "ro",
-      "text": "Schimbați cu concurenții informații despre prețuri sau planuri de vânzări/achiziții (la întâlniri ale asociațiilor, în chat-uri comune)?",
+      "text": "Schimbați informații cu concurenții privind prețurile sau planurile de vânzări/achiziții (în cadrul întâlnirilor de asociații sau în grupuri comune de comunicare)?",
       "weight": 4
     },
     {
@@ -386,10 +386,10 @@
       "weight": 3
     },
     {
-      "category": "Blocul 7. Date, IT",
+      "category": "Blocul 7. Date și IT",
       "index": 28,
       "language": "ro",
-      "text": "Aveți instalate camere de supraveghere video și este pregătită o analiză scrisă a riscurilor pentru protecția datelor personale (evaluarea impactului)?",
+      "text": "Sunt instalate camere de supraveghere și a fost întocmită vreo analiză în scris a riscurilor privind protecția datelor cu caracter personal (evaluare a impactului)?",
       "weight": 3
     },
     {
@@ -400,10 +400,10 @@
       "weight": 4
     },
     {
-      "category": "Blocul 7. Date, IT",
+      "category": "Blocul 7. Date și IT",
       "index": 29,
       "language": "ro",
-      "text": "Transferați datele clienților în \"cloud-uri\" sau servicii (CRM, newsletter-uri) ale căror servere se află în SUA sau în afara UE?",
+      "text": "Transferați datele clienților către servicii cloud (CRM, platforme de mailing), ale căror servere sunt situate în SUA sau în afara Uniunii Europene?",
       "weight": 4
     },
     {
@@ -414,10 +414,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 7. Date, IT",
+      "category": "Blocul 7. Date și IT",
       "index": 30,
       "language": "ro",
-      "text": "Faceți copii de rezervă ale bazei de date contabile pe un server la distanță/cloud?",
+      "text": "Efectuați copii de rezervă ale bazei contabile pe un server sau într-un cloud extern?",
       "weight": 5
     },
     {
@@ -428,10 +428,10 @@
       "weight": 4
     },
     {
-      "category": "Blocul 7. Date, IT",
+      "category": "Blocul 7. Date și IT",
       "index": 31,
       "language": "ro",
-      "text": "Există în contractele cu contractorii IT clauze despre confidențialitate și protecția datelor?",
+      "text": "Conțin contractele cu furnizorii IT clauze privind confidențialitatea și protecția datelor?",
       "weight": 4
     },
     {
@@ -442,10 +442,10 @@
       "weight": 3
     },
     {
-      "category": "Blocul 7. Date, IT",
+      "category": "Blocul 7. Date și IT",
       "index": 32,
       "language": "ro",
-      "text": "Este posibil în companie să obțineți în decurs de o oră lista tuturor contractelor active și să vedeți când expiră fiecare dintre ele?",
+      "text": "Este posibil, în cadrul companiei, să obțineți, în termen de o oră, lista tuturor contractelor active și datele de expirare ale fiecăruia?",
       "weight": 3
     },
     {
@@ -456,10 +456,10 @@
       "weight": 5
     },
     {
-      "category": "Blocul 7. Date, IT",
+      "category": "Blocul 7. Date și IT",
       "index": 33,
       "language": "ro",
-      "text": "Există în companie reguli scrise întocmite conform legii (politica de protecție a datelor cu caracter personal), unde este indicat ce date despre persoane sunt colectate, de ce sunt utilizate și cât timp sunt păstrate?",
+      "text": "Există în companie reguli interne scrise, întocmite conform legii (politică de protecție a datelor cu caracter personal), care să precizeze ce date sunt colectate, în ce scop sunt utilizate și cât timp sunt păstrate?",
       "weight": 5
     }
   ]
